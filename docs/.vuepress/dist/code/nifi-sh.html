@@ -1,0 +1,403 @@
+<!DOCTYPE html>
+<html lang="en-US">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <title>nifi.sh 脚本解读 | NIFI中文文档</title>
+    <meta name="description" content="NIFI中文文档">
+    <link rel="icon" href="/logo.png">
+    
+    <link rel="preload" href="/assets/css/0.styles.362009db.css" as="style"><link rel="preload" href="/assets/js/app.4deb0375.js" as="script"><link rel="preload" href="/assets/js/43.83bae356.js" as="script"><link rel="prefetch" href="/assets/js/10.b3a23b2c.js"><link rel="prefetch" href="/assets/js/11.6dc6e8f4.js"><link rel="prefetch" href="/assets/js/12.c4e391ac.js"><link rel="prefetch" href="/assets/js/13.62c683a7.js"><link rel="prefetch" href="/assets/js/14.9a610c5a.js"><link rel="prefetch" href="/assets/js/15.907799ad.js"><link rel="prefetch" href="/assets/js/16.d1d52228.js"><link rel="prefetch" href="/assets/js/17.b8ef5ac4.js"><link rel="prefetch" href="/assets/js/18.c2b2e0e6.js"><link rel="prefetch" href="/assets/js/19.321090ab.js"><link rel="prefetch" href="/assets/js/2.97aca395.js"><link rel="prefetch" href="/assets/js/20.6b952cd7.js"><link rel="prefetch" href="/assets/js/21.a6aa7914.js"><link rel="prefetch" href="/assets/js/22.8fee6dcc.js"><link rel="prefetch" href="/assets/js/23.997638d3.js"><link rel="prefetch" href="/assets/js/24.9d0fd2fc.js"><link rel="prefetch" href="/assets/js/25.a5f6357c.js"><link rel="prefetch" href="/assets/js/26.ab7186e8.js"><link rel="prefetch" href="/assets/js/27.e5801b95.js"><link rel="prefetch" href="/assets/js/28.0846aa78.js"><link rel="prefetch" href="/assets/js/29.6f9aa11e.js"><link rel="prefetch" href="/assets/js/3.a76e3a5f.js"><link rel="prefetch" href="/assets/js/30.c07fd27a.js"><link rel="prefetch" href="/assets/js/31.fe46113f.js"><link rel="prefetch" href="/assets/js/32.d4553939.js"><link rel="prefetch" href="/assets/js/33.69d9668b.js"><link rel="prefetch" href="/assets/js/34.72cbce00.js"><link rel="prefetch" href="/assets/js/35.3a40e990.js"><link rel="prefetch" href="/assets/js/36.beb500cf.js"><link rel="prefetch" href="/assets/js/37.d4613b64.js"><link rel="prefetch" href="/assets/js/38.1c689c3e.js"><link rel="prefetch" href="/assets/js/39.d6131597.js"><link rel="prefetch" href="/assets/js/4.9a9048da.js"><link rel="prefetch" href="/assets/js/40.67d63cd8.js"><link rel="prefetch" href="/assets/js/41.535bf697.js"><link rel="prefetch" href="/assets/js/42.9bed0d20.js"><link rel="prefetch" href="/assets/js/44.8f46ef86.js"><link rel="prefetch" href="/assets/js/45.67c3f85a.js"><link rel="prefetch" href="/assets/js/46.a6594589.js"><link rel="prefetch" href="/assets/js/47.273a6b8c.js"><link rel="prefetch" href="/assets/js/48.518bb300.js"><link rel="prefetch" href="/assets/js/49.a937dcc8.js"><link rel="prefetch" href="/assets/js/5.e2578ffa.js"><link rel="prefetch" href="/assets/js/50.cee76f6d.js"><link rel="prefetch" href="/assets/js/51.694ffc70.js"><link rel="prefetch" href="/assets/js/52.43a4bab7.js"><link rel="prefetch" href="/assets/js/53.4ca8611e.js"><link rel="prefetch" href="/assets/js/54.bafc55b7.js"><link rel="prefetch" href="/assets/js/55.5eac4773.js"><link rel="prefetch" href="/assets/js/56.84b15f1b.js"><link rel="prefetch" href="/assets/js/57.071acbf9.js"><link rel="prefetch" href="/assets/js/58.4939b5c0.js"><link rel="prefetch" href="/assets/js/6.4038c391.js"><link rel="prefetch" href="/assets/js/7.11b8032b.js"><link rel="prefetch" href="/assets/js/8.9c48234d.js"><link rel="prefetch" href="/assets/js/9.d4e0c278.js">
+    <link rel="stylesheet" href="/assets/css/0.styles.362009db.css">
+  </head>
+  <body>
+    <div id="app" data-server-rendered="true"><div class="theme-container"><header class="navbar"><div class="sidebar-button"><svg xmlns="http://www.w3.org/2000/svg" aria-hidden="true" role="img" viewBox="0 0 448 512" class="icon"><path fill="currentColor" d="M436 124H12c-6.627 0-12-5.373-12-12V80c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12zm0 160H12c-6.627 0-12-5.373-12-12v-32c0-6.627 5.373-12 12-12h424c6.627 0 12 5.373 12 12v32c0 6.627-5.373 12-12 12z"></path></svg></div> <a href="/" class="home-link router-link-active"><!----> <span class="site-name">NIFI中文文档</span></a> <div class="links" style="max-width:nullpx;"><div class="search-box"><input aria-label="Search" autocomplete="off" spellcheck="false" value=""> <!----></div> <!----></div></header> <div class="sidebar-mask"></div> <div class="sidebar"><!---->  <ul class="sidebar-links"><li><a href="/" class="sidebar-link">首頁</a></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>General</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Developer</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Processors</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Controller Services</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Reporting Tasks</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading open"><span>NIFI 源码系列</span> <span class="arrow down"></span></p> <ul class="sidebar-group-items"><li><a href="/code/nifi-nar.html" class="sidebar-link">NIFI-NAR包概述</a></li><li><a href="/code/nifi-nar-classloader.html" class="sidebar-link">nifi nar包加载机制源码解读</a></li><li><a href="/code/nifi-sh.html" class="active sidebar-link">nifi.sh 脚本解读</a></li><li><a href="/code/nifi-env-sh.html" class="sidebar-link">nifi-env.sh 脚本解读</a></li><li><a href="/code/nifi-sh-start.html" class="sidebar-link">nifi.sh start 解读</a></li><li><a href="/code/RunNiFi.html" class="sidebar-link">RunNiFi.java 源码解读</a></li><li><a href="/code/NiFi.html" class="sidebar-link">NiFi.java 源码解读</a></li><li><a href="/code/UnpackNar.html" class="sidebar-link">Nar包下的MANIFEST.MF</a></li><li><a href="/" class="sidebar-link">待续</a></li></ul></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>NIFI 扩展开发系列</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Java source code</span> <span class="arrow right"></span></p> <!----></div></li><li><div class="sidebar-group collapsable"><p class="sidebar-heading"><span>Jetty source code</span> <span class="arrow right"></span></p> <!----></div></li></ul> </div> <div class="page"> <div class="content"><h1 id="nifi-sh-脚本解读"><a href="#nifi-sh-脚本解读" aria-hidden="true" class="header-anchor">#</a> nifi.sh 脚本解读</h1> <hr> <p>编辑人：<strong><strong>酷酷的诚</strong></strong>  邮箱：<strong>zhangchengk@foxmail.com</strong></p> <hr> <p>内容：</p> <p>整个脚本分为三部分，第一部分是确定NIFI各个路径 目录的确定，设置环境变量，第二部分是方法区。第三部分是脚本逻辑代码的入口，初略的根据传参不同区执行不同的方法。以下脚本有详细注释：</p> <div class="language-bash extra-class"><pre class="language-bash"><code><span class="token shebang important">#!/bin/sh</span>
+
+<span class="token comment"># ==========================</span>
+<span class="token comment"># 1、查找文件的路径 start</span>
+<span class="token comment"># ==========================</span>
+
+<span class="token comment"># 由于MacOS X、FreeBSD和其他一些系统缺少gnu readlink，我们使用了基于以下StackOverflow注释http://stackoverflow.com/a/1116890/888876的更可移植的方法</span>
+
+<span class="token comment">## 特殊变量 当前脚本的文件名</span>
+<span class="token assign-left variable">TARGET_FILE</span><span class="token operator">=</span><span class="token variable">$0</span>
+<span class="token comment">#跳转到当前脚本所在的目录</span>
+<span class="token builtin class-name">cd</span> <span class="token variable"><span class="token variable">$(</span><span class="token function">dirname</span> $TARGET_FILE<span class="token variable">)</span></span>
+<span class="token comment">## TARGET_FILE=nifi.sh</span>
+<span class="token assign-left variable">TARGET_FILE</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">basename</span> $TARGET_FILE<span class="token variable">)</span></span>
+
+<span class="token comment">## 遍历(可能的)符号链接链   -L filename，判断文件是否问链接文件</span>
+<span class="token keyword">while</span> <span class="token punctuation">[</span> -L <span class="token string">&quot;<span class="token variable">$TARGET_FILE</span>&quot;</span> <span class="token punctuation">]</span>
+<span class="token keyword">do</span>
+    <span class="token assign-left variable">TARGET_FILE</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>readlink $TARGET_FILE<span class="token variable">)</span></span>
+    <span class="token builtin class-name">cd</span> <span class="token variable"><span class="token variable">$(</span><span class="token function">dirname</span> $TARGET_FILE<span class="token variable">)</span></span>
+    <span class="token assign-left variable">TARGET_FILE</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">basename</span> $TARGET_FILE<span class="token variable">)</span></span>
+<span class="token keyword">done</span>
+
+
+<span class="token comment"># pwd -P  显示出实际路径，而非使用连接（link）路径。</span>
+<span class="token assign-left variable">PHYS_DIR</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">pwd</span> -P<span class="token variable">)</span></span>
+<span class="token comment"># 脚本所在目录</span>
+<span class="token assign-left variable">SCRIPT_DIR</span><span class="token operator">=</span><span class="token variable">$PHYS_DIR</span>
+<span class="token assign-left variable">PROGNAME</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">basename</span> <span class="token string">&quot;<span class="token variable">$0</span>&quot;</span><span class="token variable">)</span></span>
+<span class="token comment"># ==========================</span>
+<span class="token comment"># 查找文件的路径 end</span>
+<span class="token comment"># ==========================</span>
+
+<span class="token comment"># 执行nifi-env.sh  设置了NIFI的目录环境变量</span>
+<span class="token builtin class-name">.</span> <span class="token string">&quot;<span class="token variable">${SCRIPT_DIR}</span>/nifi-env.sh&quot;</span>
+
+<span class="token comment"># ==========================</span>
+<span class="token comment">#/2、方法区 start</span>
+<span class="token comment"># ==========================</span>
+
+<span class="token function-name function">warn</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">&quot;<span class="token variable">${PROGNAME}</span>: <span class="token variable">$*</span>&quot;</span>
+<span class="token punctuation">}</span>
+
+<span class="token function-name function">die</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    warn <span class="token string">&quot;<span class="token variable">$*</span>&quot;</span>
+    <span class="token builtin class-name">exit</span> <span class="token number">1</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment"># 检测特殊的操作系统，然后做一些特殊操作</span>
+<span class="token function-name function">detectOS</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment"># Cygwin是一个在windows平台上运行的类UNIX模拟环境</span>
+    <span class="token assign-left variable">cygwin</span><span class="token operator">=</span>false<span class="token punctuation">;</span>
+    <span class="token comment"># AIX，是IBM专有的UNIX操作系统</span>
+    <span class="token assign-left variable">aix</span><span class="token operator">=</span>false<span class="token punctuation">;</span>
+    <span class="token comment"># AS400是IBM早期推出的商用小型机</span>
+    <span class="token assign-left variable">os400</span><span class="token operator">=</span>false<span class="token punctuation">;</span>
+    <span class="token comment"># Darwin是由苹果电脑于2000年所释出的一个开放原始码操作系统</span>
+    <span class="token assign-left variable">darwin</span><span class="token operator">=</span>false<span class="token punctuation">;</span>
+    <span class="token keyword">case</span> <span class="token string">&quot;<span class="token variable"><span class="token variable">$(</span><span class="token function">uname</span><span class="token variable">)</span></span>&quot;</span> <span class="token keyword">in</span>
+        CYGWIN*<span class="token punctuation">)</span>
+            <span class="token assign-left variable">cygwin</span><span class="token operator">=</span>true
+            <span class="token punctuation">;</span><span class="token punctuation">;</span>
+        AIX*<span class="token punctuation">)</span>
+            <span class="token assign-left variable">aix</span><span class="token operator">=</span>true
+            <span class="token punctuation">;</span><span class="token punctuation">;</span>
+        OS400*<span class="token punctuation">)</span>
+            <span class="token assign-left variable">os400</span><span class="token operator">=</span>true
+            <span class="token punctuation">;</span><span class="token punctuation">;</span>
+        Darwin<span class="token punctuation">)</span>
+            <span class="token assign-left variable">darwin</span><span class="token operator">=</span>true
+            <span class="token punctuation">;</span><span class="token punctuation">;</span>
+    <span class="token keyword">esac</span>
+    <span class="token comment"># For AIX, set an environment variable</span>
+    <span class="token keyword">if</span> <span class="token variable">${aix}</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+         <span class="token builtin class-name">export</span> <span class="token assign-left variable">LDR_CNTRL</span><span class="token operator">=</span>MAXDATA<span class="token operator">=</span>0xB0000000@DSA
+         <span class="token builtin class-name">echo</span> <span class="token variable">${LDR_CNTRL}</span>
+    <span class="token keyword">fi</span>
+    <span class="token comment"># In addition to those, go around the linux space and query the widely</span>
+    <span class="token comment"># adopted /etc/os-release to detect linux variants</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> -f /etc/os-release <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">.</span> /etc/os-release
+    <span class="token keyword">fi</span>
+<span class="token punctuation">}</span>
+
+<span class="token function-name function">unlimitFD</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment"># Use the maximum available, or set MAX_FD != -1 to use that</span>
+    <span class="token comment"># 判断 ${MAX_FD}有没有被赋值 条件成立则没有赋值</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;x<span class="token variable">${MAX_FD}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;x&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token assign-left variable">MAX_FD</span><span class="token operator">=</span><span class="token string">&quot;maximum&quot;</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token comment"># 如果可能的话，提升文件描述符的最大数量</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">${os400}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;false&quot;</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">${cygwin}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;false&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token assign-left variable">MAX_FD_LIMIT</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">ulimit</span> -H -n<span class="token variable">)</span></span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">${MAX_FD_LIMIT}</span>&quot;</span> <span class="token operator">!=</span> <span class="token string">'unlimited'</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+            <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$?</span> -eq <span class="token number">0</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+                <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">${MAX_FD}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;maximum&quot;</span> -o <span class="token string">&quot;<span class="token variable">${MAX_FD}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;max&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+                    <span class="token comment"># use the system max</span>
+                    <span class="token assign-left variable">MAX_FD</span><span class="token operator">=</span><span class="token string">&quot;<span class="token variable">${MAX_FD_LIMIT}</span>&quot;</span>
+                <span class="token keyword">fi</span>
+
+                <span class="token builtin class-name">ulimit</span> -n <span class="token variable">${MAX_FD}</span> <span class="token operator">&gt;</span> /dev/null
+                <span class="token comment"># echo &quot;ulimit -n&quot; `ulimit -n`</span>
+                <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token variable">$?</span> -ne <span class="token number">0</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+                    warn <span class="token string">&quot;Could not set maximum file descriptor limit: <span class="token variable">${MAX_FD}</span>&quot;</span>
+                <span class="token keyword">fi</span>
+            <span class="token keyword">else</span>
+                warn <span class="token string">&quot;Could not query system maximum file descriptor limit: <span class="token variable">${MAX_FD_LIMIT}</span>&quot;</span>
+            <span class="token keyword">fi</span>
+        <span class="token keyword">fi</span>
+    <span class="token keyword">fi</span>
+<span class="token punctuation">}</span>
+
+
+<span class="token comment"># 找到要执行的JVM</span>
+<span class="token function-name function">locateJava</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment"># 设置Java虚拟机</span>
+    <span class="token keyword">if</span> <span class="token variable">$cygwin</span> <span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token punctuation">[</span> -n <span class="token string">&quot;<span class="token variable">${JAVA}</span>&quot;</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">JAVA</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>cygpath --unix <span class="token string">&quot;<span class="token variable">${JAVA}</span>&quot;</span><span class="token variable">)</span></span>
+        <span class="token punctuation">[</span> -n <span class="token string">&quot;<span class="token variable">${JAVA_HOME}</span>&quot;</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">JAVA_HOME</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>cygpath --unix <span class="token string">&quot;<span class="token variable">${JAVA_HOME}</span>&quot;</span><span class="token variable">)</span></span>
+    <span class="token keyword">fi</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;x<span class="token variable">${JAVA}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;x&quot;</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">[</span> -r /etc/gentoo-release <span class="token punctuation">]</span> <span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token assign-left variable">JAVA_HOME</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>java-config --jre-home<span class="token variable">)</span></span>
+    <span class="token keyword">fi</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;x<span class="token variable">${JAVA}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;x&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;x<span class="token variable">${JAVA_HOME}</span>&quot;</span> <span class="token operator">!=</span> <span class="token string">&quot;x&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+            <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token operator">!</span> -d <span class="token string">&quot;<span class="token variable">${JAVA_HOME}</span>&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+                die <span class="token string">&quot;JAVA_HOME is not valid: <span class="token variable">${JAVA_HOME}</span>&quot;</span>
+            <span class="token keyword">fi</span>
+            <span class="token assign-left variable">JAVA</span><span class="token operator">=</span><span class="token string">&quot;<span class="token variable">${JAVA_HOME}</span>/bin/java&quot;</span>
+        <span class="token keyword">else</span>
+            warn <span class="token string">&quot;JAVA_HOME not set; results may vary&quot;</span>
+            <span class="token assign-left variable">JAVA</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token builtin class-name">type</span> java<span class="token variable">)</span></span>
+            <span class="token assign-left variable">JAVA</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">expr</span> <span class="token string">&quot;<span class="token variable">${JAVA}</span>&quot;</span> <span class="token builtin class-name">:</span> <span class="token string">'.* \(/.*\)$'</span><span class="token variable">)</span></span>
+            <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;x<span class="token variable">${JAVA}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;x&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+                die <span class="token string">&quot;java command not found&quot;</span>
+            <span class="token keyword">fi</span>
+        <span class="token keyword">fi</span>
+    <span class="token keyword">fi</span>
+    <span class="token comment"># 如果命令是 env, tools.jar classes.jar也加到 classpath</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">$1</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;env&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token punctuation">[</span> <span class="token string">&quot;x<span class="token variable">${TOOLS_JAR}</span>&quot;</span> <span class="token operator">=</span>  <span class="token string">&quot;x&quot;</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">[</span> -n <span class="token string">&quot;<span class="token variable">${JAVA_HOME}</span>&quot;</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">TOOLS_JAR</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">find</span> -H <span class="token string">&quot;<span class="token variable">${JAVA_HOME}</span>&quot;</span> -name <span class="token string">&quot;tools.jar&quot;</span><span class="token variable">)</span></span>
+        <span class="token punctuation">[</span> <span class="token string">&quot;x<span class="token variable">${TOOLS_JAR}</span>&quot;</span> <span class="token operator">=</span>  <span class="token string">&quot;x&quot;</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token punctuation">[</span> -n <span class="token string">&quot;<span class="token variable">${JAVA_HOME}</span>&quot;</span> <span class="token punctuation">]</span> <span class="token operator">&amp;&amp;</span> <span class="token assign-left variable">TOOLS_JAR</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">find</span> -H <span class="token string">&quot;<span class="token variable">${JAVA_HOME}</span>&quot;</span> -name <span class="token string">&quot;classes.jar&quot;</span><span class="token variable">)</span></span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;x<span class="token variable">${TOOLS_JAR}</span>&quot;</span> <span class="token operator">=</span>  <span class="token string">&quot;x&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+             warn <span class="token string">&quot;Could not locate tools.jar or classes.jar. Please set manually to avail all command features.&quot;</span>
+        <span class="token keyword">fi</span>
+    <span class="token keyword">fi</span>
+
+<span class="token punctuation">}</span>
+<span class="token comment"># 初始化 </span>
+<span class="token function-name function">init</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token comment"># 确定是否需要执行特殊的操作系统处理</span>
+    detectOS
+
+    <span class="token comment"># 如果可能的话，不限制文件描述符的数量</span>
+    unlimitFD
+
+    <span class="token comment"># 找到要执行的JVM</span>
+    locateJava <span class="token string">&quot;<span class="token variable">$1</span>&quot;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment"># 将nifi安装为service</span>
+<span class="token function-name function">install</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    detectOS
+
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">${darwin}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;true&quot;</span>  <span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">${cygwin}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;true&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">'Installing Apache NiFi as a service is not supported on OS X or Cygwin.'</span>
+        <span class="token builtin class-name">exit</span> <span class="token number">1</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token assign-left variable">SVC_NAME</span><span class="token operator">=</span>nifi
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;x<span class="token variable">$2</span>&quot;</span> <span class="token operator">!=</span> <span class="token string">&quot;x&quot;</span> <span class="token punctuation">]</span> <span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token assign-left variable">SVC_NAME</span><span class="token operator">=</span><span class="token variable">$2</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token comment"># since systemd seems to honour /etc/init.d we don't still create native systemd services</span>
+    <span class="token comment"># yet...</span>
+    <span class="token assign-left variable">initd_dir</span><span class="token operator">=</span><span class="token string">'/etc/init.d'</span>
+    <span class="token assign-left variable">SVC_FILE</span><span class="token operator">=</span><span class="token string">&quot;<span class="token variable">${initd_dir}</span>/<span class="token variable">${SVC_NAME}</span>&quot;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token operator">!</span> -w  <span class="token string">&quot;<span class="token variable">${initd_dir}</span>&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">&quot;Current user does not have write permissions to <span class="token variable">${initd_dir}</span>. Cannot install NiFi as a service.&quot;</span>
+        <span class="token builtin class-name">exit</span> <span class="token number">1</span>
+    <span class="token keyword">fi</span>
+
+<span class="token comment"># Create the init script, overwriting anything currently present</span>
+<span class="token function">cat</span> <span class="token operator">&lt;&lt;</span>SERVICEDESCRIPTOR <span class="token operator">&gt;</span> <span class="token variable">${SVC_FILE}</span>
+<span class="token comment">#!/bin/sh</span>
+
+<span class="token comment">#</span>
+<span class="token comment">#    Licensed to the Apache Software Foundation (ASF) under one or more</span>
+<span class="token comment">#    contributor license agreements.  See the NOTICE file distributed with</span>
+<span class="token comment">#    this work for additional information regarding copyright ownership.</span>
+<span class="token comment">#    The ASF licenses this file to You under the Apache License, Version 2.0</span>
+<span class="token comment">#    (the &quot;License&quot;); you may not use this file except in compliance with</span>
+<span class="token comment">#    the License.  You may obtain a copy of the License at</span>
+<span class="token comment">#</span>
+<span class="token comment">#       http://www.apache.org/licenses/LICENSE-2.0</span>
+<span class="token comment">#</span>
+<span class="token comment">#    Unless required by applicable law or agreed to in writing, software</span>
+<span class="token comment">#    distributed under the License is distributed on an &quot;AS IS&quot; BASIS,</span>
+<span class="token comment">#    WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.</span>
+<span class="token comment">#    See the License for the specific language governing permissions and</span>
+<span class="token comment">#    limitations under the License.</span>
+<span class="token comment">#</span>
+<span class="token comment"># chkconfig: 2345 20 80</span>
+<span class="token comment"># description: Apache NiFi is a dataflow system based on the principles of Flow-Based Programming.</span>
+<span class="token comment">#</span>
+
+<span class="token comment"># Make use of the configured NIFI_HOME directory and pass service requests to the nifi.sh executable</span>
+<span class="token assign-left variable">NIFI_HOME</span><span class="token operator">=</span><span class="token variable">${NIFI_HOME}</span>
+<span class="token assign-left variable">bin_dir</span><span class="token operator">=</span><span class="token punctuation">\</span><span class="token variable">${NIFI_HOME}</span>/bin
+<span class="token assign-left variable">nifi_executable</span><span class="token operator">=</span><span class="token punctuation">\</span><span class="token variable">${bin_dir}</span>/nifi.sh
+
+<span class="token punctuation">\</span><span class="token variable">${nifi_executable}</span> <span class="token string">&quot;\<span class="token variable">$@</span>&quot;</span>
+SERVICEDESCRIPTOR
+
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token operator">!</span> -f <span class="token string">&quot;<span class="token variable">${SVC_FILE}</span>&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">&quot;Could not create service file <span class="token variable">${SVC_FILE}</span>&quot;</span>
+        <span class="token builtin class-name">exit</span> <span class="token number">1</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token comment"># Provide the user execute access on the file</span>
+    <span class="token function">chmod</span> u+x <span class="token variable">${SVC_FILE}</span>
+
+
+    <span class="token comment"># If SLES or OpenSuse...</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">${ID}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;opensuse&quot;</span> <span class="token punctuation">]</span> <span class="token operator">||</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">${ID}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;sles&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token function">rm</span> -f <span class="token string">&quot;/etc/rc.d/rc2.d/S65<span class="token variable">${SVC_NAME}</span>&quot;</span>
+        <span class="token function">ln</span> -s <span class="token string">&quot;/etc/init.d/<span class="token variable">${SVC_NAME}</span>&quot;</span> <span class="token string">&quot;/etc/rc.d/rc2.d/S65<span class="token variable">${SVC_NAME}</span>&quot;</span> <span class="token operator">||</span> <span class="token punctuation">{</span> <span class="token builtin class-name">echo</span> <span class="token string">&quot;Could not create link /etc/rc.d/rc2.d/S65<span class="token variable">${SVC_NAME}</span>&quot;</span><span class="token punctuation">;</span> <span class="token builtin class-name">exit</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+        <span class="token function">rm</span> -f <span class="token string">&quot;/etc/rc.d/rc2.d/K65<span class="token variable">${SVC_NAME}</span>&quot;</span>
+        <span class="token function">ln</span> -s <span class="token string">&quot;/etc/init.d/<span class="token variable">${SVC_NAME}</span>&quot;</span> <span class="token string">&quot;/etc/rc.d/rc2.d/K65<span class="token variable">${SVC_NAME}</span>&quot;</span> <span class="token operator">||</span> <span class="token punctuation">{</span> <span class="token builtin class-name">echo</span> <span class="token string">&quot;Could not create link /etc/rc.d/rc2.d/K65<span class="token variable">${SVC_NAME}</span>&quot;</span><span class="token punctuation">;</span> <span class="token builtin class-name">exit</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">&quot;Service <span class="token variable">${SVC_NAME}</span> installed&quot;</span>
+    <span class="token comment"># Anything other fallback to the old approach</span>
+    <span class="token keyword">else</span>
+        <span class="token function">rm</span> -f <span class="token string">&quot;/etc/rc2.d/S65<span class="token variable">${SVC_NAME}</span>&quot;</span>
+        <span class="token function">ln</span> -s <span class="token string">&quot;/etc/init.d/<span class="token variable">${SVC_NAME}</span>&quot;</span> <span class="token string">&quot;/etc/rc2.d/S65<span class="token variable">${SVC_NAME}</span>&quot;</span> <span class="token operator">||</span> <span class="token punctuation">{</span> <span class="token builtin class-name">echo</span> <span class="token string">&quot;Could not create link /etc/rc2.d/S65<span class="token variable">${SVC_NAME}</span>&quot;</span><span class="token punctuation">;</span> <span class="token builtin class-name">exit</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+        <span class="token function">rm</span> -f <span class="token string">&quot;/etc/rc2.d/K65<span class="token variable">${SVC_NAME}</span>&quot;</span>
+        <span class="token function">ln</span> -s <span class="token string">&quot;/etc/init.d/<span class="token variable">${SVC_NAME}</span>&quot;</span> <span class="token string">&quot;/etc/rc2.d/K65<span class="token variable">${SVC_NAME}</span>&quot;</span> <span class="token operator">||</span> <span class="token punctuation">{</span> <span class="token builtin class-name">echo</span> <span class="token string">&quot;Could not create link /etc/rc2.d/K65<span class="token variable">${SVC_NAME}</span>&quot;</span><span class="token punctuation">;</span> <span class="token builtin class-name">exit</span> <span class="token number">1</span><span class="token punctuation">;</span> <span class="token punctuation">}</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">&quot;Service <span class="token variable">${SVC_NAME}</span> installed&quot;</span>
+    <span class="token keyword">fi</span>
+<span class="token punctuation">}</span>
+
+<span class="token function-name function">run</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    <span class="token assign-left variable">BOOTSTRAP_CONF_DIR</span><span class="token operator">=</span><span class="token string">&quot;<span class="token variable">${NIFI_HOME}</span>/conf&quot;</span>
+    <span class="token assign-left variable">BOOTSTRAP_CONF</span><span class="token operator">=</span><span class="token string">&quot;<span class="token variable">${BOOTSTRAP_CONF_DIR}</span>/bootstrap.conf&quot;</span><span class="token punctuation">;</span>
+    <span class="token assign-left variable">BOOTSTRAP_LIBS</span><span class="token operator">=</span><span class="token string">&quot;<span class="token variable">${NIFI_HOME}</span>/lib/bootstrap/*&quot;</span>
+
+    <span class="token comment"># 运行NiFi时使用的用户名。此值将在Windows上被忽略。在bootstrap.conf中 run.as= 配置</span>
+    <span class="token assign-left variable">run_as_user</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span><span class="token function">grep</span> <span class="token string">'^\s*run.as'</span> <span class="token string">&quot;<span class="token variable">${BOOTSTRAP_CONF}</span>&quot;</span> <span class="token operator">|</span> <span class="token function">cut</span> -d<span class="token string">'='</span> -f2<span class="token variable">)</span></span>
+    <span class="token comment"># 如果以用户身份运行与启动流程相同，则忽略此配置</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">${run_as_user}</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;<span class="token variable"><span class="token variable">$(</span><span class="token function">whoami</span><span class="token variable">)</span></span>&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token builtin class-name">unset</span> run_as_user
+    <span class="token keyword">fi</span>
+
+    <span class="token keyword">if</span> <span class="token variable">$cygwin</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> -n <span class="token string">&quot;<span class="token variable">${run_as_user}</span>&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+            <span class="token builtin class-name">echo</span> <span class="token string">&quot;The run.as option is not supported in a Cygwin environment. Exiting.&quot;</span>
+            <span class="token builtin class-name">exit</span> <span class="token number">1</span>
+        <span class="token keyword">fi</span><span class="token punctuation">;</span>
+
+        <span class="token assign-left variable">NIFI_HOME</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>cygpath --path --windows <span class="token string">&quot;<span class="token variable">${NIFI_HOME}</span>&quot;</span><span class="token variable">)</span></span>
+        <span class="token assign-left variable">NIFI_LOG_DIR</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>cygpath --path --windows <span class="token string">&quot;<span class="token variable">${NIFI_LOG_DIR}</span>&quot;</span><span class="token variable">)</span></span>
+        <span class="token assign-left variable">NIFI_PID_DIR</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>cygpath --path --windows <span class="token string">&quot;<span class="token variable">${NIFI_PID_DIR}</span>&quot;</span><span class="token variable">)</span></span>
+        <span class="token assign-left variable">BOOTSTRAP_CONF</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>cygpath --path --windows <span class="token string">&quot;<span class="token variable">${BOOTSTRAP_CONF}</span>&quot;</span><span class="token variable">)</span></span>
+        <span class="token assign-left variable">BOOTSTRAP_CONF_DIR</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>cygpath --path --windows <span class="token string">&quot;<span class="token variable">${BOOTSTRAP_CONF_DIR}</span>&quot;</span><span class="token variable">)</span></span>
+        <span class="token assign-left variable">BOOTSTRAP_LIBS</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>cygpath --path --windows <span class="token string">&quot;<span class="token variable">${BOOTSTRAP_LIBS}</span>&quot;</span><span class="token variable">)</span></span>
+        <span class="token assign-left variable">BOOTSTRAP_CLASSPATH</span><span class="token operator">=</span><span class="token string">&quot;<span class="token variable">${BOOTSTRAP_CONF_DIR}</span>;<span class="token variable">${BOOTSTRAP_LIBS}</span>&quot;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> -n <span class="token string">&quot;<span class="token variable">${TOOLS_JAR}</span>&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+            <span class="token assign-left variable">TOOLS_JAR</span><span class="token operator">=</span><span class="token variable"><span class="token variable">$(</span>cygpath --path --windows <span class="token string">&quot;<span class="token variable">${TOOLS_JAR}</span>&quot;</span><span class="token variable">)</span></span>
+            <span class="token assign-left variable">BOOTSTRAP_CLASSPATH</span><span class="token operator">=</span><span class="token string">&quot;<span class="token variable">${TOOLS_JAR}</span>;<span class="token variable">${BOOTSTRAP_CLASSPATH}</span>&quot;</span>
+        <span class="token keyword">fi</span>
+    <span class="token keyword">else</span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> -n <span class="token string">&quot;<span class="token variable">${run_as_user}</span>&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+            <span class="token keyword">if</span> <span class="token operator">!</span> <span class="token function">id</span> -u <span class="token string">&quot;<span class="token variable">${run_as_user}</span>&quot;</span> <span class="token operator">&gt;</span>/dev/null <span class="token operator"><span class="token file-descriptor important">2</span>&gt;</span><span class="token file-descriptor important">&amp;1</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+                <span class="token builtin class-name">echo</span> <span class="token string">&quot;The specified run.as user <span class="token variable">${run_as_user}</span> does not exist. Exiting.&quot;</span>
+                <span class="token builtin class-name">exit</span> <span class="token number">1</span>
+            <span class="token keyword">fi</span>
+        <span class="token keyword">fi</span><span class="token punctuation">;</span>
+        <span class="token assign-left variable">BOOTSTRAP_CLASSPATH</span><span class="token operator">=</span><span class="token string">&quot;<span class="token variable">${BOOTSTRAP_CONF_DIR}</span>:<span class="token variable">${BOOTSTRAP_LIBS}</span>&quot;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">[</span> -n <span class="token string">&quot;<span class="token variable">${TOOLS_JAR}</span>&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+            <span class="token assign-left variable">BOOTSTRAP_CLASSPATH</span><span class="token operator">=</span><span class="token string">&quot;<span class="token variable">${TOOLS_JAR}</span>:<span class="token variable">${BOOTSTRAP_CLASSPATH}</span>&quot;</span>
+        <span class="token keyword">fi</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token builtin class-name">echo</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">&quot;Java home: <span class="token variable">${JAVA_HOME}</span>&quot;</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">&quot;NiFi home: <span class="token variable">${NIFI_HOME}</span>&quot;</span>
+    <span class="token builtin class-name">echo</span>
+    <span class="token builtin class-name">echo</span> <span class="token string">&quot;Bootstrap Config File: <span class="token variable">${BOOTSTRAP_CONF}</span>&quot;</span>
+    <span class="token builtin class-name">echo</span>
+
+    <span class="token comment">#在后台运行'start'，因为进程将继续运行，监视NiFi。所有其他命令都将很快终止，所以要等待它们</span>
+
+    <span class="token comment">#设置目录的参数</span>
+    <span class="token comment"># java程序启动参数 -D 在System类中通过getProperties()得到的一串系统属性</span>
+    <span class="token assign-left variable">BOOTSTRAP_LOG_PARAMS</span><span class="token operator">=</span><span class="token string">&quot;-Dorg.apache.nifi.bootstrap.config.log.dir='<span class="token variable">${NIFI_LOG_DIR}</span>'&quot;</span>
+    <span class="token assign-left variable">BOOTSTRAP_PID_PARAMS</span><span class="token operator">=</span><span class="token string">&quot;-Dorg.apache.nifi.bootstrap.config.pid.dir='<span class="token variable">${NIFI_PID_DIR}</span>'&quot;</span>
+    <span class="token assign-left variable">BOOTSTRAP_CONF_PARAMS</span><span class="token operator">=</span><span class="token string">&quot;-Dorg.apache.nifi.bootstrap.config.file='<span class="token variable">${BOOTSTRAP_CONF}</span>'&quot;</span>
+
+    <span class="token comment"># 去掉一下注釋就允许调试NIFI进程 (或者在bootstrap.conf中取消注释)</span>
+    <span class="token comment">#BOOTSTRAP_DEBUG_PARAMS=&quot;-agentlib:jdwp=transport=dt_socket,server=y,suspend=n,address=8000&quot;</span>
+
+    <span class="token assign-left variable">BOOTSTRAP_DIR_PARAMS</span><span class="token operator">=</span><span class="token string">&quot;<span class="token variable">${BOOTSTRAP_LOG_PARAMS}</span> <span class="token variable">${BOOTSTRAP_PID_PARAMS}</span> <span class="token variable">${BOOTSTRAP_CONF_PARAMS}</span>&quot;</span>
+
+    <span class="token assign-left variable">run_nifi_cmd</span><span class="token operator">=</span><span class="token string">&quot;'<span class="token variable">${JAVA}</span>' -cp '<span class="token variable">${BOOTSTRAP_CLASSPATH}</span>' -Xms12m -Xmx24m <span class="token variable">${BOOTSTRAP_DIR_PARAMS}</span> <span class="token variable">${BOOTSTRAP_DEBUG_PARAMS}</span> <span class="token variable">${BOOTSTRAP_JAVA_OPTS}</span> org.apache.nifi.bootstrap.RunNiFi <span class="token variable">$@</span>&quot;</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> -n <span class="token string">&quot;<span class="token variable">${run_as_user}</span>&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+      <span class="token comment"># 为运行提供SCRIPT_DIR并执行ni -env。</span>
+      <span class="token assign-left variable">run_nifi_cmd</span><span class="token operator">=</span><span class="token string">&quot;sudo -u <span class="token variable">${run_as_user}</span> sh -c <span class="token entity" title="\"">\&quot;</span>SCRIPT_DIR='<span class="token variable">${SCRIPT_DIR}</span>' &amp;&amp; . '<span class="token variable">${SCRIPT_DIR}</span>/nifi-env.sh' &amp;&amp; <span class="token variable">${run_nifi_cmd}</span><span class="token entity" title="\"">\&quot;</span>&quot;</span>
+    <span class="token keyword">fi</span>
+
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">$1</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;run&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+      <span class="token comment"># 使用exec将PID切换到RunNiFi java进程，而不是将其作为子进程( 前台运行nifi，Ctrl-C就停止NIFI)</span>
+      <span class="token comment"># exec命令 用于调用并执行指令的命令。exec命令通常用在shell脚本程序中，可以调用其他的命令。如果在当前终端中使用命令，则当指定的命令执行完毕后会立即退出终端。</span>
+      <span class="token assign-left variable">run_nifi_cmd</span><span class="token operator">=</span><span class="token string">&quot;exec <span class="token variable">${run_nifi_cmd}</span>&quot;</span>
+    <span class="token keyword">fi</span>
+    <span class="token comment"># Linux eval命令用于重新运算求出参数的内容。</span>
+    <span class="token comment"># eval可读取一连串的参数，然后再依参数本身的特性来执行。</span>
+    <span class="token keyword">if</span> <span class="token punctuation">[</span> <span class="token string">&quot;<span class="token variable">$1</span>&quot;</span> <span class="token operator">=</span> <span class="token string">&quot;start&quot;</span> <span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token keyword">then</span>
+        <span class="token punctuation">(</span> <span class="token builtin class-name">eval</span> <span class="token string">&quot;cd <span class="token variable">${NIFI_HOME}</span> &amp;&amp; <span class="token variable">${run_nifi_cmd}</span>&quot;</span> <span class="token operator">&amp;</span> <span class="token punctuation">)</span><span class="token operator">&gt;</span> /dev/null <span class="token operator"><span class="token file-descriptor important">1</span>&gt;&amp;</span>-
+    <span class="token keyword">else</span>
+        <span class="token builtin class-name">eval</span> <span class="token string">&quot;cd <span class="token variable">${NIFI_HOME}</span> &amp;&amp; <span class="token variable">${run_nifi_cmd}</span>&quot;</span>
+    <span class="token keyword">fi</span>
+    <span class="token assign-left variable">EXIT_STATUS</span><span class="token operator">=</span><span class="token variable">$?</span>
+
+   <span class="token comment"># 稍等(3秒)，等待日志记录完成，然后回显新行。</span>
+   <span class="token comment"># 我们这样做是为了避免在运行命令后，日志在控制台被吐出来，然后返回给用户</span>
+    <span class="token function">sleep</span> <span class="token number">3</span>
+    <span class="token builtin class-name">echo</span>
+<span class="token punctuation">}</span>
+
+<span class="token function-name function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">{</span>
+    init <span class="token string">&quot;<span class="token variable">$1</span>&quot;</span>
+    run <span class="token string">&quot;<span class="token variable">$@</span>&quot;</span>
+<span class="token punctuation">}</span>
+
+<span class="token comment"># ==========================</span>
+<span class="token comment"># 方法区 end</span>
+<span class="token comment"># ==========================</span>
+
+<span class="token comment"># ==========================</span>
+<span class="token comment"># 3、入口 start</span>
+<span class="token comment"># ==========================</span>
+
+<span class="token comment"># 判断 $1 第一个参数是什么 </span>
+<span class="token comment"># 其中install 将nifi安装为service </span>
+<span class="token comment"># start 启动</span>
+<span class="token comment"># stop 停止</span>
+<span class="token comment"># run</span>
+<span class="token comment"># status </span>
+<span class="token comment"># dump</span>
+<span class="token comment"># env</span>
+<span class="token comment"># restart 重启</span>
+
+<span class="token comment"># $@ 传全部参数</span>
+<span class="token keyword">case</span> <span class="token string">&quot;<span class="token variable">$1</span>&quot;</span> <span class="token keyword">in</span>
+    <span class="token function">install</span><span class="token punctuation">)</span>
+        <span class="token function">install</span> <span class="token string">&quot;<span class="token variable">$@</span>&quot;</span>
+        <span class="token punctuation">;</span><span class="token punctuation">;</span>
+    start<span class="token operator">|</span>stop<span class="token operator">|</span>run<span class="token operator">|</span>status<span class="token operator">|</span>dump<span class="token operator">|</span><span class="token function">env</span><span class="token punctuation">)</span>
+        main <span class="token string">&quot;<span class="token variable">$@</span>&quot;</span>
+        <span class="token punctuation">;</span><span class="token punctuation">;</span>
+    restart<span class="token punctuation">)</span>
+        init
+        run <span class="token string">&quot;stop&quot;</span>
+        run <span class="token string">&quot;start&quot;</span>
+        <span class="token punctuation">;</span><span class="token punctuation">;</span>
+    *<span class="token punctuation">)</span>
+        <span class="token builtin class-name">echo</span> <span class="token string">&quot;Usage nifi {start|stop|run|restart|status|dump|install}&quot;</span>
+        <span class="token punctuation">;</span><span class="token punctuation">;</span>
+<span class="token keyword">esac</span>
+
+
+</code></pre></div></div> <div class="page-edit"><!----> <div class="last-updated"><span class="prefix">Last Updated: </span> <span class="time">9/24/2019, 7:41:07 PM</span></div></div> <div class="page-nav"><p class="inner"><span class="prev">
+        ←
+        <a href="/code/nifi-nar-classloader.html" class="prev">
+          nifi nar包加载机制源码解读
+        </a></span> <span class="next"><a href="/code/nifi-env-sh.html">
+          nifi-env.sh 脚本解读
+        </a>
+        →
+      </span></p></div> </div> <div class="page"><section class="page-edit"><div><span data-flag-title="Your Article Title" class="leancloud-visitors"><em class="post-meta-item-text">阅读量： </em> <i class="leancloud-visitors-count"></i></span></div> <h3><a href="javascript:;"></a>
+      评 论：
+    </h3> <div id="vcomments"></div></section></div> <!----></div></div>
+    <script src="/assets/js/app.4deb0375.js" defer></script><script src="/assets/js/43.83bae356.js" defer></script>
+  </body>
+</html>
