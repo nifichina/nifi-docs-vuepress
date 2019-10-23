@@ -54,20 +54,20 @@ module.exports = {
                 ['/processors/RouteOnContent','RouteOnContent'],
                 ['/processors/SplitAvro','SplitAvro'],
                 ['/processors/SplitJson','SplitJson'],
-                ['/processors/UpdateAttribute','UpdateAttribute'],
-                ['/','待续']
+                ['/processors/UpdateAttribute','UpdateAttribute']
+    
                ]
             },
             {
               title: 'Controller Services',
               children: [
-                ['/','待续']
+                
                ]
             },
             {
               title: 'Reporting Tasks',
               children: [
-                ['/','待续']
+                
                ]
             },
             {
@@ -81,7 +81,7 @@ module.exports = {
                 ['/code/RunNiFi','RunNiFi.java 源码解读'],
                 ['/code/NiFi','NiFi.java 源码解读'],
                 ['/code/UnpackNar','Nar包下的MANIFEST.MF'],
-                ['/','待续']
+                
                ]
             },
             {
@@ -90,8 +90,8 @@ module.exports = {
                 ['/extend/ControllerServiceArchive','ControllerService扩展开发的项目结构'],
                 ['/extend/JsonJoltShift','JSONJOLT介绍及语法详解-shift篇'],
                 ['/extend/通过配置优化NiFi性能','通过配置优化NiFi性能'],
-                ['/extend/NIFI Linux系统配置的最佳实践','NIFI Linux系统配置的最佳实践'],
-                ['/','待续']
+                ['/extend/NIFI Linux系统配置的最佳实践','NIFI Linux系统配置的最佳实践']
+               
                ]
             },
             {
@@ -103,16 +103,16 @@ module.exports = {
                 ['/java-source-code/ContextClassLoader','线程上下文类加载器'],
                 ['/java-source-code/从jvm源码解读Java运行时的类加载','从jvm源码解读Java运行时的类加载'],
                 ['/java-source-code/Socket','Java socket详解（转）'],
-                ['/java-source-code/HashMap','Java HashMap 新增方法(merge,compute)（转）'],
-                ['/','待续']
+                ['/java-source-code/HashMap','Java HashMap 新增方法(merge,compute)（转）']
+                
                
               ]
             },
             {
               title: 'Jetty source code',
               children: [
-                ['/java-source-code/ProcessBuilder','ProcessBuilder'],
-                ['/','待续']
+                ['/java-source-code/ProcessBuilder','ProcessBuilder']
+                
                
               ]
             }
