@@ -13,6 +13,9 @@ cd docs/.vuepress/dist
 # echo 'www.example.com' > CNAME
 
 git init
+git config --global http.postBuffer 1048576000
+git config --global http.lowSpeedLimit 0
+git config --global http.lowSpeedTime 999999
 git add -A
 git commit -m 'deploy'
 
