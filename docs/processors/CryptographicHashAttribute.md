@@ -67,6 +67,14 @@
 
 ## 示例说明
 
+<details>
+<summary>示例流程模板xml</summary>
+<p>流程图</p>
+<img src="./img/CryptographicHashAttribute/demo.png">
+<p>流程模板xml(1.9.2)</p>
+链接: <a target="_blank" href="https://pan.baidu.com/s/1_l4zYkFzg_SJWihv620QYg&shfl=shareset">百度云盘</a> 提取码: hyi5 
+</details>
+
 1：Allow missing attributes 
 
 Fail when no attributes present 设置为true，来源流文件中只包含一个secureKey属性，而该处理器配置test1属性进行MD5加密

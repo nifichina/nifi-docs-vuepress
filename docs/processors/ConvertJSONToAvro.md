@@ -60,6 +60,15 @@
 
 ## 示例说明
 
+<details>
+<summary>示例流程模板xml</summary>
+<p>流程图</p>
+<img src="./img/ConvertJSONToAvro/demo.png">
+<p>流程模板xml(1.9.2)</p>
+链接: <a target="_blank" href="https://pan.baidu.com/s/1aer9TnAiPaVBNRNKSgZ0Ig&shfl=shareset">百度云盘</a> 提取码: f5mg 
+</details>
+
+
 1：每次只 接收一个json数据 ，无法处理json数组 。
 
 输入json：

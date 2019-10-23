@@ -23,7 +23,15 @@ SQL select query                        |           |                           
 **Max Rows Per Flow File**              | 0         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | 单个流文件中包含的最大结果行数。这意味着允许将非常大的结果集分解为多个流文件。如果指定的值为零，则在单个流文件中返回所有行。 <br/> **支持表达式语言**                                                                                                                                                                                                                                                                                                                                                     
 **Output Batch Size**                   | 0         |                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | 提交进程会话之前要排队的输出流文件的数量。当设置为零时，会话将在处理完所有结果集行并准备好将输出流文件传输到下游关系时提交。对于大型结果集，这可能导致在处理器执行结束时传输大量流文件。如果设置了此属性，那么当指定数量的流文件准备好传输时，将提交会话，从而将流文件释放到下游关系。注意:片段。在设置此属性时，不会在FlowFiles上设置count属性。<br/>  **支持表达式语言**                                                                                                                                                                                                                                   
 
-举例说明：
+## 示例说明
+
+<details>
+<summary>示例流程模板xml</summary>
+<p>流程图</p>
+<img src="./img/ExecuteSQL/demo.png">
+<p>流程模板xml(1.9.2)</p>
+链接: <a target="_blank" href="https://pan.baidu.com/s/1kwSjFDT1kfZcGOcc35GqBg&shfl=shareset">百度云盘</a> 提取码: y88g 
+</details>
 
 1：Avro Logical Types ，没有接触过的人可能会一头雾水。简单来说，数据库有自己的数据类型，avro格式数据也有自己的数据类型，两方的数据类型有些是能直接映射的，有些是需要转换的，文档中所说的DECIMAL/NUMBER, DATE, TIME 和TIMESTAMP这些来源数据的类型在avro中就无法直接映射类型；这里提供了两种解决方法，第一种是上述类型统一转成字符串类型，具体值不变；另一种是转换成avro Logical Types，但数据值会变动转换。按我使用一般这个属性设置为false，十进制/数字、日期、时间和时间戳列就写成字符串。最大的好处就是值不变（如下）![](./img/ExecuteSQL/1.png)
 

@@ -67,11 +67,19 @@ Groovy脚本处理器。脚本负责处理传入的流文件以及任何脚本�
 
 ## 示例说明
 
+<details>
+<summary>示例流程模板xml</summary>
+<p>流程图</p>
+<img src="./img/ExecuteGroovyScript/demo.png">
+<p>流程模板xml(1.9.2)</p>
+链接: <a target="_blank" href="https://pan.baidu.com/s/1iTQNOeBRlH_wTJ3R3mmIAA&shfl=shareset">百度云盘</a> 提取码: nnt8 
+</details>
+
 1.使用Groovy脚本组装数据
 
 ![](./img/ExecuteGroovyScript/config.png)
 
-groovy脚本:这段脚本的意思是根据主表的数据，去查询子表，并且将主子表的数据进行 组装 
+groovy脚本:这段脚本执行一个SQL 查询MySQL 并将结果写入到输出流属性 
 
 ```groovy
 //By zhangchengk@foxmail.com
@@ -81,27 +89,14 @@ import groovy.json.JsonOutput
 //get the flowfile  
 def ff = session.get()
 if(!ff)return
-String text = ff.read().getText("UTF-8")
-def jsonSlurper = new JsonSlurper()
-//get Map
-def map = jsonSlurper.parseText(text)
+Map map = [:]
 // get attributes of this flowfile
-def join_value = ff.getAttribute('join_value')//主子表关联键value
-def tablename= ff.getAttribute('slaveTableName')//子表表名
-def tsLt= ff.getAttribute('tsLt')
-def slaveJoinColumn= ff.getAttribute('slaveJoinColumn')
-def slaveJsonField= ff.getAttribute('slaveJsonField')
+def tablename= ff.getAttribute('tableName')
 // build the sql which select from slave table
-def sql = "select distinct id from ${tablename} where ${slaveJoinColumn}= '${join_value}' and dr !='2' and ts < '${tsLt}'"
+def sql = "select * from ${tablename} limit 1"
 //SQL.mydb references http://docs.groovy-lang.org/2.4.10/html/api/groovy/sql/Sql.html object
-List list = SQL.mydb.rows(sql .toString()) //important to cast to String
-List result = []
-//查询子表一定时间范围（<tsLt）的最新状态
-for(int i=0;i<list.size();i++){
-	sql = "select  * from test.fi_note_cusl_ysbxd_b where id = '${ list[i].id}' and dr !='2' order by ts DESC limit 1"
-	result.add( SQL.mydb.firstRow(sql .toString()))
-}
-map.put(slaveJsonField.toString(),result)//主子表数据json组合
+List list = SQL.mydb.rows(sql.toString()) //important to cast to String
+map.put("result",list[0].toString())
 def output = JsonOutput.toJson(map)
 session.remove(ff)
 def newff = session.create()
@@ -109,3 +104,5 @@ newff.putAttribute("data", output )
 //transfer flow file to success
 REL_SUCCESS << newff
 ```
+
+![](./img/ExecuteGroovyScript/result.png)

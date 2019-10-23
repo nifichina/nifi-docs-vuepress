@@ -67,7 +67,7 @@
 <p>流程图</p>
 <img src="./img/AttributesToCSV/demo.png">
 <p>流程模板xml(1.9.2)</p>
-<a href="./img/AttributesToCSV/AttributesToCSVdemo.xml">下载示例模板</a>
+链接: <a target="_blank" href="https://pan.baidu.com/s/1EiMvHGLMV2mYiT7pWxgf3A">百度云盘</a> 提取码: rqy4 
 </details>
 
 1：如图为GenerateFlowFile生成的流文件，AttributesToCSV配置csv输出到流属性中，csv包含核心属性 ，包含schema

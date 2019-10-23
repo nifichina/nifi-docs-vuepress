@@ -1152,7 +1152,8 @@ User2无法建立连接::
 
 2.  从操作选项板中选择访问策略图标(![访问政策图标](../img/iconAccessPolicies.png)),然后打开访问策略对话框。
 
-3.  从策略下拉列表中选择修改组件。 ![](../img/process-group-modify-policy.png)
+3.  从策略下拉列表中选择修改组件。 
+   ![](../img/process-group-modify-policy.png)
 
 4.  选择添加用户图标(![添加用户图标](../img/iconAddUser.png))。找到或输入User2并选择确定。
 

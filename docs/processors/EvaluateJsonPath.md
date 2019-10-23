@@ -66,6 +66,14 @@
 
 ## 示例说明
 
+<details>
+<summary>示例流程模板xml</summary>
+<p>流程图</p>
+<img src="./img/EvaluateJsonPath/demo.png">
+<p>流程模板xml(1.9.2)</p>
+链接: <a target="_blank" href="https://pan.baidu.com/s/1N6EWikb5Y3WYoSzuMCZgjA&shfl=shareset">百度云盘</a> 提取码: 24i6 
+</details>
+
 1：提取流文件json内容，作为输出流的属性。（注意：当输出选择flowfile-attribute时，及时jsonpath匹配不到值，流文件也会路由到matched）
 
 ![](./img/EvaluateJsonPath/config.png)
