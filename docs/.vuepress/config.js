@@ -17,7 +17,7 @@ module.exports = {
                 ['/general/UserGuide','用户指南'],
                 ['/general/ExpressionLanguageGuide','Expression Language Guide'],
                 ['/general/RecordPathGuide','RecordPath Guide'],
-                ['/general/AdminGuide','Admin Guide'],
+                ['/general/AdminGuide','管理员指南'],
                 ['/general/ToolkitGuide','Toolkit Guide']
               ]
             },
@@ -81,7 +81,7 @@ module.exports = {
                 ['/code/RunNiFi','RunNiFi.java 源码解读'],
                 ['/code/NiFi','NiFi.java 源码解读'],
                 ['/code/UnpackNar','Nar包下的MANIFEST.MF'],
-                
+                ['/code/Content Repository Archiving','理解内容存储库归档']
                ]
             },
             {

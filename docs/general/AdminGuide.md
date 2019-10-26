@@ -29,14 +29,14 @@ NiFi具有以下最低系统要求:
 
     * Safari: Current &(Current - 1)
 
-**注意**在持续且极高的吞吐量下,可能需要调整CodeCache设置以避免突然的性能损失。有关更多信息,请参阅[Bootstrap Properties](#Bootstrap属性)部分。
+**注意**在持续且极高的吞吐量下,可能需要调整CodeCache设置以避免突然的性能损失。有关更多信息,请参阅[Bootstrap属性](#bootstrap属性)部分。
 
 ## 如何安装和启动NiFi
 
 * Linux/Unix/OS X.
-    * 加压NIFI到所需的安装目录
+    * 解压NIFI到所需的安装目录
 
-    * 按照需要配置conf目录下的文件 `<installdir>/conf`
+    * 按照需要，配置conf目录下的文件 
         * 至少,我们建议您编辑nifi.properties文件并输入密码`nifi.sensitive.props.key`(请参阅下面的[系统属性](#系统属性))
 
     * 从`<installdir>/bin`目录中,输入执行以下命令`./nifi.sh <command>`:
@@ -47,9 +47,9 @@ NiFi具有以下最低系统要求:
 
         * status:提供NiFi的当前状态
 
-        * run:在前台运行NiFi并等待Ctrl-C启动NiFi的关闭
+        * run:在前台运行NiFi并等待Ctrl-C关闭NiFi
 
-        * install:安装NiFi作为服务,然后可以通过以下命令控制NIFI
+        * install:把NiFi安装作为服务,然后可以通过以下命令控制NIFI
          
           * `service nifi start`
 
@@ -60,7 +60,7 @@ NiFi具有以下最低系统要求:
 * Windows
     * 解压NIFI到所需的安装目录
 
-    * 按照需要配置conf目录下的文件 `<installdir>/conf`
+    * 按照需要配置conf目录下的文件 
         * 至少,我们建议您编辑nifi.properties文件并输入密码`nifi.sensitive.props.key`(请参阅下面的[系统属性](#系统属性))
 
     * 进入`<installdir>/bin`目录
@@ -85,7 +85,7 @@ NiFi具有以下最低系统要求:
 
 * 在`conf`目录中,将创建flow.xml.gz文件
 
-有关配置NiFi存储库和配置文件的详细信息,请参阅本指南的" [[系统属性](#系统属性)部分。
+有关配置NiFi存储库和配置文件的详细信息,请参阅本指南的[系统属性](#系统属性)部分。
 
 ## 端口配置
 
@@ -1384,13 +1384,13 @@ PBE是从_用户提供的秘密材料_(通常是密码)导出用于加密或解�
 
 除了`tls-toolkit`和之外`encrypt-config`，NiFi Toolkit还包含命令行实用程序，供管理员在独立和集群环境中支持NiFi维护。这些工具包括：
 
-* CLI - 该`cli`工具使管理员能够与NiFi和NiFi Registry实例进行交互，以自动执行诸如部署版本化流程以及管理流程组和群集节点等任务。
+* CLI - 该`cli`工具使管理员能够与NiFi和NiFi Registry实例进行交互，以自动执行诸如部署版本化流程以及管理流程组和集群节点等任务。
 
 * 文件管理器(File Manager) - 该`file-manager`工具使管理员能够从备份中备份，安装或恢复NiFi安装。
 
 * 流量分析器(Flow Analyzer) - 该`flow-analyzer`工具生成一个报告，帮助管理员了解可以存储在给定流量的背压中的最大数据量。
 
-* 节点管理器(Node Manager ) - 该`node-manager`工具使管理员能够对节点执行状态检查，以及从群集连接，断开连接或删除节点的功能。
+* 节点管理器(Node Manager ) - 该`node-manager`工具使管理员能够对节点执行状态检查，以及从集群连接，断开连接或删除节点的功能。
 
 * 通知(Notify) - 该`notify`工具使管理员能够将公告发送到NiFi UI。
 
@@ -1398,39 +1398,39 @@ PBE是从_用户提供的秘密材料_(通常是密码)导出用于加密或解�
 
 有关每个实用程序的详细信息，请参阅[NiFi工具包指南](./ToolkitGuide)。
 
-## 群集配置
+## 集群配置
 
-本节简要概述了NiFi群集以及如何设置基本群集的说明。在未来，我们希望提供涵盖NiFi集群架构的补充文档。
+本节简要概述了NiFi集群以及如何设置基本集群的说明。在未来，我们希望提供涵盖NiFi集群架构的补充文档。
 
 ![](../img/zero-master-cluster-http-access.png)
 
 ### 零主集群
 
-NiFi采用Zero-Master Clustering范例。集群中的每个节点都对数据执行相同的任务，但每个节点都在不同的数据集上运行。其中一个节点自动选择(通过Apache ZooKeeper)作为集群协调器。然后，群集中的所有节点都会向此节点发送心跳/状态信息，并且此节点负责断开在一段时间内未报告任何心跳状态的节点。此外，当新节点选择加入群集时，新节点必须首先连接到当前选定的群集协调器，以获取最新的流。如果群集协调器确定允许该节点加入(基于其配置的防火墙文件)，则将当前流提供给该节点，并且该节点能够加入群集，假设节点的流副本与群集协调器提供的副本匹配。如果节点的流配置版本与群集协调器的版本不同，则该节点将不会加入群集。
+NiFi采用Zero-Master Clustering范例。集群中的每个节点都对数据执行相同的任务，但每个节点都在不同的数据集上运行。其中一个节点自动选择(通过Apache ZooKeeper)作为集群协调器。然后，集群中的所有节点都会向此节点发送心跳/状态信息，并且此节点负责断开在一段时间内未报告任何心跳状态的节点。此外，当新节点选择加入集群时，新节点必须首先连接到当前选定的集群协调器，以获取最新的流。如果集群协调器确定允许该节点加入(基于其配置的防火墙文件)，则将当前流提供给该节点，并且该节点能够加入集群，假设节点的流副本与集群协调器提供的副本匹配。如果节点的流配置版本与集群协调器的版本不同，则该节点将不会加入集群。
 
 ### 为什么集群？
 
-NiFi管理员或DataFlow管理器(DFM)可能会发现在单个服务器上使用一个NiFi实例不足以处理他们拥有的数据量。因此，一种解决方案是在多个NiFi服务器上运行相同的数据流。但是，这会产生管理问题，因为每次DFM想要更改或更新数据流时，他们必须在每个服务器上进行这些更改，然后单独监视每个服务器。通过集群NiFi服务器，可以增加处理能力以及单个接口，通过该接口可以更改数据流并监控数据流。群集允许DFM仅进行一次更改，然后将更改复制到群集的所有节点。通过单一接口，DFM还可以监视所有节点的健康状况和状态。
+NiFi管理员或DataFlow管理器(DFM)可能会发现在单个服务器上使用一个NiFi实例不足以处理他们拥有的数据量。因此，一种解决方案是在多个NiFi服务器上运行相同的数据流。但是，这会产生管理问题，因为每次DFM想要更改或更新数据流时，他们必须在每个服务器上进行这些更改，然后单独监视每个服务器。通过集群NiFi服务器，可以增加处理能力以及单个接口，通过该接口可以更改数据流并监控数据流。集群允许DFM仅进行一次更改，然后将更改复制到集群的所有节点。通过单一接口，DFM还可以监视所有节点的健康状况和状态。
 
 ### 术语
 
-NiFi Clustering是独一无二的，有自己的术语。在设置群集之前了解以下术语非常重要：
+NiFi Clustering是独一无二的，有自己的术语。在设置集群之前了解以下术语非常重要：
 
-**NiFi群集协调器(****NiFi Cluster Coordinator****)**：NiFi群集协调器是NiFi群集中的节点，负责执行任务以管理群集中允许的节点，并为新加入的节点提供最新的流量。当DataFlow Manager管理群集中的数据流时，他们可以通过群集中任何节点的用户界面执行此操作。然后，所做的任何更改都将复制到群集中的所有节点。
+**NiFi集群协调器(****NiFi Cluster Coordinator****)**：NiFi集群协调器是NiFi集群中的节点，负责执行任务以管理集群中允许的节点，并为新加入的节点提供最新的流量。当DataFlow Manager管理集群中的数据流时，他们可以通过集群中任何节点的用户界面执行此操作。然后，所做的任何更改都将复制到集群中的所有节点。
 
-**节点(****Nodes****)**：每个群集由一个或多个节点组成。节点执行实际的数据处理。
+**节点(****Nodes****)**：每个集群由一个或多个节点组成。节点执行实际的数据处理。
 
-**主节点(****Primary Node****)**：每个群集都有一个主节点。在此节点上，可以运行“隔离处理器”(见下文)。ZooKeeper用于自动选择主节点。如果该节点由于任何原因断开与群集的连接，将自动选择新的主节点。用户可以通过查看用户界面的“群集管理”页面来确定当前选择哪个节点作为主节点。
+**主节点(****Primary Node****)**：每个集群都有一个主节点。在此节点上，可以运行“隔离处理器”(见下文)。ZooKeeper用于自动选择主节点。如果该节点由于任何原因断开与集群的连接，将自动选择新的主节点。用户可以通过查看用户界面的“集群管理”页面来确定当前选择哪个节点作为主节点。
 
 ![](../img/primary-node-cluster-mgt.png)
 
-**孤立的处理器**：在NiFi群集中，相同的数据流在所有节点上运行。因此，流中的每个组件都在每个节点上运行。但是，可能存在DFM不希望每个处理器在每个节点上运行的情况。最常见的情况是使用的处理器使用不能很好扩展的协议与外部服务进行通信。例如，GetSFTP处理器从远程目录中提取。如果GetSFTP处理器在群集中的每个节点上运行并同时尝试从同一个远程目录中提取，则可能存在竞争条件。因此，DFM可以将主节点上的GetSFTP配置为独立运行，这意味着它仅在该节点上运行。通过适当的数据流配置，它可以提取数据并在群集中的其余节点之间对其进行负载平衡。请注意，虽然存在此功能，但仅使用独立的NiFi实例来提取数据并将其提供给群集也很常见。它仅取决于可用资源以及管理员决定配置群集的方式。
+**孤立的处理器**：在NiFi集群中，相同的数据流在所有节点上运行。因此，流中的每个组件都在每个节点上运行。但是，可能存在DFM不希望每个处理器在每个节点上运行的情况。最常见的情况是使用的处理器使用不能很好扩展的协议与外部服务进行通信。例如，GetSFTP处理器从远程目录中提取。如果GetSFTP处理器在集群中的每个节点上运行并同时尝试从同一个远程目录中提取，则可能存在竞争条件。因此，DFM可以将主节点上的GetSFTP配置为独立运行，这意味着它仅在该节点上运行。通过适当的数据流配置，它可以提取数据并在集群中的其余节点之间对其进行负载平衡。请注意，虽然存在此功能，但仅使用独立的NiFi实例来提取数据并将其提供给集群也很常见。它仅取决于可用资源以及管理员决定配置集群的方式。
 
-**心跳**：节点通过“心跳”将其健康状况和状态传达给当前选定的群集协调器，这使协调器知道它们仍然连接到群集并正常工作。默认情况下，节点每5秒发出一次心跳，如果群集协调器在40秒内没有从节点收到心跳，则由于“缺乏心跳”而断开节点。5秒设置可在_nifi.properties_文件中配置(请参阅[集群公共属性](#集群公共属性))部分了解更多信息)。群集协调器断开节点的原因是协调器需要确保群集中的每个节点都处于同步状态，并且如果没有定期听到节点，协调器无法确定它是否仍与其余节点同步集群。如果在40秒后节点发送新的心跳，协调器将自动请求节点重新加入群集，以包括重新验证节点的流。一旦接收到心跳，由于心跳不足导致的断开连接和重新连接都会报告给用户界面中的DFM。
+**心跳**：节点通过“心跳”将其健康状况和状态传达给当前选定的集群协调器，这使协调器知道它们仍然连接到集群并正常工作。默认情况下，节点每5秒发出一次心跳，如果集群协调器在40秒内没有从节点收到心跳，则由于“缺乏心跳”而断开节点。5秒设置可在_nifi.properties_文件中配置(请参阅[集群公共属性](#集群公共属性))部分了解更多信息)。集群协调器断开节点的原因是协调器需要确保集群中的每个节点都处于同步状态，并且如果没有定期听到节点，协调器无法确定它是否仍与其余节点同步集群。如果在40秒后节点发送新的心跳，协调器将自动请求节点重新加入集群，以包括重新验证节点的流。一旦接收到心跳，由于心跳不足导致的断开连接和重新连接都会报告给用户界面中的DFM。
 
 ### 集群内的通信
 
-如上所述，节点通过心跳与群集协调器通信。当选择群集协调器时，它会使用其连接信息更新Apache ZooKeeper中众所周知的ZNode，以便节点了解发送心跳的位置。如果其中一个节点发生故障，则群集中的其他节点将不会自动获取丢失节点的负载。DFM可以配置故障转移意外事件的数据流; 但是，这取决于数据流设计，并不会自动发生。
+如上所述，节点通过心跳与集群协调器通信。当选择集群协调器时，它会使用其连接信息更新Apache ZooKeeper中众所周知的ZNode，以便节点了解发送心跳的位置。如果其中一个节点发生故障，则集群中的其他节点将不会自动获取丢失节点的负载。DFM可以配置故障转移意外事件的数据流; 但是，这取决于数据流设计，并不会自动发生。
 
 当DFM对数据流进行更改时，接收更改流的请求的节点会将这些更改传递给所有节点，并等待每个节点响应，表明它已对其本地流进行了更改。
 
@@ -1438,7 +1438,7 @@ NiFi Clustering是独一无二的，有自己的术语。在设置群集之前�
 
 #### 断开节点
 
-DFM可以手动断开节点与群集的连接。节点也可能由于其他原因而断开连接，例如由于缺乏心跳。当节点断开连接时，群集协调器将在用户界面上显示公告。在解决断开连接节点的问题之前，DFM将无法对数据流进行任何更改。DFM或管理员需要对节点的问题进行故障排除，并在对数据流进行任何新的更改之前解决该问题。但是，值得注意的是，仅仅因为节点断开连接并不意味着它不起作用。这可能由于某些原因而发生，例如，当节点由于网络问题而无法与集群协调器通信时。
+DFM可以手动断开节点与集群的连接。节点也可能由于其他原因而断开连接，例如由于缺乏心跳。当节点断开连接时，集群协调器将在用户界面上显示公告。在解决断开连接节点的问题之前，DFM将无法对数据流进行任何更改。DFM或管理员需要对节点的问题进行故障排除，并在对数据流进行任何新的更改之前解决该问题。但是，值得注意的是，仅仅因为节点断开连接并不意味着它不起作用。这可能由于某些原因而发生，例如，当节点由于网络问题而无法与集群协调器通信时。
 
 要手动断开节点，请从节点的行中选择“断开连接”图标(![断开图标](../img/iconDisconnect.png))。
 
@@ -1450,21 +1450,21 @@ DFM可以手动断开节点与群集的连接。节点也可能由于其他原�
 
 #### 卸载节点
 
-保留在断开连接的节点上的流文件可以通过卸载重新平衡到群集中的其他活动节点。在Cluster Management对话框中，为Disconnected节点选择“Offload”图标(![卸载图标](../img/iconOffload.png))。这将停止所有处理器，终止所有处理器，停止在所有远程进程组上传输，并将流文件重新平衡到群集中的其他连接节点。
+保留在断开连接的节点上的流文件可以通过卸载重新平衡到集群中的其他活动节点。在Cluster Management对话框中，为Disconnected节点选择“Offload”图标(![卸载图标](../img/iconOffload.png))。这将停止所有处理器，终止所有处理器，停止在所有远程进程组上传输，并将流文件重新平衡到集群中的其他连接节点。
 
 ![](../img/offloading-node-cluster-mgt.png)
 
-由于遇到错误(内存不足，没有网络连接等)而保持“卸载”状态的节点可以通过重新启动节点上的NiFi重新连接到群集。卸载的节点可以重新连接到群集(通过选择连接或重新启动节点上的NiFi)或从群集中删除。
+由于遇到错误(内存不足，没有网络连接等)而保持“卸载”状态的节点可以通过重新启动节点上的NiFi重新连接到集群。卸载的节点可以重新连接到集群(通过选择连接或重新启动节点上的NiFi)或从集群中删除。
 
 ![](../img/offloaded-node-cluster-mgt.png)
 
 #### 删除节点
 
-在某些情况下，DFM可能希望继续对流进行更改，即使节点未连接到群集也是如此。在这种情况下，DFM可以选择完全从集群中删除节点。在Cluster Management对话框中，为Disconnected或Offloaded节点选择“Delete”图标(![删除图标](../img/iconDelete.png))。删除后，在重新启动节点之前，节点无法重新加入群集。
+在某些情况下，DFM可能希望继续对流进行更改，即使节点未连接到集群也是如此。在这种情况下，DFM可以选择完全从集群中删除节点。在Cluster Management对话框中，为Disconnected或Offloaded节点选择“Delete”图标(![删除图标](../img/iconDelete.png))。删除后，在重新启动节点之前，节点无法重新加入集群。
 
 #### 退役节点
 
-停用节点并将其从群集中删除的步骤如下：
+停用节点并将其从集群中删除的步骤如下：
 
 1.  断开节点。
 
@@ -1494,7 +1494,7 @@ NiFi CLI节点命令
 
 ### 流动选举
 
-当群集首次启动时，NiFi必须确定哪个节点具有流的“正确”版本。这是通过对每个节点具有的流进行投票来完成的。当节点尝试连接到群集时，它会将其本地流的副本提供给群集协调器。如果尚未选择流“正确”流，则将节点的流与每个其他节点的流进行比较。如果另一个Node的流与此流匹配，则为此流投票。如果还没有其他节点报告相同的流，则此流将以一票投票的方式添加到可能选择的流池中。经过一段时间后(通过设置`nifi.cluster.flow.election.max.wait.time`属性配置)或一些节点有投票(通过设置`nifi.cluster.flow.election.max.candidates`属性)，流被选为流的“正确”副本。然后，具有不兼容流的所有节点将与群集断开连接，而具有兼容流的节点将继承群集的流。选举是根据“民众投票”进行的，但需要注意的是，除非所有流量都是空的，否则获胜者永远不会是“空流”。这允许管理员删除节点的_flow.xml.gz_文件并重新启动节点，因为知道节点的流将不会被投票为“正确”流，除非找不到其他流。
+当集群首次启动时，NiFi必须确定哪个节点具有流的“正确”版本。这是通过对每个节点具有的流进行投票来完成的。当节点尝试连接到集群时，它会将其本地流的副本提供给集群协调器。如果尚未选择流“正确”流，则将节点的流与每个其他节点的流进行比较。如果另一个Node的流与此流匹配，则为此流投票。如果还没有其他节点报告相同的流，则此流将以一票投票的方式添加到可能选择的流池中。经过一段时间后(通过设置`nifi.cluster.flow.election.max.wait.time`属性配置)或一些节点有投票(通过设置`nifi.cluster.flow.election.max.candidates`属性)，流被选为流的“正确”副本。然后，具有不兼容流的所有节点将与集群断开连接，而具有兼容流的节点将继承集群的流。选举是根据“民众投票”进行的，但需要注意的是，除非所有流量都是空的，否则获胜者永远不会是“空流”。这允许管理员删除节点的_flow.xml.gz_文件并重新启动节点，因为知道节点的流将不会被投票为“正确”流，除非找不到其他流。
 
 
 ### 基本集群设置
@@ -1552,9 +1552,9 @@ NiFi为处理器,报告任务,控制器服务和框架本身提供了一种机�
 
 **属性**| **描述**
 :--|:--
-`nifi.state.management.configuration.file` | 第一个是指定外部XML文件的属性，该文件用于配置本地和/或群集范围的状态提供程序。此XML文件可能包含多个提供程序的配置
+`nifi.state.management.configuration.file` | 第一个是指定外部XML文件的属性，该文件用于配置本地和/或集群范围的状态提供程序。此XML文件可能包含多个提供程序的配置
 `nifi.state.management.provider.local`     | 提供此XML文件中配置的本地State Provider标识符的属性                          
-`nifi.state.management.provider.cluster`   | 同样，该属性提供在此XML文件中配置的群集范围的State Provider的标识符。                                 
+`nifi.state.management.provider.cluster`   | 同样，该属性提供在此XML文件中配置的集群范围的State Provider的标识符。                                 
 
 此XML文件由顶级`state-management`元素组成,该元素具有一个或多个`local-provider`零个或多个`cluster-provider` 元素。然后,这些元素中的每一个都包含一个`id`元素,用于指定可在 _nifi.properties_ 文件中引用的标识符, 以及一个`class`元素,该元素指定要用于实例化State Provider的完全限定类名。最后,这些元素中的每一个可以具有零个或多个`property`元素。每个`property`元素都有一个属性,`name`即`property`State Provider支持的名称。property元素的文本内容是属性的值。
 
@@ -1781,23 +1781,23 @@ java.arg.16=-Dsun.security.krb5.debug=true
 
 ## Bootstrap属性
 
-目录中的_bootstrap.conf_文件`conf`允许用户配置NiFi应如何启动的设置。这包括参数,例如Java堆的大小,要运行的Java命令以及Java系统属性。
+`conf`目录中的 _bootstrap.conf_  文件允许用户配置应如何启动NiFi。例如可以设置Java堆的大小,要运行的Java命令以及Java系统属性等等。
 
-在这里,我们将解决文件中可用的不同属性。只有在NiFi停止并重新启动后,对此文件的任何更改才会生效。
+只有重启NiFi,对此文件的更改才会生效。
 
 **属性**                             | **描述**
 :--|:-------                                                    
-`java`                             | 指定要运行的完全限定的java命令。默认情况下,它只是简单`java`但可以更改为绝对路径或引用环境变量,例如`$JAVA_HOME/bin/java`                                                                                                                                    
-`run.as`                           | 运行NiFi的用户名为。例如,如果NiFi应作为`nifi`用户运行,则将此值设置为`nifi`将导致NiFi Process作为`nifi`用户运行。在Windows上忽略此属性。对于Linux,指定的用户可能需要sudo权限。                                                                                             
-`lib.dir`                          | 用于NiFi 的_lib_目录。默认情况下,此设置为`./lib`                                                                                                                                                                               
-`conf.dir`                         | 用于NiFi 的_conf_目录。默认情况下,此设置为`./conf`                                                                                                                                                                             
-`graceful.shutdown.seconds`        | 当NiFi被指示关闭时,Bootstrap将等待这个秒数,以使该过程干净地关闭。在这段时间内,如果服务仍在运行,则Bootstrap将执行`kill`该过程,或者突然终止该过程。                                                                                                                       
-`java.arg.N`                       | 启动进程时,可以将任意数量的JVM参数传递给NiFi JVM。这些参数是通过向以_bootstrap.conf_开头的属性添加来定义的`java.arg.`。除了区分属性名称之外,属性名称的其余部分不相关,将被忽略。默认值包括最小和最大Java堆大小的属性,要使用的垃圾收集器等。                                                                    
-`notification.services.file`       | 当NiFi启动或停止时,或当Bootstrap检测到NiFi已经死亡时,Bootstrap能够向相关方发送这些事件的通知。这是通过指定定义可以使用哪些通知服务的XML文件来配置的。有关此文件的更多信息,请参阅" [通知服务"](http://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#notification_services)部分。
-`notification.max.attempts`        | 如果配置了通知服务但无法执行其功能,它将再次尝试最多尝试次数。此属性配置最大尝试次数。默认值为`5`。                                                                                                                                                             
-`nifi.start.notification.services` | 此属性是以逗号分隔的通知服务标识符列表,这些标识符对应于`notification.services.file`属性中定义的Notification Services 。具有指定标识符的服务将用于在启动NiFi时通知其配置的收件人。                                                                                            
-`nifi.stop.notification.services`  | 此属性是以逗号分隔的通知服务标识符列表,这些标识符对应于`notification.services.file`属性中定义的Notification Services 。每当NiFi停止时,具有指定标识符的服务将用于通知其配置的收件人。                                                                                          
-`nifi.died.notification.services`  | 此属性是以逗号分隔的通知服务标识符列表,这些标识符对应于`notification.services.file`属性中定义的Notification Services 。如果引导程序确定NiFi意外死亡,则具有指定标识符的服务将用于通知其配置的收件人。                                                                                  
+java                             | 指定要运行的java命令。默认情况下,它的值只是简单java，但可以将其更改为绝对路径或引用环境变量,例如$JAVA_HOME/bin/java                                                                                                                                    
+run.as                           | 指定运行NiFi的用户名。例如,如果NiFi应作为nifi用户运行,则将此值设置为nifi将导致NiFi Process作为nifi用户运行。在Windows上忽略此属性。对于Linux,指定的用户需要sudo权限。                                                                                             
+lib.dir                          | 用于NiFi 的 _lib_ 目录。默认情况下,默认设置为 ./lib                                                                                                                                                                               
+conf.dir                         | 用于NiFi 的 _conf_ 目录。默认情况下,默认设置为 ./conf                                                                                                                                                                             
+graceful.shutdown.seconds        | 当NiFi要关闭时,Bootstrap将等待这个秒数,以便能够干净的关闭进程。过了这段时间,如果NIFI仍在运行,则Bootstrap将kill该进程。                                                                                                                       
+java.arg.N                       | 启动进程时,可以将任意数量的JVM参数传递给NiFi JVM。这些参数是通过向以 _bootstrap.conf_ 中以添加java.arg.开头的属性来定义的。属性名的其余部分不相关，只是为了区分属性名，将被忽略。默认值包括最小和最大Java堆的属性,要使用的垃圾收集器等。                                                                    
+notification.services.file       | 当NiFi启动或停止时,或当Bootstrap检测到NiFi已经死亡时,Bootstrap能够向相关方发送通知。这是通过指定可以使用哪些通知服务的XML文件来配置的。有关此文件的更多信息,请参阅[通知服务](#通知服务)部分。
+notification.max.attempts        | 如果配置了此属性为n，当通知服务但无法执行其功能,它将再次尝试n次。此属性配置最大尝试次数。默认值为5。                                                                                                                                                             
+nifi.start.notification.services | 此属性是以逗号分隔的通知服务标识符列表,这些标识符对应于notification.services.file属性中定义的Notification Services 。具有指定标识符的服务将用于在启动NiFi时通知其配置的收件人。                                                                                            
+nifi.stop.notification.services  | 此属性是以逗号分隔的通知服务标识符列表,这些标识符对应于notification.services.file属性中定义的Notification Services 。每当NiFi停止时,具有指定标识符的服务将用于通知其配置的收件人。                                                                                          
+nifi.died.notification.services  | 此属性是以逗号分隔的通知服务标识符列表,这些标识符对应于notification.services.file属性中定义的Notification Services 。如果引导程序确定NiFi意外死亡,则具有指定标识符的服务将用于通知其配置的收件人。                                                                                  
 
 ## 通知服务
 
@@ -2014,54 +2014,54 @@ root@kdc:~#
 
 ## 系统属性
 
-目录中的_nifi.properties_文件`conf`是用于控制NiFi运行方式的主要配置文件。本节概述了此文件中的属性，并包含有关如何以便于升级的方式对其进行配置的一些注意事项。**更改此文件后，重新启动NiFi以使更改生效。**
+`conf`目录中的 _nifi.properties_ 文件是用于控制NiFi运行方式的主要配置文件。本节概述了此文件中的属性，并包含有关如何以便于升级的方式对其进行配置的一些注意事项。**更改此文件后，重新启动NiFi以使更改生效。**
               
-![](../img/i.png)此文件的内容相对稳定，但会不时更改。升级时查看此文件始终是个好主意，并注意任何更改。考虑使用星号（*）配置下面的项目，以便更容易升级。有关详细信息，请参阅本节末尾有关升级的完整讨论。请注意，时间段和数据大小的值必须包括度量单位，例如“10秒”或“10 MB”，而不仅仅是“10”。
+![](../img/i.png)此文件的内容相对稳定，但会不时更改。升级时查看此文件始终是个好主意，并注意任何更改。考虑使用星号(*)配置下面的项目，以便更容易升级。有关详细信息，请参阅本节末尾有关升级的完整讨论。请注意，时间段和数据大小的值必须包括度量单位，例如“10 secs”或“10 MB”，而不仅仅是“10”。
 
 ### 核心属性
 
-_nifi.properties_文件的第一部分用于核心属性。这些属性作为一个整体适用于核心框架。
+_nifi.properties_ 文件的第一部分是核心属性。这些属性适用于核心框架。
 
 **属性**                                              | **描述**
 :--|:--
-`nifi.flow.configuration.file`\*                    | 流配置文件的位置（即包含当前在NiFi图上显示的内容的文件）。默认值为`./conf/flow.xml.gz`。
+`nifi.flow.configuration.file`\*                    | 流配置文件的位置(即包含当前在NiFi图上显示的内容的文件)。默认值为`./conf/flow.xml.gz`。
 `nifi.flow.configuration.archive.enabled`\*         | 指定NiFi是否在更新流时自动创建流的备份副本。默认值为`true`。
-`nifi.flow.configuration.archive.dir`\*             | 存档目录的位置，其中保存了_flow.xml的_备份副本。默认值为`./conf/archive`。NiFi删除旧的存档文件，以根据归档文件的生命周期，总大小和文件数限制磁盘使用`nifi.flow.configuration.archive.max.time`，分别使用`max.storage`和`max.count`属性指定。如果未指定归档的这些限制，则NiFi使用默认条件，即`30 days`max.time和`500 MB`max.storage。此清理机制仅考虑自动创建的归档_flow.xml_文件。如果此存档目录中有其他文件或目录，NiFi将忽略它们。自动创建的存档具有带ISO 8601格式时间戳前缀的文件名，后跟`<original-filename>`。那是`<year><month><day>T<hour><minute><second>+<timezone offset>_<original filename>`。例如，`20160706T160719+0900_flow.xml.gz`。NiFi在清理存档目录时会检查文件名。如果您想在此目录中保留特定存档而不必担心NiFi删除它，您可以通过使用不同的文件名模式复制它。
-`nifi.flow.configuration.archive.max.time`\*        | 归档的_flow.xml_文件的生命周期。如果指定了此属性，NiFi将在更新_flow.xml_时删除过期的归档文件。到期时间取决于当前系统时间和已归档_flow.xml_的上次修改时间戳。如果在_nifi.properties中_未指定存档限制，则NiFi将删除早于以下版本的存档`30 days`。                                                                                                                                                                                                                                                                                                                                                                                           
-`nifi.flow.configuration.archive.max.storage`\*     | 存档的_flow.xml_文件允许的总数据大小。如果指定了此属性，NiFi将删除最早的归档文件，直到总归档文件大小小于此配置值。如果在_nifi.properties中_未指定存档限制，则NiFi会使用`500 MB`此限制。                                                                                                                                                                                                                                                                                                                                                                                                                               
+`nifi.flow.configuration.archive.dir`\*             | 存档目录的位置，其中保存了 _flow.xml_ 的备份副本。默认值为`./conf/archive`。NiFi根据归档文件的生命周期，总大小和文件数删除旧的存档文件，以限制磁盘使用。分别使用`nifi.flow.configuration.archive.max.time`，`max.storage`和`max.count`属性指定生命周期，总大小和文件数。如果未指定归档的这些限制，则NiFi使用默认条件，即`30 days`max.time和`500 MB`max.storage。此清理机制仅考虑自动创建的归档 _flow.xml_ 文件。如果此存档目录中有其他文件或目录，NiFi将忽略它们。自动创建的存档具有带ISO 8601格式时间戳前缀的文件名，后跟`<original-filename>`。即`<year><month><day>T<hour><minute><second>+<timezone offset>_<original filename>`。例如，`20160706T160719+0900_flow.xml.gz`。NiFi在清理存档目录时会检查文件名。如果您想在此目录中保留特定存档而不必担心NiFi删除它，您可以通过使用不同的文件名模式复制它。
+`nifi.flow.configuration.archive.max.time`\*        | 归档的_flow.xml_文件的生命周期。如果指定了此属性，NiFi将在更新 _flow.xml_ 时删除过期的归档文件。到期时间取决于当前系统时间和已归档 _flow.xml_ 的上次修改时间戳。如果在 _nifi.properties_ 中未指定存档限制，则NiFi将删除早于`30 days`的存档。                                                                                                                                                                                                                                                                                                                                                                                           
+`nifi.flow.configuration.archive.max.storage`\*     | 存档的 _flow.xml_ 文件允许的总数据大小。如果指定了此属性，NiFi将删除最早的归档文件，直到总归档文件大小小于此配置值。如果在 _nifi.properties_ 中未指定存档限制，则NiFi会使用`500 MB`此限制。                                                                                                                                                                                                                                                                                                                                                                                                                               
 `nifi.flow.configuration.archive.max.count`\*       | 允许的归档文件数。如果指定了此属性，NiFi将删除最旧的存档文件，以便只保留N个最新存档。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     
-`nifi.flowcontroller.autoResumeState`               | 指示是否重新启动 - NiFi图上的组件应返回其上一个状态。默认值为`true`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
+`nifi.flowcontroller.autoResumeState`               | 指示重新启动时NiFi上的组件是否应返回重启之前的状态。默认值为`true`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
 `nifi.flowcontroller.graceful.shutdown.period`      | 表示关机时间。默认值为`10 secs`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           
-`nifi.flowservice.writedelay.interval`              | 当对_flow.xml_进行许多更改时，此属性指定在写出更改之前等待的时间，以便将更改批处理为单个写入。默认值为`500 ms`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
-`nifi.administrative.yield.duration`                | 如果某个组件允许意外异常转义，则会将其视为错误。因此，框架将在这段时间内暂停（或在行政上产生）组件。这样做是为了使组件不会消耗大量的系统资源，因为已知在现有状态下存在问题。默认值为`30 secs`。                                                                                                                                                                                                                                                                                                                                                                                                                                              
-`nifi.bored.yield.duration`                         | 当一个组件没有工作要做（即，“无聊”）时，这是它在检查是否有新数据要工作之前等待的时间。这样，它不会过多地检查新工作而耗尽CPU资源。设置此属性时，请注意它可能会为不经常工作的组件添加额外的延迟，因为一旦进入这种“无聊”状态，他们将等待这段时间后再检查更多工作。默认值为`10 ms`。                                                                                                                                                                                                                                                                                                                                                                                                 
+`nifi.flowservice.writedelay.interval`              | 当对 _flow.xml_ 进行许多更改时，此属性指定在写出更改之前等待的时间，以便批量写入。默认值为`500 ms`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+`nifi.administrative.yield.duration`                | 如果一个组件允许一个意外的异常被转义，那么它就被认为是一个bug。因此，框架将暂停(或在管理上放弃)组件这段时间。这样做是为了使组件不会因为已知在现有状态下存在的问题而消耗大量的系统资源。默认值为`30 secs`。                                                                                                                                                                                                                                                                                                                                                                                                                                              
+`nifi.bored.yield.duration`                         | 当一个组件没有工作要做(即无聊)时，这是它在检查是否有新数据要工作之前等待的时间。这样，它不会过多地检查新工作而耗尽CPU资源。设置此属性时，请注意它可能会为不经常工作的组件添加额外的延迟，因为一旦进入这种无聊状态，他们将等待这段时间后再检查更多工作。默认值为`10 ms`。                                                                                                                                                                                                                                                                                                                                                                                                 
 `nifi.queue.backpressure.count`                     | 在两个组件之间绘制新连接时，这是该连接的背压对象阈值的默认值。默认值为`10000`，且值必须为整数。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             
 `nifi.queue.backpressure.size`                      | 在两个组件之间绘制新连接时，这是该连接的背压数据大小阈值的默认值。默认值为`1 GB`，值必须是包含度量单位的数据大小。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-`nifi.authorizer.configuration.file`\*              | 这是文件的位置，指定如何定义授权程序。默认值为`./conf/authorizers.xml`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-`nifi.login.identity.provider.configuration.file`\* | 这是文件的位置，指定如何执行用户名/密码身份验证。仅在`nifi.security.user.login.identity.provider`配置了提供者标识符时才考虑此文件。默认值为`./conf/login-identity-providers.xml`。                                                                                                                                                                                                                                                                                                                                                                                                              
-`nifi.templates.directory`\*                        | 这是保存流模板的目录的位置（仅用于向后兼容）。模板存储在_flow.xml.gz中，_从NiFi 1.0开始。模板目录可用于在NiFi启动时自动（批量）将模板导入到_flow.xml.gz中_。默认值为`./conf/templates`。                                                                                                                                                                                                                                                                                                                                                                                                                        
+`nifi.authorizer.configuration.file`\*              | 这是指定如何定义授权程序的文件的位置。默认值为`./conf/authorizers.xml`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
+`nifi.login.identity.provider.configuration.file`\* | 这是指定如何执行用户名/密码身份验证的文件的位置。仅在`nifi.security.user.login.identity.provider`配置了提供者标识符时才考虑此文件。默认值为`./conf/login-identity-providers.xml`。                                                                                                                                                                                                                                                                                                                                                                                                              
+`nifi.templates.directory`\*                        | 这是保存流模板的目录的位置(仅用于向后兼容)。模板存储在 _flow.xml.gz_ 中，从NiFi 1.0开始。模板目录可用于在NiFi启动时自动(批量)将模板导入到 _flow.xml.gz_ 中。默认值为`./conf/templates`。                                                                                                                                                                                                                                                                                                                                                                                                                        
 `nifi.ui.banner.text`                               | 这是横幅文本，可配置为显示在用户界面的顶部。默认为空白。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 `nifi.ui.autorefresh.interval`                      | 用户界面自动刷新的时间间隔。默认值为`30 secs`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-`nifi.nar.library.directory`                        | nar库的位置。默认值是`./lib`，可能应保持原样。**注意**：可以使用`nifi.nar.library.directory.`带有唯一后缀的前缀和单独的路径作为值来指定其他库目录。例如，要提供两个额外的库位置，用户还可以使用以下键指定其他属性：`nifi.nar.library.directory.lib1=/nars/lib1``nifi.nar.library.directory.lib2=/nars/lib2`  提供三个总位置，包括 `nifi.nar.library.directory`。                                                                                                                                                                                                                                                                    
-`nifi.nar.working.directory`                        | nar工作目录的位置。默认值是`./work/nar`，可能应保持原样。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-`nifi.documentation.working.directory`              | 文档工作目录。默认值是`./work/docs/components`，可能应保持原样。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
-`nifi.processor.scheduling.timeout`                 | 等待处理器的生命周期操作（`@OnScheduled`和`@OnUnscheduled`）在其他生命周期操作（例如，**stop**）之前完成的时间可以被调用。默认值为`1 min`。                                                                                                                                                                                                                                                                                                                                                                                                                                                      
+`nifi.nar.library.directory`                        | nar库的位置。默认值是`./lib`，可保持原样。**注意**：可以使用`nifi.nar.library.directory.`带有唯一后缀的前缀和单独的路径作为值来指定其他库目录。例如，要提供两个额外的库位置，用户还可以使用以下键指定其他属性：`nifi.nar.library.directory.lib1=/nars/lib1``nifi.nar.library.directory.lib2=/nars/lib2`  提供三个总位置，包括 `nifi.nar.library.directory`。                                                                                                                                                                                                                                                                    
+`nifi.nar.working.directory`                        | nar工作目录的位置。默认值是`./work/nar`，可保持原样。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
+`nifi.documentation.working.directory`              | 文档工作目录。默认值是`./work/docs/components`，可保持原样。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+`nifi.processor.scheduling.timeout`                 | 在调用其他生命周期操作(例如，stop)之前，等待处理器的生命周期操作(@OnScheduled和@OnUnscheduled)完成的时间。默认值是1分钟。                                                                                                                                                                                                                                                                                                                                                                                                                                                     
 
 ### State管理
 
-“属性”文件的“状态管理”部分提供了一种机制，用于配置组件的本地和群集范围机制以保持状态。有关如何使用它的更多信息，请参见“ [状态管理”](http://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#state_management)部分。
+“属性”文件的“状态管理”部分提供了一种机制，用于配置组件的本地和集群范围机制以保持状态。有关如何使用它的更多信息，请参见[状态管理](#State管理)部分。
 
 **属性**                                                | **描述** 
 :--|:--|
-`nifi.state.management.configuration.file`            | 包含本地和群集范围的状态提供程序的配置的XML文件。默认值为`./conf/state-management.xml`。                                          
-`nifi.state.management.provider.local`                | 要使用的本地状态提供程序的ID。此值必须与_state-management.xml_文件`id`中某个`local-provider`元素的元素值匹配。                           
-`nifi.state.management.provider.cluster`              | 要使用的群集状态提供程序的ID。此值必须与_state-management.xml_文件`id`中某个`cluster-provider`元素的元素值匹配。如果不是群集，则忽略此值，但群集中的节点需要此值。
+`nifi.state.management.configuration.file`            | 包含本地和集群范围的状态提供程序的配置的XML文件。默认值为`./conf/state-management.xml`。                                          
+`nifi.state.management.provider.local`                | 要使用的本地状态提供程序的ID。此值必须与 _state-management.xml_ 文件中某个`local-provider`元素的`id`值匹配。                           
+`nifi.state.management.provider.cluster`              | 要使用的集群状态提供程序的ID。此值必须与 _state-management.xml_ 文件中某个`cluster-provider`元素的`id`值匹配。如果不是集群，则忽略此值，但集群中的节点需要此值。
 `nifi.state.management.embedded.zookeeper.start`      | 指定此NiFi实例是否应启动嵌入式ZooKeeper服务器。它与ZooKeeperStateProvider一起使用。                                             
-`nifi.state.management.embedded.zookeeper.properties` | 指定一个属性文件，其中包含已启动的嵌入式ZooKeeper服务器的配置（如果该`nifi.state.management.embedded.zookeeper.start`属性设置为`true`）     
+`nifi.state.management.embedded.zookeeper.properties` | 指定一个属性文件，其中包含已启动的嵌入式ZooKeeper服务器的配置(如果该`nifi.state.management.embedded.zookeeper.start`属性设置为`true`)     
 
 ### H2设置
 
-H2设置部分定义H2数据库的设置，该数据库跟踪用户访问和流控制器历史记录。
+H2设置部分定义了H2数据库的设置，该数据库跟踪用户访问和流控制器历史记录。
 
 **属性**                      | **描述**                        
 :--|:--|
@@ -2070,20 +2070,20 @@ H2设置部分定义H2数据库的设置，该数据库跟踪用户访问和流�
 
 ### FlowFile存储库
 
-FlowFile存储库跟踪系统中每个FlowFile的属性和当前状态。默认情况下，此存储库安装在与所有其他存储库相同的根安装目录中; 但是，如果可用，建议在单独的驱动器上进行配置。
+FlowFile存储库跟踪系统中每个FlowFile的属性和当前状态。默认情况下，此存储库安装在与所有其他存储库相同的根安装目录中; 但是，如果可以的话，建议配置在单独的磁盘挂载上。
 
 **属性**                                         | **描述**
 ---------------------------------------------- | -----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-`nifi.flowfile.repository.implementation`      | FlowFile Repository实现。默认值为`org.apache.nifi.controller.repository.WriteAheadFlowFileRepository`且应该谨慎更改。要将流文件存储在内存而不是磁盘上（在电源/机器故障或重新启动NiFi时接受数据丢失），请将此属性设置为`org.apache.nifi.controller.repository.VolatileFlowFileRepository`。                                                                                                                                                                                                                   
-`nifi.flowfile.repository.wal.implementation`  | 如果存储库实现配置为使用`WriteAheadFlowFileRepository`，则可以使用此属性指定应使用Write-Ahead Log的哪个实现。默认值为`org.apache.nifi.wali.SequentialAccessWriteAheadLog`。此版本的预写日志是在Apache NiFi的1.6.0版本中添加的，并且是为了解决旧实现中存在的问题而开发的。在断电或操作系统崩溃的情况下，旧的实现很容易错误地恢复FlowFiles。在断电或操作系统崩溃后，这可能会导致在重新启动时将错误的属性或内容分配给FlowFile。但是，如果需要，仍然可以选择选择使用先前的实现并接受该风险（例如，如果新实现会出现一些意外错误）。为此，请将此属性的值设置为`org.wali.MinimalLockingWriteAheadLog`。如果更改了此属性的值，则在重新启动时，NiFi仍将恢复使用先前配置的存储库写入的记录，并删除先前配置的实现所写的文件。
+`nifi.flowfile.repository.implementation`      | FlowFile Repository实现。默认值为`org.apache.nifi.controller.repository.WriteAheadFlowFileRepository`应该谨慎更改。要将流文件存储在内存而不是磁盘上(在电源/机器故障或重新启动NiFi时接受数据丢失)，请将此属性设置为`org.apache.nifi.controller.repository.VolatileFlowFileRepository`。                                                                                                                                                                                                                   
+`nifi.flowfile.repository.wal.implementation`  | 如果存储库实现配置为使用`WriteAheadFlowFileRepository`，则可以使用此属性指定应使用Write-Ahead Log的哪个实现。默认值为`org.apache.nifi.wali.SequentialAccessWriteAheadLog`。此版本的预写日志是在Apache NiFi的1.6.0版本中添加的，并且是为了解决旧实现中存在的问题而开发的。在断电或操作系统崩溃的情况下，旧的实现很容易错误地恢复FlowFiles。在断电或操作系统崩溃后，这可能会导致在重新启动时将错误的属性或内容分配给FlowFile。但是，如果需要，仍然可以选择选择使用先前的实现并接受该风险(例如，如果新实现会出现一些意外错误)。为此，请将此属性的值设置为`org.wali.MinimalLockingWriteAheadLog`。如果更改了此属性的值，则在重新启动时，NiFi仍将恢复使用先前配置的存储库写入的记录，并删除先前配置的实现所写的文件。
 `nifi.flowfile.repository.directory`\*         | FlowFile存储库的位置。默认值为`./flowfile_repository`。                                                                                                                                                                                                                                                                                                                                                                                                    
 `nifi.flowfile.repository.partitions`          | 分区数量。默认值为`256`。                                                                                                                                                                                                                                                                                                                                                                                                                                
-`nifi.flowfile.repository.checkpoint.interval` | FlowFile存储库检查点间隔。默认值为`2 mins`。                                                                                                                                                                                                                                                                                                                                                                                                                 
+`nifi.flowfile.repository.checkpoint.interval` | FlowFile存储库检查点间隔时间。默认值为`2 mins`。                                                                                                                                                                                                                                                                                                                                                                                                                 
 `nifi.flowfile.repository.always.sync`         | 如果设置为`true`，则对存储库的任何更改都将同步到磁盘，这意味着NiFi将要求操作系统不要缓存信息。这非常昂贵并且可以显着降低NiFi性能。但是，如果是`false`，如果突然断电或操作系统崩溃，可能会有数据丢失的可能性。默认值为`false`。                                                                                                                                                                                                                                                                                                                  
 
 ### 交换管理(Swap Management)
 
-NiFi将FlowFile信息保存在内存（JVM）中，但在传入数据激增期间，FlowFile信息可能开始占用系统性能受损的大量JVM。为了抵消这种影响，NiFi会暂时将FlowFile信息“交换”到磁盘，直到更多JVM空间再次可用。这些属性控制着该过程的发生方式。
+NiFi将FlowFile信息保存在内存(JVM)中，但在传入数据激增期间，FlowFile流文件信息可能开始占用大量JVM空间，从而影响系统性能。为了抵消这种影响，NiFi临时将流文件信息交换到磁盘，直到更多的JVM空间再次可用。这些属性决定了这个过程是如何发生的。
 
 **属性**                             | **描述**
 ---------------------------------- | -----------------------------------------------------------------------------------
@@ -2096,72 +2096,72 @@ NiFi将FlowFile信息保存在内存（JVM）中，但在传入数据激增期�
 
 ### 内容存储库 (Content Repository)
 
-内容存储库保存系统中所有FlowFiles的内容。默认情况下，它与所有其他存储库安装在同一根安装目录中; 但是，管理员可能希望在单独的驱动器上配置它（如果可用）。如果没有别的，最好是内容存储库与FlowFile存储库不在同一个驱动器上。在处理大量数据的数据流中，内容存储库可能会填满磁盘，而FlowFile存储库（如果也在该磁盘上）可能会损坏。要避免这种情况，请在不同的驱动器上配置这些存储库。
+内容存储库保存系统中所有FlowFiles的内容。默认情况下，它与所有其他存储库安装在同一根安装目录中; 但是，管理员可能希望把它配置到单独的磁盘挂载(如果可以的话)。如果没有别的，最好是内容存储库与FlowFile存储库目录不在同一个挂载下。在处理大量数据的数据流中，内容存储库可能会填满磁盘，而FlowFile存储库(如果也在该磁盘上)可能会损坏。要避免这种情况，请在不同的挂载下配置这些存储库。
 
 **属性**                                   | **描述**
 ---------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-`nifi.content.repository.implementation` | 内容存储库实现。默认值为`org.apache.nifi.controller.repository.FileSystemRepository`且应该谨慎更改。要将流文件内容存储在内存而不是磁盘上（在电源/机器发生故障时存在数据丢失的风险），请将此属性设置为`org.apache.nifi.controller.repository.VolatileContentRepository`。
+`nifi.content.repository.implementation` | 内容存储库实现。默认值为`org.apache.nifi.controller.repository.FileSystemRepository`且应该谨慎更改。要将流文件内容存储在内存而不是磁盘上(在电源/机器发生故障时存在数据丢失的风险)，请将此属性设置为`org.apache.nifi.controller.repository.VolatileContentRepository`。
 
 ### 文件系统内容存储库属性 (File System Content Repository Properties)
 
 **属性**                                                 | **描述**       
 ------------------------------------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------              
-`nifi.content.repository.implementation`               | 内容存储库实现。默认值为`org.apache.nifi.controller.repository.FileSystemRepository`且应该谨慎更改。要将流文件内容存储在内存而不是磁盘上（在电源/机器发生故障时存在数据丢失的风险），请将此属性设置为`org.apache.nifi.controller.repository.VolatileContentRepository`。                                                                                                                                                     
-`nifi.content.claim.max.appendable.size`               | 内容声明的最大大小。默认值为`1 MB`。                                                                                                                                                                                                                                                                                                                                   
-`nifi.content.claim.max.flow.files`                    | 要分配给一个内容声明的最大FlowFiles数。默认值为`100`。                                                                                                                                                                                                                                                                                                                      
+`nifi.content.repository.implementation`               | 内容存储库实现。默认值为`org.apache.nifi.controller.repository.FileSystemRepository`且应该谨慎更改。要将流文件内容存储在内存而不是磁盘上(在电源/机器发生故障时存在数据丢失的风险)，请将此属性设置为`org.apache.nifi.controller.repository.VolatileContentRepository`。                                                                                                                                                     
+`nifi.content.claim.max.appendable.size`               | 一个内容标识的最大大小。默认值为`1 MB`。                                                                                                                                                                                                                                                                                                                                   
+`nifi.content.claim.max.flow.files`                    | 要分配给一个内容标识的最大FlowFiles数。默认值为`100`。                                                                                                                                                                                                                                                                                                                      
 `nifi.content.repository.directory.default`\*          | 内容存储库的位置。默认值为`./content_repository`。  **注意**：可以使用`nifi.content.repository.directory.`带有唯一后缀的前缀和单独的路径作为值来指定多个内容存储库。  例如，要提供两个额外的位置作为内容存储库的一部分，用户还可以使用以下键指定其他属性：`nifi.content.repository.directory.content1=/repos/content1`  `nifi.content.repository.directory.content2=/repos/content2`  提供三个总位置，包括 `nifi.content.repository.directory.default`。
-`nifi.content.repository.archive.max.retention.period` | 如果启用了归档（请参见`nifi.content.repository.archive.enabled`下文），则此属性指定保留归档数据的最长时间。默认值为`12 hours`。                                                                                                                                                                                                                                                               
-`nifi.content.repository.archive.max.usage.percentage` | 如果启用了归档（请参阅`nifi.content.repository.archive.enabled`下文），则此属性必须具有一个值，该值指示开始删除归档数据的内容存储库磁盘使用百分比。如果存档为空且内容存储库磁盘使用率高于此百分比，则暂时禁用存档。当磁盘使用率低于此百分比时，将继续存档。默认值为`50%`。                                                                                                                                                                                            
+`nifi.content.repository.archive.max.retention.period` | 如果启用了归档(请参见下文`nifi.content.repository.archive.enabled`)，则此属性指定保留归档数据的最长时间。默认值为`12 hours`。                                                                                                                                                                                                                                                               
+`nifi.content.repository.archive.max.usage.percentage` | 如果启用了归档(请参阅下文`nifi.content.repository.archive.enabled`)，则此属性必须具有一个值，该值指示开始删除归档数据的内容存储库磁盘使用百分比。如果存档为空且内容存储库磁盘使用率高于此百分比，则暂时禁用存档。当磁盘使用率低于此百分比时，将继续存档。默认值为`50%`。                                                                                                                                                                                            
 `nifi.content.repository.archive.enabled`              | 要启用内容存档，请将其设置为`true`并指定上述`nifi.content.repository.archive.max.usage.percentage`属性的值。内容归档使来源UI能够查看或重放不再位于数据流队列中的内容。默认情况下，启用存档。                                                                                                                                                                                                                           
 `nifi.content.repository.always.sync`                  | 如果设置为`true`，则对存储库的任何更改都将同步到磁盘，这意味着NiFi将要求操作系统不要缓存信息。这非常昂贵并且可以显着降低NiFi性能。但是，如果是`false`，如果突然断电或操作系统崩溃，可能会有数据丢失的可能性。默认值为`false`。                                                                                                                                                                                                                           
-`nifi.content.viewer.url`                              | 基于Web的内容查看器的URL（如果有）。默认为空白。                                                                                                                                                                                                                                                                                                                             
+`nifi.content.viewer.url`                              | 基于Web的内容查看器的URL(如果有)。默认为空白。                                                                                                                                                                                                                                                                                                                             
 
-### 易失性内容存储库属性 (Volatile Content Repository Properties)
+### Volatile内容存储库属性 (Volatile Content Repository Properties)
 
 **属性**                                        | **描述**                                 
 --------------------------------------------- | ------------------------------
 `nifi.volatile.content.repository.max.size`   | 内容存储库中的内容存储库最大大小。默认值为`100 MB`。
 `nifi.volatile.content.repository.block.size` | 内容存储库块大小。默认值为`32 KB`。         
 
-### 原产地库(Provenance Repository)
+### Provenance存储库(Provenance Repository)
 
 Provenance Repository包含与Data Provenance相关的信息。接下来的四个部分是针对Provenance Repository属性的。
 
 **属性**                                      | **描述**        
 ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-`nifi.provenance.repository.implementation` | Provenance Repository实现。默认值为`org.apache.nifi.provenance.WriteAheadProvenanceRepository`。还有三个额外的存储库。要将起源事件存储在内存而不是磁盘上（在这种情况下，所有事件将在重新启动时丢失，并且事件将按先进先出的顺序逐出），将此属性设置为`org.apache.nifi.provenance.VolatileProvenanceRepository`。这在Java堆中留下了可配置数量的Provenance事件，因此可以保留的事件数量非常有限。第三和第四种选择是可用的：`org.apache.nifi.provenance.PersistentProvenanceRepository`和`org.apache.nifi.provenance.EncryptedWriteAheadProvenanceRepository`。在`PersistentProvenanceRepository`最初写有持续出处活动，因为它们是产生和提供依次遍历这些事件的能力的简单的目标。后来，希望能够压缩数据以便存储更多数据。之后，添加了索引和查询数据的功能。随着需求的不断变化，存储库不断变化，没有任何重大的重新设计。当在负责处理大量小型FlowFiles的NiFi实例中使用时，`PersistentProvenanceRepository`很快就会成为瓶颈。在`WriteAheadProvenanceRepository`随后被写入提供相同功能的`PersistentProvenanceRepository`同时提供更好的性能。该`WriteAheadProvenanceRepository`在NiFi版本1.2.0中添加了。从那时起，它已被证明非常稳定和强大，因此被作为默认实现。在`PersistentProvenanceRepository`现在被认为是过时的，不应再使用。如果管理当前正在使用的NiFi实例， `PersistentProvenanceRepository`强烈建议升级到`WriteAheadProvenanceRepository`。这样做是从改变实现属性值一样简单`org.apache.nifi.provenance.PersistentProvenanceRepository`来`org.apache.nifi.provenance.WriteAheadProvenanceRepository`。由于Provenance Repository是向后兼容的，因此不会丢失数据或功能。在`EncryptedWriteAheadProvenanceRepository`建立在`WriteAheadProvenanceRepository`，并确保数据在其余加密。**注：**在`WriteAheadProvenanceRepository`将利用由存储的出处的数据`PersistentProvenanceRepository`。但是， `PersistentProvenanceRepository`可能无法读取所写的数据`WriteAheadProvenanceRepository`。因此，一旦将原型存储库更改为使用`WriteAheadProvenanceRepository`，则无法将其更改回`PersistentProvenanceRepository`原始存储库中的数据。
+`nifi.provenance.repository.implementation` | Provenance Repository实现。默认值为`org.apache.nifi.provenance.WriteAheadProvenanceRepository`。还有三个额外的存储库。要将起源事件存储在内存而不是磁盘上(在这种情况下，所有事件将在重新启动时丢失，并且事件将按先进先出的顺序逐出)，将此属性设置为`org.apache.nifi.provenance.VolatileProvenanceRepository`。这在Java堆中保存可配置数量的Provenance事件，因此可以保留的事件数量非常有限。第三和第四种选择是可用的：`org.apache.nifi.provenance.PersistentProvenanceRepository`和`org.apache.nifi.provenance.EncryptedWriteAheadProvenanceRepository`。在`PersistentProvenanceRepository`最初写有持续出处活动，因为它们是产生和提供依次遍历这些事件的能力的简单的目标。后来，希望能够压缩数据以便存储更多数据。之后，添加了索引和查询数据的功能。随着需求的不断变化，存储库不断变化，没有任何重大的重新设计。当在负责处理大量小型FlowFiles的NiFi实例中使用时，`PersistentProvenanceRepository`很快就会成为瓶颈。在`WriteAheadProvenanceRepository`随后被写入提供相同功能的`PersistentProvenanceRepository`同时提供更好的性能。该`WriteAheadProvenanceRepository`是在NiFi版本1.2.0中添加的。从那时起，它已被证明非常稳定和强大，因此被作为默认实现。`PersistentProvenanceRepository`现在被认为是过时的，不应再使用。如果管理当前正在使用的NiFi实例， `PersistentProvenanceRepository`强烈建议升级到`WriteAheadProvenanceRepository`。由于Provenance Repository是向后兼容的，因此不会丢失数据或功能。`EncryptedWriteAheadProvenanceRepository`是建立在`WriteAheadProvenanceRepository`，为数据加密。**注：**`WriteAheadProvenanceRepository`无法更改回`PersistentProvenanceRepository`
 
-### 提前编写源代码存储库属性(Write Ahead Provenance Repository Properties)
+### Write Ahead Provenance属性(Write Ahead Provenance Repository Properties)
 
 **属性**                                                | **描述**                                                              
 ----------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 `nifi.provenance.repository.directory.default`\*      | Provenance存储库的位置。默认值为`./provenance_repository`。  **注意**：可以使用`nifi.provenance.repository.directory.`带有唯一后缀的前缀和单独的路径作为值来指定多个出处存储库。  例如，要提供另外两个位置作为起源库的一部分，用户还可以使用以下键指定其他属性：`nifi.provenance.repository.directory.provenance1=/repos/provenance1` `nifi.provenance.repository.directory.provenance2=/repos/provenance2`  提供三个总位置，包括`nifi.provenance.repository.directory.default`。                                                                                                                                                                                                                                                                                                                                               
 `nifi.provenance.repository.max.storage.time`         | 保留数据出处信息的最长时间。默认值为`24 hours`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
-`nifi.provenance.repository.max.storage.size`         | 一次存储的最大数据源信息量。默认值为`1 GB`。Data Provenance功能可能会占用大量存储空间，因为保留了大量数据。对于生产环境，1-2 TB或更多的值并不罕见。如果定义了多个存储位置，如上所述，存储库将写入单个“事件文件”（或一组“事件文件”）一段时间（由`nifi.provenance.repository.rollover.time`和`nifi.provenance.repository.rollover.size`属性定义 ）。数据总是一次老化一个文件，因此不建议在很长一段时间内写入单个“事件文件”，因为这样可以防止旧数据平滑老化。                                                                                                                                                                                                                                                                                                                                                                                                                                              
+`nifi.provenance.repository.max.storage.size`         | 一次存储的最大数据源信息量。默认值为`1 GB`。Data Provenance功能可能会占用大量存储空间，因为保留了大量数据。对于生产环境，1-2 TB或更多的值并不罕见。如果定义了多个存储位置，如上所述，存储库将写入单个“事件文件”(或一组“事件文件”)一段时间(由`nifi.provenance.repository.rollover.time`和`nifi.provenance.repository.rollover.size`属性定义 )。数据总是一次老化一个文件，因此不建议在很长一段时间内写入单个“事件文件”，因为这样可以防止旧数据平滑老化。                                                                                                                                                                                                                                                                                                                                                                                                                                              
 `nifi.provenance.repository.rollover.time`            | 滚动存储库正在写入的“事件文件”之前等待的时间。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              
 `nifi.provenance.repository.rollover.size`            | 要写入单个“事件文件”的数据量。默认值为`100 MB`。对于生成大量Data Provenance的生产环境，值`1 GB`也非常合理。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
 `nifi.provenance.repository.query.threads`            | 用于Provenance Repository查询的线程数。默认值为`2`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                
-`nifi.provenance.repository.index.threads`            | 用于索引Provenance事件的线程数，以便可以搜索它们。默认值为`2`。对于在大量FlowFiles上运行的流，Provenance事件的索引可能成为瓶颈。如果发生这种情况，增加此属性的值可能会提高Provenance Repository能够处理这些记录的速率，从而提高整体吞吐量。建议每个存储位置使用至少1个线程（即，如果有3个存储位置，则应使用至少3个线程）。对于具有更多CPU和磁盘I / O的高吞吐量环境，可能会显着增加此值。通常每个存储位置超过2-4个线程是没有价值的。但是，这可以根据与I / O资源相比可用的CPU资源进行调整。                                                                                                                                                                                                                                                                                                                                                                                                                                                    
+`nifi.provenance.repository.index.threads`            | 用于索引Provenance事件的线程数，以便可以搜索它们。默认值为`2`。对于在大量FlowFiles上运行的流，Provenance事件的索引可能成为瓶颈。如果发生这种情况，增加此属性的值可能会提高Provenance Repository能够处理这些记录的速率，从而提高整体吞吐量。建议每个存储位置使用至少1个线程(即，如果有3个存储位置，则应使用至少3个线程)。对于具有更多CPU和磁盘I / O的高吞吐量环境，可能会显着增加此值。通常每个存储位置超过2-4个线程是没有价值的。但是，这可以根据与I / O资源相比可用的CPU资源进行调整。                                                                                                                                                                                                                                                                                                                                                                                                                                                    
 `nifi.provenance.repository.compress.on.rollover`     | 指示在滚动“事件文件”时是否压缩起源信息。默认值为`true`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      
 `nifi.provenance.repository.always.sync`              | 如果设置为`true`，则对存储库的任何更改都将同步到磁盘，这意味着NiFi将要求操作系统不要缓存信息。这非常昂贵并且可以显着降低NiFi性能。但是，如果是`false`，如果突然断电或操作系统崩溃，可能会有数据丢失的可能性。默认值为`false`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                         
 `nifi.provenance.repository.indexed.fields`           | 这是一个以逗号分隔的字段列表，应该将其编入索引并进行搜索。未编制索引的字段将无法搜索。有效的字段有：`EventType`，`FlowFileUUID`，`Filename`，`TransitURI`，`ProcessorID`， `AlternateIdentifierURI`，`Relationship`，`Details`。默认值为：`EventType, FlowFileUUID, Filename, ProcessorID`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 `nifi.provenance.repository.indexed.attributes`       | 这是一个以逗号分隔的FlowFile属性列表，应该对其进行索引并使其可搜索。默认为空白。但一些很好的例子要考虑的是`filename`和`mime.type`以及任何自定义属性，你可以使用这对你的使用情况有价值。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            
-`nifi.provenance.repository.index.shard.size`         | 存储库使用Apache Lucene执行索引和搜索功能。此值指示在Repository开始写入新索引之前Lucene索引应该有多大。在搜索Provenance存储库时，分片大小的较大值将导致更多Java堆使用，但应提供更好的性能。默认值为`500 MB`。但是，这是因为默认情况适用于大多数用户开始使用NiFi的非常小的环境。对于生产环境，建议将此值更改`4`为`8 GB`。一旦索引中的所有Provenance Events都从“事件文件”中删除，索引也将被销毁。**注意：**此值应小于（不超过一半）`nifi.provenance.repository.max.storage.size`属性。                                                                                                                                                                                                                                                                                                                                                                                                                          
+`nifi.provenance.repository.index.shard.size`         | 存储库使用Apache Lucene执行索引和搜索功能。此值指示在Repository开始写入新索引之前Lucene索引应该有多大。在搜索Provenance存储库时，分片大小的较大值将导致更多Java堆使用，但应提供更好的性能。默认值为`500 MB`。但是，这是因为默认情况适用于大多数用户开始使用NiFi的非常小的环境。对于生产环境，建议将此值更改`4`为`8 GB`。一旦索引中的所有Provenance Events都从“事件文件”中删除，索引也将被销毁。**注意：**此值应小于(不超过一半)`nifi.provenance.repository.max.storage.size`属性。                                                                                                                                                                                                                                                                                                                                                                                                                          
 `nifi.provenance.repository.max.attribute.length`     | 指示从存储库检索Provenance事件时FlowFile属性的最大长度。如果任何属性的长度超过此值，则在检索事件时将截断该值。默认值为`65536`。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                          
 `nifi.provenance.repository.concurrent.merge.threads` | Apache Lucene在索引中创建了几个“段”。这些段定期合并在一起，以提供更快的查询。此属性指定允许用于**每个**存储目录的最大线程数。默认值为`2`。对于高吞吐量环境，建议将索引线程数设置为大于合并线程数*存储位置数。例如，如果有2个存储位置并且索引线程的数量设置为`8`，则合并线程的数量应该小于`4`。虽然完成此操作并不重要，但设置大于此数量的合并线程数会导致所有索引线程被用于合并，这会导致NiFi流在索引发生时周期性地暂停，从而导致某些数据被处理具有比其他数据更高的延迟。                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 
-`nifi.provenance.repository.warm.cache.frequency`     | 每次运行Provenance查询时，查询必须首先搜索Apache Lucene索引（至少在大多数情况下 - 有一些查询经常运行并且结果被缓存以避免搜索Lucene索引）。当Lucene索引首次打开时，它可能非常昂贵并且需要几秒钟。这有很多不同的索引，并且可能导致Provenance查询花费更长时间。打开索引后，操作系统的磁盘缓存通常会保留足够的数据，以便更快地重新打开索引 - 至少在一段时间内，直到磁盘缓存逐出该数据。如果设置了此值，NiFi将定期打开每个Lucene索引，然后关闭它，以“加热”缓存。当Provenance Repository很大时，这将导致更快的查询。然而，与所有伟大的事物一样，它带来了成本。加热缓存确实需要一些CPU资源，但更重要的是，它会从操作系统磁盘缓存中驱逐其他数据，并导致从磁盘读取（可能是大量的）数据。这可能导致较低的NiFi性能。但是，如果NiFi在CPU和磁盘未充分利用的环境中运行，则此功能可以使Provenance查询速度快得多。此属性的默认值为空（即禁用）。但更重要的是，它将从操作系统磁盘缓存中驱逐其他数据，并将导致从磁盘读取（可能是大量）数据。这可能导致较低的NiFi性能。但是，如果NiFi在CPU和磁盘未充分利用的环境中运行，则此功能可以使Provenance查询速度快得多。此属性的默认值为空（即禁用）。但更重要的是，它将从操作系统磁盘缓存中驱逐其他数据，并将导致从磁盘读取（可能是大量）数据。这可能导致较低的NiFi性能。但是，如果NiFi在CPU和磁盘未充分利用的环境中运行，则此功能可以使Provenance查询速度快得多。此属性的默认值为空（即禁用）。
+`nifi.provenance.repository.warm.cache.frequency`     | 每次运行Provenance查询时，查询必须首先搜索Apache Lucene索引(至少在大多数情况下 - 有一些查询经常运行并且结果被缓存以避免搜索Lucene索引)。当Lucene索引首次打开时，它可能非常昂贵并且需要几秒钟。这有很多不同的索引，并且可能导致Provenance查询花费更长时间。打开索引后，操作系统的磁盘缓存通常会保留足够的数据，以便更快地重新打开索引 - 至少在一段时间内，直到磁盘缓存逐出该数据。如果设置了此值，NiFi将定期打开每个Lucene索引，然后关闭它，以“加热”缓存。当Provenance Repository很大时，这将导致更快的查询。然而，与所有伟大的事物一样，它带来了成本。加热缓存确实需要一些CPU资源，但更重要的是，它会从操作系统磁盘缓存中驱逐其他数据，并导致从磁盘读取(可能是大量的)数据。这可能导致较低的NiFi性能。但是，如果NiFi在CPU和磁盘未充分利用的环境中运行，则此功能可以使Provenance查询速度快得多。此属性的默认值为空(即禁用)。但更重要的是，它将从操作系统磁盘缓存中驱逐其他数据，并将导致从磁盘读取(可能是大量)数据。这可能导致较低的NiFi性能。但是，如果NiFi在CPU和磁盘未充分利用的环境中运行，则此功能可以使Provenance查询速度快得多。此属性的默认值为空(即禁用)。但更重要的是，它将从操作系统磁盘缓存中驱逐其他数据，并将导致从磁盘读取(可能是大量)数据。这可能导致较低的NiFi性能。但是，如果NiFi在CPU和磁盘未充分利用的环境中运行，则此功能可以使Provenance查询速度快得多。此属性的默认值为空(即禁用)。
 
 ### 加密的提前写入存储库属性(Encrypted Write Ahead Provenance Repository Properties)
 
-上面定义的所有属性（请参阅“ [编写预先存储库属性”](http://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#write-ahead-provenance-repository-properties)）仍然适用。此处仅列出特定于加密的属性。有关详细信息，请参阅[“用户指南”中的“加密的源代码存储库”](http://nifi.apache.org/docs/nifi-docs/html/user-guide.html#encrypted-provenance)。
+上面定义的所有属性(请参阅“ [编写预先存储库属性”](http://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#write-ahead-provenance-repository-properties))仍然适用。此处仅列出特定于加密的属性。有关详细信息，请参阅[“用户指南”中的“加密的源代码存储库”](http://nifi.apache.org/docs/nifi-docs/html/user-guide.html#encrypted-provenance)。
 
 **属性**                                                              | **描述**                                                                                                                                                                                                                                                                                                                                         
 ------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------     
 `nifi.provenance.repository.debug.frequency`                        | 控制在记录存储库性能指标的DEBUG语句之间处理的事件数。仅当在日志配置中启用DEBUG级别语句时才使用此值。                                                                                                                                                                                                                                                                                       
 `nifi.provenance.repository.encryption.key.provider.implementation` | 这是**密钥提供者**的完全限定类名。密钥提供程序是用于访问加密密钥以保护起源事件的数据存储区接口。目前有两种实现方式-  `StaticKeyProvider`直接从读取键_nifi.properties_和`FileBasedKeyProvider`读取**ñ**从加密的文件很多关键点。该接口是可扩展的，未来预计将支持HSM或其他提供商。                                                                                                                                                                  
-`nifi.provenance.repository.encryption.key.provider.location`       | 该键定义资源的路径（为空`StaticKeyProvider`，`./keys.nkp`或类似的路径`FileBasedKeyProvider`）。对于像HSM这样的未来提供商，这可能是连接字符串或URL。                                                                                                                                                                                                                                       
-`nifi.provenance.repository.encryption.key.id`                      | 用于加密的活动密钥ID（例如`Key1`）。                                                                                                                                                                                                                                                                                                                        
-`nifi.provenance.repository.encryption.key`                         | 使用的关键`StaticKeyProvider`。密钥格式为十六进制编码（`0123456789ABCDEFFEDCBA98765432100123456789ABCDEFFEDCBA9876543210`），但也可以使用`./encrypt-config.sh`NiFi Toolkit中的工具进行加密（有关详细信息，请参阅[NiFi工具包指南中](http://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html)的[加密配置工具](http://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html#encrypt_config_tool)部分）。
+`nifi.provenance.repository.encryption.key.provider.location`       | 该键定义资源的路径(为空`StaticKeyProvider`，`./keys.nkp`或类似的路径`FileBasedKeyProvider`)。对于像HSM这样的未来提供商，这可能是连接字符串或URL。                                                                                                                                                                                                                                       
+`nifi.provenance.repository.encryption.key.id`                      | 用于加密的活动密钥ID(例如`Key1`)。                                                                                                                                                                                                                                                                                                                        
+`nifi.provenance.repository.encryption.key`                         | 使用的关键`StaticKeyProvider`。密钥格式为十六进制编码(`0123456789ABCDEFFEDCBA98765432100123456789ABCDEFFEDCBA9876543210`)，但也可以使用`./encrypt-config.sh`NiFi Toolkit中的工具进行加密(有关详细信息，请参阅[NiFi工具包指南中](http://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html)的[加密配置工具](http://nifi.apache.org/docs/nifi-docs/html/toolkit-guide.html#encrypt_config_tool)部分)。
 `nifi.provenance.repository.encryption.key.id.`\*                   | 允许为其指定其他键`StaticKeyProvider`。例如，该行将`nifi.provenance.repository.encryption.key.id.Key2=012…​210`提供可用密钥`Key2`。                                                                                                                                                                                                                                  
 
 最简单的配置如下：
@@ -2200,7 +2200,7 @@ col 1                                    | col 2
 
 组件状态存储库包含用户界面中“组件状态历史记录”工具的信息。这些属性控制着该工具的工作方式。
 
-在`buffer.size`和`snapshot.frequency`一起工作以确定历史数据保留量。例如，配置两天的历史数据，每5分钟发生一次数据点快照，您将配置 `snapshot.frequency`为“5分钟”，缓冲区大小为“576”。为了进一步解释此示例每60分钟，该时间段有12（60/5）个快照窗口。为了保持48小时（12 * 48）的数据，最终缓冲区大小为576。
+在`buffer.size`和`snapshot.frequency`一起工作以确定历史数据保留量。例如，配置两天的历史数据，每5分钟发生一次数据点快照，您将配置 `snapshot.frequency`为“5分钟”，缓冲区大小为“576”。为了进一步解释此示例每60分钟，该时间段有12(60/5)个快照窗口。为了保持48小时(12 * 48)的数据，最终缓冲区大小为576。
 
 col 1                                              | col 2                                                                                            
 -------------------------------------------------- | -------------------------------------------------------------------------------------------------
@@ -2229,13 +2229,13 @@ col 1                                    | col 2
 
 ### 反向代理的站点到站点路由属性(Site to Site Routing Properties for Reverse Proxies)
 
-站点到站点需要客户端和远程NiFi节点之间的对等通信。例如，如果远程NiFi群集具有3个节点（`nifi0`，`nifi1`和`nifi2`），则必须能够到达每个远程节点的客户端请求。
+站点到站点需要客户端和远程NiFi节点之间的对等通信。例如，如果远程NiFi集群具有3个节点(`nifi0`，`nifi1`和`nifi2`)，则必须能够到达每个远程节点的客户端请求。
 
-如果计划通过互联网或公司防火墙从/向站点到站点客户端接收/传输数据，则可以在NiFi群集节点前部署反向代理服务器，作为将客户端请求路由到的网关上游NiFi节点，以减少必须暴露的服务器和端口的数量。
+如果计划通过互联网或公司防火墙从/向站点到站点客户端接收/传输数据，则可以在NiFi集群节点前部署反向代理服务器，作为将客户端请求路由到的网关上游NiFi节点，以减少必须暴露的服务器和端口的数量。
 
-在这样的环境中，同一网络中的站点到站点客户端也可以访问相同的NiFi群集。将流文件发送给自身以在NiFi群集节点之间进行负载分配可以是典型示例。在这种情况下，客户端请求应该直接路由到节点而不通过反向代理。
+在这样的环境中，同一网络中的站点到站点客户端也可以访问相同的NiFi集群。将流文件发送给自身以在NiFi集群节点之间进行负载分配可以是典型示例。在这种情况下，客户端请求应该直接路由到节点而不通过反向代理。
 
-为了支持此类部署，远程NiFi群集需要根据客户端请求上下文动态公开其站点到站点端点。以下属性配置对等方应如何向客户端公开。路由定义包括4个属性，`when`，`hostname`，`port`，和`secure`，通过分组`protocol`和`name`。可以配置多个路由定义。`protocol`表示站点到站点传输协议，即`RAW`或`HTTP`。
+为了支持此类部署，远程NiFi集群需要根据客户端请求上下文动态公开其站点到站点端点。以下属性配置对等方应如何向客户端公开。路由定义包括4个属性，`when`，`hostname`，`port`，和`secure`，通过分组`protocol`和`name`。可以配置多个路由定义。`protocol`表示站点到站点传输协议，即`RAW`或`HTTP`。
 
 col 1                                          | col 2                                            
 ---------------------------------------------- | -------------------------------------------------
@@ -2261,13 +2261,13 @@ col 1                          | col 2
 
 正确配置这些属性需要对站点到站点协议序列有一些了解。
 
-1.  客户端通过向指定的远程URL发送HTTP（S）请求来获取站点到站点协议，以获取远程群集站点到站点信息。具体来说，到' _/nifi-api/site-to-site_ '。调用此请求`SiteToSiteDetail`。
+1.  客户端通过向指定的远程URL发送HTTP(S)请求来获取站点到站点协议，以获取远程集群站点到站点信息。具体来说，到' _/nifi-api/site-to-site_ '。调用此请求`SiteToSiteDetail`。
 
 2.  远程NiFi节点响应其输入和输出端口，以及RAW和TCP传输协议的TCP端口号。
 
-3.  客户端使用＃2返回的TCP端口号发送另一个请求以获取远程对等方。根据此请求，原始套接字通信用于RAW传输协议，而HTTP继续使用HTTP（S）。调用此请求`Peers`。
+3.  客户端使用＃2返回的TCP端口号发送另一个请求以获取远程对等方。根据此请求，原始套接字通信用于RAW传输协议，而HTTP继续使用HTTP(S)。调用此请求`Peers`。
 
-4.  远程NiFi节点使用包含主机名，端口，安全性和工作负载（例如排队的FlowFiles数）的可用远程对等体列表进行响应。从这一点开始，在客户端和远程NiFi节点之间进行进一步的通信。
+4.  远程NiFi节点使用包含主机名，端口，安全性和工作负载(例如排队的FlowFiles数)的可用远程对等体列表进行响应。从这一点开始，在客户端和远程NiFi节点之间进行进一步的通信。
 
 5.  客户端根据工作负载信息决定从哪个对等方传输数据。
 
@@ -2289,9 +2289,9 @@ col 1                          | col 2
 
 可以在反向代理服务器上应用两种类型的请求到NiFi节点映射技术。一个是“服务器名称到节点”，另一个是“端口号到节点”。
 
-使用“服务器名称到节点”，可以使用相同的端口根据请求的服务器名称（例如`nifi0.example.com`，`nifi1.example.com`）将请求路由到不同的上游NiFi节点。应将主机名解析配置为将不同的主机名映射到相同的反向代理地址，这可以通过添加/ etc / hosts文件或DNS服务器条目来完成。此外，如果反向代理的客户端使用HTTPS，则反向代理服务器证书应具有通配符公用名或SAN，以便由不同的主机名访问。
+使用“服务器名称到节点”，可以使用相同的端口根据请求的服务器名称(例如`nifi0.example.com`，`nifi1.example.com`)将请求路由到不同的上游NiFi节点。应将主机名解析配置为将不同的主机名映射到相同的反向代理地址，这可以通过添加/ etc / hosts文件或DNS服务器条目来完成。此外，如果反向代理的客户端使用HTTPS，则反向代理服务器证书应具有通配符公用名或SAN，以便由不同的主机名访问。
 
-某些反向代理技术不支持服务器名称路由规则，在这种情况下，请使用“端口号到节点”技术。“端口号到节点”映射要求NiFi群集的反向代理处的N开放端口由N个节点组成。
+某些反向代理技术不支持服务器名称路由规则，在这种情况下，请使用“端口号到节点”技术。“端口号到节点”映射要求NiFi集群的反向代理处的N开放端口由N个节点组成。
 
 有关实际配置，请参阅以下示例。
 
@@ -2321,10 +2321,10 @@ col 1                          | col 2
 
 6.  Client2决定使用`nifi2:8081`进一步的通信。
 
-在_nifi.properties中_定义的路由规则**example1**（所有节点具有相同的路由配置）：
+在_nifi.properties中_定义的路由规则**example1**(所有节点具有相同的路由配置)：
 
 ```
-#S2S路由为RAW，使用服务器名称到节点nifi.remote.route.raw.example1.when = \$ {X-ProxyHost的：等于（ 'nifi.example.com'）或（\$ {s2s.source.hostname：等于（ 'nifi.example.com'）或（\$ {s2s.source.hostname：等于（ '192.168.99.100'）}）}）}nifi.remote.route.raw.example1.hostname = $ {} s2s.target.hostname .example.com的nifi.remote.route.raw.example1.port = 10443nifi.remote.route.raw.example1.secure =真
+#S2S路由为RAW，使用服务器名称到节点nifi.remote.route.raw.example1.when = \$ {X-ProxyHost的：等于( 'nifi.example.com')或(\$ {s2s.source.hostname：等于( 'nifi.example.com')或(\$ {s2s.source.hostname：等于( '192.168.99.100')})})}nifi.remote.route.raw.example1.hostname = $ {} s2s.target.hostname .example.com的nifi.remote.route.raw.example1.port = 10443nifi.remote.route.raw.example1.secure =真
 ```
 
 _nginx.conf_：
@@ -2339,9 +2339,9 @@ http {     upstream nifi {        server nifi0:8443;        server nifi1:8443;  
 
 ![端口号到节点映射](http://nifi.apache.org/docs/nifi-docs/html/images/s2s-rproxy-portnumber.svg)
 
-该**例题**路由映射原始主机名（`nifi0`，`nifi1`和`nifi2`），以不同的代理端口（`10443`，`10444`以及`10445`使用）`equals`和`ifElse`表达式。
+该**例题**路由映射原始主机名(`nifi0`，`nifi1`和`nifi2`)，以不同的代理端口(`10443`，`10444`以及`10445`使用)`equals`和`ifElse`表达式。
 
-在_nifi.properties中_定义的路由规则**example2**（所有节点具有相同的路由配置）：
+在_nifi.properties中_定义的路由规则**example2**(所有节点具有相同的路由配置)：
 
 ```
 #S2S路由为RAW，使用端口号到节点
@@ -2363,7 +2363,7 @@ http {    # Same as example 1.} stream {     map $ssl_preread_server_name $nifi 
 
 ![服务器名称到节点映射](http://nifi.apache.org/docs/nifi-docs/html/images/s2s-rproxy-http.svg)
 
-_nifi.properties中_定义的路由规则**example3**（所有节点具有相同的路由配置）：
+_nifi.properties中_定义的路由规则**example3**(所有节点具有相同的路由配置)：
 
 ```
 # S2S Routing for HTTPnifi.remote.route.http.example3.when=${X-ProxyHost:contains('.example.com')}nifi.remote.route.http.example3.hostname=${s2s.target.hostname}.example.comnifi.remote.route.http.example3.port=443nifi.remote.route.http.example3.secure=true
@@ -2385,7 +2385,7 @@ col 1                                | col 2
 `nifi.web.war.directory`             | 这是web war目录的位置。默认值为`./lib`。                                                                                                                                                                                                                                                                                
 `nifi.web.http.host`                 | HTTP主机。默认为空白。                                                                                                                                                                                                                                                                                              
 `nifi.web.http.port`                 | HTTP端口。默认值为`8080`。                                                                                                                                                                                                                                                                                         
-`nifi.web.http.port.forwarding`      | 将传入的HTTP请求转发到的端口`nifi.web.http.host`。此属性旨在与“端口转发”一起使用，当NiFi必须由非root用户启动以获得更好的安全性时，需要通过低端口访问以通过防火墙。例如，要在端口80上通过HTTP协议公开NiFi，但实际上在端口8080上侦听，则需要配置OS级别端口转发，例如`iptables`（Linux / Unix）或`pfctl`（OS X）将请求从80重定向到8080.然后设置`nifi.web.http.port`如8080和`nifi.web.http.port.forwarding`80.默认为空。                       
+`nifi.web.http.port.forwarding`      | 将传入的HTTP请求转发到的端口`nifi.web.http.host`。此属性旨在与“端口转发”一起使用，当NiFi必须由非root用户启动以获得更好的安全性时，需要通过低端口访问以通过防火墙。例如，要在端口80上通过HTTP协议公开NiFi，但实际上在端口8080上侦听，则需要配置OS级别端口转发，例如`iptables`(Linux / Unix)或`pfctl`(OS X)将请求从80重定向到8080.然后设置`nifi.web.http.port`如8080和`nifi.web.http.port.forwarding`80.默认为空。                       
 `nifi.web.http.network.interface`\*  | NiFi应为HTTP请求绑定的网络接口的名称。默认为空白。  
 **注意**：可以使用`nifi.web.http.network.interface.`带有唯一后缀的前缀和单独的网络接口名称作为值来指定多个网络接口。  
 例如，要提供两个额外的网络接口，用户还可以使用以下键指定其他属性：  
@@ -2404,7 +2404,7 @@ col 1                                | col 2
 `nifi.web.jetty.working.directory`   | Jetty工作目录的位置。默认值为`./work/jetty`。                                                                                                                                                                                                                                                                           
 `nifi.web.jetty.threads`             | Jetty线程的数量。默认值为`200`。                                                                                                                                                                                                                                                                                      
 `nifi.web.max.header.size`           | 请求和响应标头允许的最大大小。默认值为`16 KB`。                                                                                                                                                                                                                                                                                
-`nifi.web.proxy.host`                | 以逗号分隔的允许的HTTP主机标头值列表，当NiFi安全运行时将考虑这些值，并且将接收到与其绑定的不同主机[：port]的请求。例如，在Docker容器中运行或在代理后面运行时（例如localhost：18443，proxyhost：443）。默认情况下，此值为空，表示NiFi应仅允许发送到NiFi绑定的主机[：port]的请求。                                                                                                                                     
+`nifi.web.proxy.host`                | 以逗号分隔的允许的HTTP主机标头值列表，当NiFi安全运行时将考虑这些值，并且将接收到与其绑定的不同主机[：port]的请求。例如，在Docker容器中运行或在代理后面运行时(例如localhost：18443，proxyhost：443)。默认情况下，此值为空，表示NiFi应仅允许发送到NiFi绑定的主机[：port]的请求。                                                                                                                                     
 `nifi.web.proxy.context.path`        | 要考虑的允许HTTP X-ProxyContextPath，X-Forwarded-Context或X-Forwarded-Prefix标头值的逗号分隔列表。默认情况下，此值为空，表示拒绝包含代理上下文路径的所有请求。配置此属性将允许此列表中包含代理路径的请求。                                                                                                                                                                        
 
 ### 安全属性(Security Properties)
@@ -2417,7 +2417,7 @@ col 1                                        | col 2
 `nifi.sensitive.props.key`                   | 这是用于加密处理器中配置的任何敏感属性值的密码。默认情况下，它是空白的，但系统管理员应为其提供值。它可以是任意长度的字符串，但建议的最小长度为10个字符。请注意，一旦设置了此密码并且配置了一个或多个敏感处理器属性，就不应更改此密码。                                  
 `nifi.sensitive.props.algorithm`             | 用于加密敏感属性的算法。默认值为`PBEWITHMD5AND256BITAES-CBC-OPENSSL`。                                                                                                 
 `nifi.sensitive.props.provider`              | 敏感的财产提供者。默认值为`BC`。                                                                                                                                    
-`nifi.sensitive.props.additional.keys`       | 除了默认敏感属性之外，_nifi.properties中_的逗号分隔属性列表还要加密（请参阅[配置文件中的加密密码](http://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#encrypt-config_tool)）。
+`nifi.sensitive.props.additional.keys`       | 除了默认敏感属性之外，_nifi.properties中_的逗号分隔属性列表还要加密(请参阅[配置文件中的加密密码](http://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#encrypt-config_tool))。
 `nifi.security.keystore`\*                   | 密钥库的完整路径和名称。默认为空白。                                                                                                                                    
 `nifi.security.keystoreType`                 | 密钥库类型。默认为空白。                                                                                                                                          
 `nifi.security.keystorePasswd`               | 密钥库密码。默认为空白。                                                                                                                                          
@@ -2427,12 +2427,12 @@ col 1                                        | col 2
 `nifi.security.truststorePasswd`             | 信任库密码。默认为空白。                                                                                                                                          
 `nifi.security.user.authorizer`              | 指定_authorizers.xml_文件中要使用的已配置Authorizer 。默认情况下，它设置为`file-provider`。                                                                                   
 `nifi.security.user.login.identity.provider` | 这表示要使用的登录标识提供程序类型。默认值为空，可以从指定文件中的提供程序设置为标识符`nifi.login.identity.provider.configuration.file`。设置此属性将触发NiFi以支持用户名/密码身份验证。                               
-`nifi.security.ocsp.responder.url`           | 这是在线证书状态协议（OCSP）响应程序的URL（如果正在使用）。默认为空白。                                                                                                               
-`nifi.security.ocsp.responder.certificate`   | 这是OCSP响应者证书的位置（如果正在使用）。默认为空白。                                                                                                                         
+`nifi.security.ocsp.responder.url`           | 这是在线证书状态协议(OCSP)响应程序的URL(如果正在使用)。默认为空白。                                                                                                               
+`nifi.security.ocsp.responder.certificate`   | 这是OCSP响应者证书的位置(如果正在使用)。默认为空白。                                                                                                                         
 
 ### 身份映射属性 ( Identity Mapping Properties )
 
-这些属性可用于规范用户身份。实施后，由不同身份提供商（证书，LDAP，Kerberos）进行身份验证的身份在NiFi内部处理相同。因此，避免了重复的用户，并且仅需要为每个用户设置一次特定于用户的配置（例如授权）。
+这些属性可用于规范用户身份。实施后，由不同身份提供商(证书，LDAP，Kerberos)进行身份验证的身份在NiFi内部处理相同。因此，避免了重复的用户，并且仅需要为每个用户设置一次特定于用户的配置(例如授权)。
 
 以下示例演示了如何从证书和Kerberos主体中规范化DN：
 
@@ -2442,11 +2442,11 @@ nifi.security.identity.mapping.pattern.dn=^CN=(.*?), OU=(.*?), O=(.*?), L=(.*?),
 
 每个属性的最后一段是用于将模式与替换值相关联的标识符。当用户向NiFi发出请求时，将检查其身份以查看它是否与字典顺序中的每个模式匹配。对于匹配的第一个，`nifi.security.identity.mapping.value.xxxx`使用属性中指定的替换。因此，登录与`CN=localhost, OU=Apache NiFi, O=Apache, L=Santa Monica, ST=CA, C=US`上面的DN映射模式匹配，并`$1@$2`应用DN映射值。用户标准化为`localhost@Apache NiFi`。
 
-除了映射之外，还可以应用变换。支持的版本是`NONE`（未应用转换），`LOWER`（标识小写）和`UPPER`（标识大写）。如果未指定，则默认值为`NONE`。
+除了映射之外，还可以应用变换。支持的版本是`NONE`(未应用转换)，`LOWER`(标识小写)和`UPPER`(标识大写)。如果未指定，则默认值为`NONE`。
 
 col 1 | col 2                                                                                                                                                                                
 ----- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
-      | 这些映射还应用于“初始管理员标识”，“群集节点标识”以及_authorizers.xml_文件中的所有旧用户以及从LDAP导入的用户（请参阅[Authorizers.xml安装程序](http://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#authorizers-setup)）。
+      | 这些映射还应用于“初始管理员标识”，“集群节点标识”以及_authorizers.xml_文件中的所有旧用户以及从LDAP导入的用户(请参阅[Authorizers.xml安装程序](http://nifi.apache.org/docs/nifi-docs/html/administration-guide.html#authorizers-setup))。
 
 组名也可以映射。以下示例将接受现有的组名称，但会将其小写。与外部授权人一起使用时，这可能会有所帮助。
 
@@ -2458,70 +2458,70 @@ col 1 | col 2
 ----- | ---------------------------------------------
       | 这些映射适用于_authorizers.xml中_引用的任何遗留组以及从LDAP导入的组。
 
-### 群集公共属性
+### 集群公共属性
 
-设置NiFi群集时，应在所有节点上以相同方式配置这些属性。
+设置NiFi集群时，应在所有节点上以相同方式配置这些属性。
 
 col 1                                      | col 2                          
 ------------------------------------------ | -------------------------------
 **属性**                                     | **描述**                         
-`nifi.cluster.protocol.heartbeat.interval` | 节点应向群集协调器发出心跳的时间间隔。默认值为`5 sec`。
-`nifi.cluster.protocol.is.secure`          | 这表明群集通信是否安全。默认值为`false`。       
+`nifi.cluster.protocol.heartbeat.interval` | 节点应向集群协调器发出心跳的时间间隔。默认值为`5 sec`。
+`nifi.cluster.protocol.is.secure`          | 这表明集群通信是否安全。默认值为`false`。       
 
-### 群集节点属性
+### 集群节点属性
 
-为群集节点配置这些属性。
+为集群节点配置这些属性。
 
 col 1                                            | col 2                                                                                                                                         
 ------------------------------------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------
 **属性**                                           | **描述**                                                                                                                                        
-`nifi.cluster.is.node`                           | `true`如果实例是群集中的节点，请将此项设置为。默认值为`false`。                                                                                                        
+`nifi.cluster.is.node`                           | `true`如果实例是集群中的节点，请将此项设置为。默认值为`false`。                                                                                                        
 `nifi.cluster.node.address`                      | 节点的完全限定地址。默认为空白。                                                                                                                              
 `nifi.cluster.node.protocol.port`                | 节点的协议端口。默认为空白。                                                                                                                                
-`nifi.cluster.node.protocol.threads`             | 应该用于与群集中的其他节点通信的线程数。此属性默认为`10`，但对于大型群集，此值可能需要更大。                                                                                              
-`nifi.cluster.node.protocol.max.threads`         | 应该用于与群集中其他节点通信的最大线程数。此属性默认为`50`。                                                                                                              
-`nifi.cluster.node.event.history.size`           | 更改群集中节点的状态时，将生成一个事件，并可在“群集”页面中查看该事件。此值指示每个节点在内存中保留的事件数。默认值为`25`。                                                                              
-`nifi.cluster.node.connection.timeout`           | 连接到群集中的另一个节点时，指定在考虑连接失败之前此节点应等待的时间。默认值为`5 secs`。                                                                                              
-`nifi.cluster.node.read.timeout`                 | 与群集中的另一个节点通信时，指定此节点在考虑与节点通信失败之前应等待多长时间从远程节点接收信息。默认值为`5 secs`。                                                                                 
-`nifi.cluster.node.max.concurrent.requests`      | 可以复制到群集中节点的未完成Web请求的最大数量。如果超过此数量的请求，嵌入式Jetty服务器将返回“409：Conflict”响应。此属性默认为`100`。                                                               
-`nifi.cluster.firewall.file`                     | 节点防火墙文件的位置。这是一个文件，可用于列出允许连接到群集的所有节点。它提供了额外的安全层。默认情况下，此值为空，表示不使用防火墙文件。                                                                         
-`nifi.cluster.flow.election.max.wait.time`       | 指定在选择Flow作为“正确”流之前等待的时间量。如果已投票的节点数等于`nifi.cluster.flow.election.max.candidates`属性指定的数量，则群集将不会等待这么长时间。默认值为`5 mins`。请注意，一旦投票第一次投票，时间就会开始。       
-`nifi.cluster.flow.election.max.candidates`      | 指定群集中所需的节点数，以便提前选择流。这允许群集中的节点避免在开始处理之前等待很长时间，如果我们至少达到群集中的此数量的节点。                                                                              
-`nifi.cluster.flow.election.max.wait.time`       | 指定在选择Flow作为“正确”流之前等待的时间量。如果已投票的节点数等于`nifi.cluster.flow.election.max.candidates`属性指定的数量，则群集将不会等待这么长时间。默认值为`5 mins`。请注意，一旦投票第一次投票，时间就会开始。       
-`nifi.cluster.flow.election.max.candidates`      | 指定群集中所需的节点数，以便提前选择流。这允许群集中的节点避免在开始处理之前等待很长时间，如果我们至少达到群集中的此数量的节点。                                                                              
-`nifi.cluster.load.balance.port`                 | 指定要侦听传入连接的端口，以便跨群集负载平衡数据。默认值为`6342`。                                                                                                          
-`nifi.cluster.load.balance.host`                 | 指定要侦听传入连接的主机名，以便跨群集负载平衡数据。如果未指定，将默认为`nifi.cluster.node.address`属性使用的值。                                                                        
-`nifi.cluster.load.balance.connections.per.node` | 此节点与群集中每个其他节点之间要创建的最大连接数。例如，如果群集中有5个节点且此值设置为4，则最多将建立20个套接字连接以实现负载平衡（5 x 4 = 20）。默认值为`4`。                                                      
-`nifi.cluster.load.balance.max.thread.count`     | 用于将数据从此节点传输到群集中其他节点的最大线程数。例如，如果此值设置为8，则最多有8个线程负责将数据传输到其他节点，而不管群集中有多少个节点。虽然给定线程一次只能写入一个套接字，但是单个线程能够同时为多个连接提供服务，因为给定的连接可能无法在任何给定时间进行读/写。默认值为`8`。
+`nifi.cluster.node.protocol.threads`             | 应该用于与集群中的其他节点通信的线程数。此属性默认为`10`，但对于大型集群，此值可能需要更大。                                                                                              
+`nifi.cluster.node.protocol.max.threads`         | 应该用于与集群中其他节点通信的最大线程数。此属性默认为`50`。                                                                                                              
+`nifi.cluster.node.event.history.size`           | 更改集群中节点的状态时，将生成一个事件，并可在“集群”页面中查看该事件。此值指示每个节点在内存中保留的事件数。默认值为`25`。                                                                              
+`nifi.cluster.node.connection.timeout`           | 连接到集群中的另一个节点时，指定在考虑连接失败之前此节点应等待的时间。默认值为`5 secs`。                                                                                              
+`nifi.cluster.node.read.timeout`                 | 与集群中的另一个节点通信时，指定此节点在考虑与节点通信失败之前应等待多长时间从远程节点接收信息。默认值为`5 secs`。                                                                                 
+`nifi.cluster.node.max.concurrent.requests`      | 可以复制到集群中节点的未完成Web请求的最大数量。如果超过此数量的请求，嵌入式Jetty服务器将返回“409：Conflict”响应。此属性默认为`100`。                                                               
+`nifi.cluster.firewall.file`                     | 节点防火墙文件的位置。这是一个文件，可用于列出允许连接到集群的所有节点。它提供了额外的安全层。默认情况下，此值为空，表示不使用防火墙文件。                                                                         
+`nifi.cluster.flow.election.max.wait.time`       | 指定在选择Flow作为“正确”流之前等待的时间量。如果已投票的节点数等于`nifi.cluster.flow.election.max.candidates`属性指定的数量，则集群将不会等待这么长时间。默认值为`5 mins`。请注意，一旦投票第一次投票，时间就会开始。       
+`nifi.cluster.flow.election.max.candidates`      | 指定集群中所需的节点数，以便提前选择流。这允许集群中的节点避免在开始处理之前等待很长时间，如果我们至少达到集群中的此数量的节点。                                                                              
+`nifi.cluster.flow.election.max.wait.time`       | 指定在选择Flow作为“正确”流之前等待的时间量。如果已投票的节点数等于`nifi.cluster.flow.election.max.candidates`属性指定的数量，则集群将不会等待这么长时间。默认值为`5 mins`。请注意，一旦投票第一次投票，时间就会开始。       
+`nifi.cluster.flow.election.max.candidates`      | 指定集群中所需的节点数，以便提前选择流。这允许集群中的节点避免在开始处理之前等待很长时间，如果我们至少达到集群中的此数量的节点。                                                                              
+`nifi.cluster.load.balance.port`                 | 指定要侦听传入连接的端口，以便跨集群负载平衡数据。默认值为`6342`。                                                                                                          
+`nifi.cluster.load.balance.host`                 | 指定要侦听传入连接的主机名，以便跨集群负载平衡数据。如果未指定，将默认为`nifi.cluster.node.address`属性使用的值。                                                                        
+`nifi.cluster.load.balance.connections.per.node` | 此节点与集群中每个其他节点之间要创建的最大连接数。例如，如果集群中有5个节点且此值设置为4，则最多将建立20个套接字连接以实现负载平衡(5 x 4 = 20)。默认值为`4`。                                                      
+`nifi.cluster.load.balance.max.thread.count`     | 用于将数据从此节点传输到集群中其他节点的最大线程数。例如，如果此值设置为8，则最多有8个线程负责将数据传输到其他节点，而不管集群中有多少个节点。虽然给定线程一次只能写入一个套接字，但是单个线程能够同时为多个连接提供服务，因为给定的连接可能无法在任何给定时间进行读/写。默认值为`8`。
 `nifi.cluster.load.balance.comms.timeout`        | 与另一个节点通信时，如果在读取或写入套接字时经过了这段时间而没有取得任何进展，则会抛出TimeoutException。这将导致数据被重试或发送到集群中的另一个节点，具体取决于配置的负载平衡策略。默认值为`30 sec`。                               
 
 ### 索赔管理
 
-每当请求更改数据流时，重要的是NiFi群集中的所有节点都保持同步。为了实现这一点，NiFi采用了两阶段提交。首先将请求复制到群集中的所有节点，只询问是否允许该请求。然后，每个节点确定它是否允许该请求，如果是，则在被修改的组件上发出“声明”。可以将此声明视为请求者拥有的互斥锁。一旦所有节点都对是否允许该请求进行了投票，则发起请求的节点必须决定是否完成该请求。如果任何节点投票为“否”，则取消请求并取消声明，并将错误消息发送回用户。但是，如果节点全部投票' 是'然后请求完成。在这种分布式环境中，在发生投票之后和请求完成之前，发出原始请求的节点可能会失败。这将使组件无限期地锁定，以便不再对组件进行更改。为了避免这种情况，索赔将在一段时间后超时。
+每当请求更改数据流时，重要的是NiFi集群中的所有节点都保持同步。为了实现这一点，NiFi采用了两阶段提交。首先将请求复制到集群中的所有节点，只询问是否允许该请求。然后，每个节点确定它是否允许该请求，如果是，则在被修改的组件上发出“声明”。可以将此声明视为请求者拥有的互斥锁。一旦所有节点都对是否允许该请求进行了投票，则发起请求的节点必须决定是否完成该请求。如果任何节点投票为“否”，则取消请求并取消声明，并将错误消息发送回用户。但是，如果节点全部投票' 是'然后请求完成。在这种分布式环境中，在发生投票之后和请求完成之前，发出原始请求的节点可能会失败。这将使组件无限期地锁定，以便不再对组件进行更改。为了避免这种情况，索赔将在一段时间后超时。
 
 ### ZooKeeper属性
 
-NiFi依赖于Apache ZooKeeper来确定集群中哪个节点应该扮演主节点的角色以及哪个节点应该扮演集群协调器的角色。必须配置这些属性才能使NiFi加入群集。
+NiFi依赖于Apache ZooKeeper来确定集群中哪个节点应该扮演主节点的角色以及哪个节点应该扮演集群协调器的角色。必须配置这些属性才能使NiFi加入集群。
 
 col 1                            | col 2                                                                                                                                                                     
 -------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------
 **属性**                           | **描述**                                                                                                                                                                    
-`nifi.zookeeper.connect.string`  | 连接到Apache ZooKeeper所需的Connect String。这是一个以逗号分隔的hostname：port对列表。例如，`localhost:2181,localhost:2182,localhost:2183`。这应该包含ZooKeeper仲裁中所有ZooKeeper实例的列表。必须指定此属性才能加入群集，并且没有默认值。
+`nifi.zookeeper.connect.string`  | 连接到Apache ZooKeeper所需的Connect String。这是一个以逗号分隔的hostname：port对列表。例如，`localhost:2181,localhost:2182,localhost:2183`。这应该包含ZooKeeper仲裁中所有ZooKeeper实例的列表。必须指定此属性才能加入集群，并且没有默认值。
 `nifi.zookeeper.connect.timeout` | 在考虑连接失败之前连接到ZooKeeper时需要等待多长时间。默认值为`3 secs`。                                                                                                                              
 `nifi.zookeeper.session.timeout` | 在会话过期之前丢失与ZooKeeper的连接后等待多长时间。默认值为`3 secs`。                                                                                                                               
-`nifi.zookeeper.root.node`       | 应该在ZooKeeper中使用的根ZNode。ZooKeeper提供了一个类似目录的结构来存储数据。此结构中的每个“目录”称为ZNode。这表示应该用于存储数据的根ZNode或“目录”。默认值为`/root`。这对于正确设置很重要，因为NiFi实例尝试加入的群集取决于它连接到哪个ZooKeeper实例以及指定的ZooKeeper根节点。 
+`nifi.zookeeper.root.node`       | 应该在ZooKeeper中使用的根ZNode。ZooKeeper提供了一个类似目录的结构来存储数据。此结构中的每个“目录”称为ZNode。这表示应该用于存储数据的根ZNode或“目录”。默认值为`/root`。这对于正确设置很重要，因为NiFi实例尝试加入的集群取决于它连接到哪个ZooKeeper实例以及指定的ZooKeeper根节点。 
 
 ### Kerberos属性
 
 col 1                                              | col 2                                                                                                                        
 -------------------------------------------------- | -----------------------------------------------------------------------------------------------------------------------------
 **属性**                                             | **描述**                                                                                                                       
-`nifi.kerberos.krb5.file`\*                        | krb5文件的位置（如果使用）。默认为空白。此时，每个NiFi实例只允许指定一个krb5文件，因此此属性在此处配置为支持SPNEGO和服务主体，而不是单个处理器。如有必要，krb5文件可以支持多个领域。例：`/etc/krb5.conf`      
-`nifi.kerberos.service.principal`\*                | NiFi Kerberos服务主体的名称（如果使用）。默认为空白。请注意，此属性适用于NiFi作为客户端其他系统进行身份验证。示例：`nifi/nifi.example.com`或`nifi/nifi.example.com@EXAMPLE.COM`
-`nifi.kerberos.service.keytab.location`\*          | NiFi Kerberos密钥表的文件路径（如果使用）。默认为空白。请注意，此属性适用于NiFi作为客户端其他系统进行身份验证。例：`/etc/nifi.keytab`                                         
-`nifi.kerberos.spnego.principal`\*                 | NiFi Kerberos服务主体的名称（如果使用）。默认为空白。请注意，此属性用于验证NiFi用户。示例：`HTTP/nifi.example.com`或`HTTP/nifi.example.com@EXAMPLE.COM`            
-`nifi.kerberos.spnego.keytab.location`\*           | NiFi Kerberos密钥表的文件路径（如果使用）。默认为空白。请注意，此属性用于验证NiFi用户。例：`/etc/http-nifi.keytab`                                                
-`nifi.kerberos.spengo.authentication.expiration`\* | 成功使用Kerberos用户身份验证的到期持续时间（如果使用）。默认值为`12 hours`。                                                                              
+`nifi.kerberos.krb5.file`\*                        | krb5文件的位置(如果使用)。默认为空白。此时，每个NiFi实例只允许指定一个krb5文件，因此此属性在此处配置为支持SPNEGO和服务主体，而不是单个处理器。如有必要，krb5文件可以支持多个领域。例：`/etc/krb5.conf`      
+`nifi.kerberos.service.principal`\*                | NiFi Kerberos服务主体的名称(如果使用)。默认为空白。请注意，此属性适用于NiFi作为客户端其他系统进行身份验证。示例：`nifi/nifi.example.com`或`nifi/nifi.example.com@EXAMPLE.COM`
+`nifi.kerberos.service.keytab.location`\*          | NiFi Kerberos密钥表的文件路径(如果使用)。默认为空白。请注意，此属性适用于NiFi作为客户端其他系统进行身份验证。例：`/etc/nifi.keytab`                                         
+`nifi.kerberos.spnego.principal`\*                 | NiFi Kerberos服务主体的名称(如果使用)。默认为空白。请注意，此属性用于验证NiFi用户。示例：`HTTP/nifi.example.com`或`HTTP/nifi.example.com@EXAMPLE.COM`            
+`nifi.kerberos.spnego.keytab.location`\*           | NiFi Kerberos密钥表的文件路径(如果使用)。默认为空白。请注意，此属性用于验证NiFi用户。例：`/etc/http-nifi.keytab`                                                
+`nifi.kerberos.spengo.authentication.expiration`\* | 成功使用Kerberos用户身份验证的到期持续时间(如果使用)。默认值为`12 hours`。                                                                              
 
 ### 自定义属性
 
@@ -2530,7 +2530,7 @@ col 1                                              | col 2
 * 创建自定义属性。确保这件事：
     * 每个自定义属性都包含一个不同的属性值，因此它不会被现有的环境属性，系统属性或FlowFile属性覆盖。
 
-    * 群集环境中的每个节点都配置有相同的自定义属性。
+    * 集群环境中的每个节点都配置有相同的自定义属性。
 
 * `nifi.variable.registry.properties`使用自定义属性文件的位置进行更新：
 
@@ -2547,4 +2547,4 @@ col 1 | col 2
 ----- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------
       | _升级_
 
-配置上面标有星号（*）的属性时要小心。要使升级过程更容易，建议将默认配置更改为主根安装目录之外的位置。通过这种方式，这些项目可以通过升级保留在其配置的位置，NiFi可以找到所有存储库和配置文件，并在旧版本停止并启动新版本后立即从中断处继续。此外，管理员可以重复使用此_nifi.properties_文件和任何其他配置文件，而无需在每次升级时重新配置它们。如前所述，检查_nifi.properties中的_任何更改非常重要升级时新版本的文件，并确保它们反映在您使用的_nifi.properties_文件中。
+配置上面标有星号(*)的属性时要小心。要使升级过程更容易，建议将默认配置更改为主根安装目录之外的位置。通过这种方式，这些项目可以通过升级保留在其配置的位置，NiFi可以找到所有存储库和配置文件，并在旧版本停止并启动新版本后立即从中断处继续。此外，管理员可以重复使用此_nifi.properties_文件和任何其他配置文件，而无需在每次升级时重新配置它们。如前所述，检查_nifi.properties中的_任何更改非常重要升级时新版本的文件，并确保它们反映在您使用的_nifi.properties_文件中。
