@@ -28,6 +28,9 @@ QQ群：无(之前也建过，包括其他的NIFI群，发现有些人真就是�
 
 <li>部分Processor文档增加模板，后期没新加组件文档都会带有示例说明的模板</li>
 <li>NIFI 源码系列 新增 理解内容存储库归档</li>
+<li>聊聊HTTPS和SS、TLS协议</li>
+<li>Java Mysql连接池配置和案例分析--超时异常和处理</li>
+<li>Base64EncodeContent:对base64和base64之间的内容进行编码或解码</li>
 
 ### 2019-09-30
 

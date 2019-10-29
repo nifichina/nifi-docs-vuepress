@@ -34,6 +34,7 @@ module.exports = {
               children: [
                 ['/processors/AttributesToCSV','AttributesToCSV'],
                 ['/processors/AttributesToJSON','AttributesToJSON'],
+                ['/processors/Base64EncodeContent','Base64EncodeContent'],
                 ['/processors/ConvertJSONToAvro','ConvertJSONToAvro'],
                 ['/processors/CryptographicHashAttribute','CryptographicHashAttribute'],
                 ['/processors/DistributeLoad','DistributeLoad'],
@@ -90,8 +91,9 @@ module.exports = {
                 ['/extend/ControllerServiceArchive','ControllerService扩展开发的项目结构'],
                 ['/extend/JsonJoltShift','JSONJOLT介绍及语法详解-shift篇'],
                 ['/extend/通过配置优化NiFi性能','通过配置优化NiFi性能'],
-                ['/extend/NIFI Linux系统配置的最佳实践','NIFI Linux系统配置的最佳实践']
-               
+                ['/extend/NIFI Linux系统配置的最佳实践','NIFI Linux系统配置的最佳实践'],
+                ['/extend/聊聊HTTPS和SS、TLS协议','聊聊HTTPS和SS、TLS协议'],
+                ['/extend/Java Mysql连接池配置和案例分析--超时异常和处理','Java Mysql连接池配置和案例分析--超时异常和处理']
                ]
             },
             {

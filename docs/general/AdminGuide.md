@@ -106,7 +106,7 @@ Web HTTP Forwarding Port | `nifi.web.http.port.forwarding` | _none_
 
 ### 嵌入式Zookeeper
 
-下表列出了[内置的ZooKeeper服务器](#内置的ZooKeeper服务器)使用的默认端口以及 _zookeeper.properties_ 文件中的相应属性。
+下表列出了[嵌入式ZooKeeper服务器](#嵌入式ZooKeeper服务器)使用的默认端口以及 _zookeeper.properties_ 文件中的相应属性。
 
 功能                                                | 属性           | 默认值   
 ------------------------------------------------- | ------------ | ------
@@ -114,15 +114,15 @@ Zookeeper Server Quorum and Leader Election Ports | `server.1`   | _none_
 Zookeeper Client Port                             | `clientPort` | `2181`
 
 
-![](../img/i.png)Zookeeper服务器端口的注释示例包含在表单中的 _zookeeper.properties_ 文件中`server.N=nifi-nodeN-hostname:2888:3888`。
+![](../img/i.png)Zookeeper服务器端口的注释示例包含在 _zookeeper.properties_ 文件`server.N=nifi-nodeN-hostname:2888:3888`。
 
 ## 配置最佳实践
 
-如果您在Linux上运行,请考虑这些最佳实践。典型的Linux默认设置不一定能够满足像NiFi这样的IO密集型应用程序的需求。对于这些方面,您的NIFI所在的Linux发行版的实际情况可能会有所不同,可以参考下面的介绍,但是请参考特定发行版的文档,了解如何最好地实现这些建议。
+如果您在Linux上运行,请考虑这些最佳实践。典型的Linux默认设置不一定能够满足像NiFi这样的IO密集型应用程序的需求。对于这些最佳实践,NIFI所在的Linux发行版的实际情况可能会有所不同,可以参考下面的介绍,但是请参考特定发行版的文档。
 
 **最大文件句柄(Maximum File Handles)**
 
-NiFi在任何时候都可能会打开非常大量的文件句柄。通过编辑 _/etc/security/limits.conf_ 来增加限制,以添加类似的内容
+NiFi在任何时候都可能会打开非常大量的文件句柄。通过编辑 _/etc/security/limits.conf_ 来增加限制,添加类似的内容
 
 > ```
 > * hard nofile 50000
@@ -131,14 +131,14 @@ NiFi在任何时候都可能会打开非常大量的文件句柄。通过编辑 
 
 **最大派生进程数(Maximum Forked Processes)**
 
-NiFi可以配置为生成大量线程。要增加允许的数量,请编辑 _/etc/security/limits.conf_
+NiFi可以配置生成大量的线程。要增加Linux允许的数量,请编辑 _/etc/security/limits.conf_
 
 > ```
 > *  hard  nproc  10000
 > *  soft  nproc  10000
 > ```
 
-您的发行版Linux可能需要通过添加来编辑_/etc/security/limits.d/90-nproc.conf_
+你的发行版Linux可能需要通过添加来编辑 _/etc/security/limits.d/90-nproc.conf_ 
 
 > ```
 > * soft nproc 10000
@@ -154,7 +154,7 @@ NiFi可以配置为生成大量线程。要增加允许的数量,请编辑 _/etc
 
 **设置套接字在关闭时保持TIMED_WAIT状态的时间(Set how long sockets stay in a TIMED_WAIT state when closed)**
 
-考虑到您希望能够快速设置和拆卸新套接字,您不希望您的套接字停留太长时间。最好多阅读一下并调整类似的东西
+考虑到你希望能够快速设置和拆卸新套接字,你不希望您的套接字停留太长时间。最好多阅读一下并调整类似的东西
 
 > ```
 > sudo sysctl -w net.ipv4.netfilter.ip_conntrack_tcp_timeout_time_wait ="1"
@@ -172,7 +172,7 @@ NiFi可以配置为生成大量线程。要增加允许的数量,请编辑 _/etc
 
 ## 安全配置
 
-出于安全目的NiFi提供多种不同的配置选项。最重要的属性是  _nifi.properties_  文件中"security properties(安全属性)"标题下的属性。为了安全运行,必须设置以下属性:
+出于安全目的NiFi提供了多种不同的配置选项。最重要的属性是  _nifi.properties_  文件中"security properties(安全属性)"标题下的属性。为了安全运行,必须设置以下属性:
 
 属性名称                             | 描述                                                                   
 -------------------------------- | ---------------------------------------------------------------------
@@ -180,7 +180,7 @@ NiFi可以配置为生成大量线程。要增加允许的数量,请编辑 _/etc
 `nifi.security.keystore`         | 包含服务器私钥的密钥库的文件名。                                                     
 `nifi.security.keystoreType`     | 密钥库的类型。必须是`PKCS12`或`JKS`。JKS是首选类型,PKCS12文件将加载BouncyCastle提供程序。       
 `nifi.security.keystorePasswd`   | 密钥库的密码。                                                              
-`nifi.security.keyPasswd`        | 密钥库中证书的密码。如果未设置,`nifi.security.keystorePasswd`将使用值。                  
+`nifi.security.keyPasswd`        | 密钥库中证书的密码。如果未设置,将使用`nifi.security.keystorePasswd`值。                  
 `nifi.security.truststore`       | 将用于授权连接到NiFi的Truststore的文件名。没有Truststore的安全实例将拒绝所有传入连接。              
 `nifi.security.truststoreType`   | Truststore的类型。必须是`PKCS12`或`JKS`。JKS是首选类型,PKCS12文件将加载BouncyCastle提供程序。
 
