@@ -11,7 +11,9 @@
 异常现象和问题本源:
 　　服务的持久层依赖mysql, 采用连接池的机制来优化性能. 但服务空闲一段时间(切确地讲是mysql connection空闲一段时间), 下次使用时执行sql失败.
 　　具体的异常, 可反映到具体的异常日志:
+
 ![](./img/mysql/1.png)
+
 当然除了异常的原因以外, 里面也提供了一个解决方案.　　
 ```
 com.mysql.jdbc.exceptions.jdbc4.CommunicationsException:

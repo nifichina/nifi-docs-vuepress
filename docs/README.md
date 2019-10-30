@@ -2,7 +2,7 @@
 
 # 文档版本
 
-翻译的文档对照官方文档1.9.2版本，如有出入，以官方文档为准（可以以此中文文档为参照，但建议多看官方文档原文）
+翻译的文档对照官方文档1.9.2版本，如有出入，以官方文档为准（可以以此中文文档为参照，但建议多看官方文档原文）除了官方文档的说明外，还有一些关于组件的小demo说明，一些与各个组件可能有关系的其他文献资料的整理等等。
 
 官方文档地址：http://nifi.apache.org/docs.html
 
@@ -24,70 +24,78 @@ QQ群：无(之前也建过，包括其他的NIFI群，发现有些人真就是�
 
 ## 更新日志
 
-### 2019-10-26
+### 2019-10-
 
-<li>部分Processor文档增加模板，后期没新加组件文档都会带有示例说明的模板</li>
-<li>NIFI 源码系列 新增 理解内容存储库归档</li>
-<li>聊聊HTTPS和SS、TLS协议</li>
-<li>Java Mysql连接池配置和案例分析--超时异常和处理</li>
-<li>Base64EncodeContent:对base64和base64之间的内容进行编码或解码</li>
+#### Processor更新
+* 部分Processor文档增加模板，后期没新加组件文档都会带有示例说明的模板
+* Base64EncodeContent:对base64和base64之间的内容进行编码或解码
+#### NIFI 源码系列
+* NIFI 源码系列 新增 理解内容存储库归档
+#### Oracle
+* oracle 12C的新特性-CDB和PDB
+  
+#### nysql
+* Java Mysql连接池配置和案例分析--超时异常和处理
 
+#### http
+* 聊聊HTTPS和SS、TLS协议
+  
 ### 2019-09-30
 
 (由于之前已知没有写更新日志，所有截止9.30所有更新全部写到这里)
 
 #### Processor更新
-<li>AttributesToCSV ：流属性转CSV</li>
-<li>AttributesToJSON：流属性转JSON</li>
-<li>ConvertJSONToAvro：将 JSON数据转成AVRO格式</li>
-<li>CryptographicHashAttribute：哈希流属性</li>
-<li>DistributeLoad：数据分发</li>
-<li>EvaluateJsonPath：提取json内容到流属性</li>
-<li>ExecuteGroovyScript：执行Groovy脚本</li>
-<li>ExecuteSQL：执行SQL</li>
-<li>ExtractText：提取text内容到流属性</li>
-<li>FlattenJson：“压平”多层json</li>
-<li>GenerateFlowFile：生成流</li>
-<li>GenerateTableFetch：生成SQL，增量，全量</li>
-<li>HandleHttpRequest_HandleHttpResponse：web api</li>
-<li>InvokeHTTP：执行HTTP请求</li>
-<li>LogAttribute：日志打印流属性</li>
-<li>LogMessage：：日志打印信息</li>
-<li>PutHiveStreaming：写hive</li>
-<li>ReplaceText：替换text</li>
-<li>RouteOnAttribute:根据属性路由流</li>
-<li>RouteOnContent：根据流内容路由流</li>
-<li>SplitAvro：切分avro数据</li>
-<li>SplitJson：切分json数组</li>
-<li>UpdateAttribute：更改流属性</li>
+* AttributesToCSV ：流属性转CSV
+* AttributesToJSON：流属性转JSON
+* ConvertJSONToAvro：将 JSON数据转成AVRO格式
+* CryptographicHashAttribute：哈希流属性
+* DistributeLoad：数据分发
+* EvaluateJsonPath：提取json内容到流属性
+* ExecuteGroovyScript：执行Groovy脚本
+* ExecuteSQL：执行SQL
+* ExtractText：提取text内容到流属性
+* FlattenJson：“压平”多层json
+* GenerateFlowFile：生成流
+* GenerateTableFetch：生成SQL，增量，全量
+* HandleHttpRequest_HandleHttpResponse：web api
+* InvokeHTTP：执行HTTP请求
+* LogAttribute：日志打印流属性
+* LogMessage：：日志打印信息
+* PutHiveStreaming：写hive
+* ReplaceText：替换text
+* RouteOnAttribute:根据属性路由流
+* RouteOnContent：根据流内容路由流
+* SplitAvro：切分avro数据
+* SplitJson：切分json数组
+* UpdateAttribute：更改流属性
 
 #### General更新
-<li>概览</li>
-<li>入门</li>
-<li>用户指南</li>
+* 概览
+* 入门
+* 用户指南
 
 #### NIFI 源码系列
-<li>NIFI-NAR包概述</li>
-<li>nifi nar包加载机制源码解读</li>
-<li>nifi.sh 脚本解读</li>
-<li>nifi-env.sh 脚本解读</li>
-<li>nifi.sh start 解读</li>
-<li>RunNiFi.java 源码解读</li>
-<li>NiFi.java 源码解读</li>
-<li>Nar包下的MANIFEST.MF</li>
+* NIFI-NAR包概述
+* nifi nar包加载机制源码解读
+* nifi.sh 脚本解读
+* nifi-env.sh 脚本解读
+* nifi.sh start 解读
+* RunNiFi.java 源码解读
+* NiFi.java 源码解读
+* Nar包下的MANIFEST.MF
 
 #### NIFI 扩展开发系列
-<li>ControllerService扩展开发的项目结构</li>
-<li>JSONJOLT介绍及语法详解-shift篇</li>
-<li>通过配置优化NiFi性能</li>
-<li>NIFI Linux系统配置的最佳实践</li>
+* ControllerService扩展开发的项目结构
+* JSONJOLT介绍及语法详解-shift篇
+* 通过配置优化NiFi性能
+* NIFI Linux系统配置的最佳实践
 
 #### Java source code
-<li>ProcessBuilder</li>
-<li>ClassLoader</li>
-<li>Thread</li>
-<li>线程上下文类加载器</li>
-<li>从jvm源码解读Java运行时的类加载</li>
-<li>Java socket详解（转）</li>
-<li>Java HashMap 新增方法(merge,compute)（转）</li>
+* ProcessBuilder
+* ClassLoader
+* Thread
+* 线程上下文类加载器
+* 从jvm源码解读Java运行时的类加载
+* Java socket详解（转）
+* Java HashMap 新增方法(merge,compute)（转）
 

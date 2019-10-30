@@ -15,8 +15,8 @@
 
 属性名称                                       |  默认值  | 可选值                                   | 描述                                                                                             
 ------------------------------------------ |:-----:| ------------------------------------- | -----------------------------------------------------------------------------------------------
-**Log Level**                              | info  | <li>trace<li>debug<li>info<li>warn<li>error | 将属性输出到日志的级别                                                                                    
-**Log Payload**                            | false | <li>true<li>false                        | 如果为true，将记录流文件的有效负载及其属性;否则，只记录属性。                                                              
+**Log Level**                              | info  | <li>trace</li><li>debug</li><li>info<li>warn</li><li>error</li> | 将属性输出到日志的级别                                                                                    
+**Log Payload**                            | false | <li>true</li><li>false</li>                        | 如果为true，将记录流文件的有效负载及其属性;否则，只记录属性。                                                              
 Attributes to Log                          |       |                                       | 以逗号分隔的要记录的属性列表。如果没有指定，所有属性都将被记录，除非修改“Attributes to Log by Regular Expression”。这两个性质之间有一个AND关系。 
 Attributes to Log by Regular Expression    |  .*   |                                       | 指示要记录的属性的正则表达式。如果没有指定，所有属性都将被记录，除非“Attributes to Log”被修改。这两个性质之间有一个AND关系。                      
 Attributes to Ignore                       |       |                                       | 要忽略的属性的逗号分隔列表。如果没有指定，则不会忽略任何属性，除非修改“Attributes to Ignore by Regular Expression”。这两个属性之间有一个OR关系。

@@ -91,9 +91,7 @@ module.exports = {
                 ['/extend/ControllerServiceArchive','ControllerService扩展开发的项目结构'],
                 ['/extend/JsonJoltShift','JSONJOLT介绍及语法详解-shift篇'],
                 ['/extend/通过配置优化NiFi性能','通过配置优化NiFi性能'],
-                ['/extend/NIFI Linux系统配置的最佳实践','NIFI Linux系统配置的最佳实践'],
-                ['/extend/聊聊HTTPS和SS、TLS协议','聊聊HTTPS和SS、TLS协议'],
-                ['/extend/Java Mysql连接池配置和案例分析--超时异常和处理','Java Mysql连接池配置和案例分析--超时异常和处理']
+                ['/extend/NIFI Linux系统配置的最佳实践','NIFI Linux系统配置的最佳实践']
                ]
             },
             {
@@ -114,6 +112,30 @@ module.exports = {
               title: 'Jetty source code',
               children: [
                 ['/java-source-code/ProcessBuilder','ProcessBuilder']
+                
+               
+              ]
+            },
+            {
+              title: 'http',
+              children: [
+                ['/http/聊聊HTTPS和SS、TLS协议','聊聊HTTPS和SS、TLS协议']
+                
+               
+              ]
+            },
+            {
+              title: 'mysql',
+              children: [
+                ['/mysql/Java Mysql连接池配置和案例分析--超时异常和处理','Java Mysql连接池配置和案例分析--超时异常和处理']
+                
+               
+              ]
+            },
+            {
+              title: 'oracle',
+              children: [
+                ['/oracle/oracle 12C的新特性-CDB和PDB','oracle 12C的新特性-CDB和PDB']
                 
                
               ]
