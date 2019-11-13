@@ -40,17 +40,17 @@ Oracle LogMiner是Oracle数据库的一部分，它允许你通过SQL接口在�
 
     例如，考虑以下SQL语句:
 
-    <pre dir="ltr">
+    ```sql
     INSERT INTO HR.JOBS(JOB_ID, JOB_TITLE, MIN_SALARY, MAX_SALARY)  VALUES('IT_WT','Technical Writer', 4000, 11000);
-    </pre>
+    ```
 
     没有字典，LogMiner会显示:
 
-    <pre dir="ltr">
+    ```sql
     insert into "UNKNOWN"."OBJ# 45522"("COL 1","COL 2","COL 3","COL 4") values
     (HEXTORAW('45465f4748'),HEXTORAW('546563686e6963616c20577269746572'),
     HEXTORAW('c229'),HEXTORAW('c3020b'));
-    </pre>
+    ```
 
 * 重做日志文件包含对数据库或数据库字典所做的更改。
 
@@ -60,7 +60,7 @@ Oracle LogMiner是Oracle数据库的一部分，它允许你通过SQL接口在�
 你可以直接使用LogMiner`DBMS_LOGMNR` and `DBMS_LOGMNR_D` PL/SQL程序包, 并使用 `V$LOGMNR_CONTENTS`视图, 如下:
 
 
-1.  知道LogMiner字典.
+1.  指定LogMiner字典.
 
     使用`DBMS_LOGMNR_D.BUILD`程序生成或者当启动LogMiner(第三步)时指定数据字典，或者同时使用。具体取决于你想使用哪种数据字典。
 
@@ -261,25 +261,25 @@ Oracle建议，当您不希望访问创建重做日志文件的源数据库时�
 
 1.  DBMS_LOGMNR_D构建过程需要访问一个可以放置字典文件的目录。因为PL/SQL过程通常不访问用户目录，所以必须指定DBMS_LOGMNR_D使用的目录。要指定一个目录，请在初始化参数文件中设置初始化参数UTL_FILE_DIR。例如，要将UTL_FILE_DIR设置为使用/oracle/database作为字典文件所在的目录，请在初始化参数文件中放置以下内容:
 
-    <pre dir="ltr">
+    ```sql
     UTL_FILE_DIR = /oracle/database
-    </pre>
+    ```
 
     请记住，要使初始化参数文件的更改生效，必须停止并重新启动数据库。
 
 2.  如果数据库已关闭，则使用SQL*Plus挂载并打开要分析其重做日志文件的数据库。例如，输入SQL STARTUP命令挂载并打开数据库:
 
-    <pre dir="ltr">
+    ```sql
     STARTUP
-    </pre>
+    ```
 
 3.  执行PL/SQL过程DBMS_LOGMNR_D.BUILD来指定字典的文件名和文件的目录路径名。这个过程创建字典文件。例如，输入以下内容来在`/oracle/database`目录中创建`dictionary.ora`：
 
-    <pre dir="ltr">
+    ```sql
     EXECUTE DBMS_LOGMNR_D.BUILD('dictionary.ora', - 
        '/oracle/database/', -
         DBMS_LOGMNR_D.STORE_IN_FLAT_FILE);
-    </pre>
+    ```
 
     您还可以只指定文件名和位置，而不需要指定STORE_IN_FLAT_FILE选项。结果是一样的。
 
@@ -306,14 +306,14 @@ Oracle建议，当您不希望访问创建重做日志文件的源数据库时�
 
     LogMiner将使用数据库控制文件查找并将满足指定时间或SCN范围的重做日志文件添加到LogMiner重做日志文件列表中。例如:
 
-    <pre dir="ltr">
+    ```sql
     ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-YYYY HH24:MI:SS';
     EXECUTE DBMS_LOGMNR.START_LOGMNR( -
        STARTTIME => '01-Jan-2012 08:30:00', -
        ENDTIME => '01-Jan-2012 08:45:00', -
        OPTIONS => DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG + -
        DBMS_LOGMNR.CONTINUOUS_MINE);
-    </pre>
+    ```
 
     (为了避免在对DBMS_LOGMNR的PL/SQL调用中指定日期格式。START_LOGMNR过程，本例首先使用SQL ALTER会话集NLS_DATE_FORMAT语句。)
 
@@ -325,19 +325,19 @@ Oracle建议，当您不希望访问创建重做日志文件的源数据库时�
 
     例如，要启动重做日志文件的新列表，请指定DBMS_LOGMNR的新选项。ADD_LOGFILE PL/SQL过程，表明这是一个新列表的开始。例如，输入以下命令来指定/oracle/logs/log1.f:
 
-    <pre dir="ltr">
+    ```sql
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
        LOGFILENAME => '/oracle/logs/log1.f', -
        OPTIONS => DBMS_LOGMNR.NEW);
-    </pre>
+    ```
 
     如果需要，可以通过指定PL/SQL DBMS_LOGMNR的ADDFILE选项来添加更多的重做日志文件。ADD_LOGFILE过程。例如，输入以下内容来添加/oracle/logs/log2.f:
 
-    <pre dir="ltr">
+    ```sql
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
        LOGFILENAME => '/oracle/logs/log2.f', -
        OPTIONS => DBMS_LOGMNR.ADDFILE);
-    </pre>
+    ```
 
     要确定在当前LogMiner会话中分析哪些重做日志文件，可以查询`V$LOGMNR_LOGS`视图，其中包含每个重做日志文件的一行。
 
@@ -376,51 +376,52 @@ Oracle建议，当您不希望访问创建重做日志文件的源数据库时�
 
 当执行`DBMS_LOGMNR.START_LOGMNR`过程, LogMiner会检测确保你指定的参数是有效的并且重做日志和数据字典是存在可获得的。 在您查询视图之前，`V$LOGMNR_CONTENTS`视图不会被填充, 详见[How the V$LOGMNR_CONTENTS View Is Populated](https://docs.oracle.com/database/121/SUTIL/GUID-CD389496-1D82-4E39-881F-C0C18355C573.htm).
 
+注意，在调用DBMS_LOGMNR.START_LOGMNR时，参数和选项不是持久的。每次调用DBMS_LOGMNR.START_LOGMNR时，必须指定所有需要的参数和选项(包括SCN和时间范围)。
 
 ## Querying V$LOGMNR_CONTENTS for Redo Data of Interest
 
 通过查询`V$LOGMNR_CONTENTS`视图获取我们感兴趣的数据. (注意要有 `SYSDBA` or `LOGMINING` 权限来查询`V$LOGMNR_CONTENTS`.) 这个视图包括了数据库的历史变更信息，包括但不仅限于下列:
 
-* The type of change made to the database: `INSERT`, `UPDATE`, `DELETE`, or `DDL` (`OPERATION` column).
+* 对数据库的更改类型:插入、更新、删除或DDL(`OPERATION` column).
 
-* The SCN at which a change was made (`SCN` column).
+* 对其进行更改的SCN(`SCN` column).
 
-* The SCN at which a change was committed (`COMMIT_SCN` column).
+* 提交更改的SCN (`COMMIT_SCN` column).
 
-* The transaction to which a change belongs (`XIDUSN`, `XIDSLT`, and `XIDSQN` columns).
+* 变更所属的事务 (`XIDUSN`, `XIDSLT`, and `XIDSQN` columns).
 
-* The table and schema name of the modified object (`SEG_NAME` and `SEG_OWNER` columns).
+* 修改对象对应的表和schema (`SEG_NAME` and `SEG_OWNER` columns).
 
-* The name of the user who issued the DDL or DML statement to make the change (`USERNAME` column).
+* 发出DDL或DML语句进行更改的用户的名称(`USERNAME` column).
 
-* If the change was due to a SQL DML statement, the reconstructed SQL statements showing SQL DML that is equivalent (but not necessarily identical) to the SQL DML used to generate the redo records (`SQL_REDO` column).
+* 如果更改是由于SQL DML语句造成的，则重构的SQL语句将显示与用于生成重做记录的SQL DML相同(但不一定相同)的SQL DML (`SQL_REDO` column).
 
-* If a password is part of the statement in a `SQL_REDO` column, then the password is encrypted. `SQL_REDO` column values that correspond to DDL statements are always identical to the SQL DDL used to generate the redo records.
+* 如果密码是SQL_REDO列中语句的一部分，则对密码进行加密。与DDL语句对应的SQL_REDO列值总是与用于生成redo记录的SQL DDL相同。
 
-* If the change was due to a SQL DML change, the reconstructed SQL statements showing the SQL DML statements needed to undo the change (`SQL_UNDO` column).
+* 如果更改是由于SQL DML更改造成的，则重构的SQL语句显示撤消更改所需的SQL DML语句 (`SQL_UNDO` column).
 
-    `SQL_UNDO` columns that correspond to DDL statements are always `NULL`. The `SQL_UNDO` column may be `NULL` also for some data types and for rolled back operations.
+    与DDL语句对应的SQL_UNDO列始终为空。对于某些数据类型和回滚操作，SQL_UNDO列可能也是NULL。
 
 Note:
 
-LogMiner supports Transparent Data Encryption (TDE) in that `V$LOGMNR_CONTENTS` shows DML operations performed on tables with encrypted columns (including the encrypted columns being updated), provided the LogMiner data dictionary contains the metadata for the object in question and provided the appropriate master key is in the Oracle wallet. The wallet must be open or `V$LOGMNR_CONTENTS` cannot interpret the associated redo records. TDE support is not available if the database is not open (either read-only or read-write). See [Oracle Database Advanced Security Guide](https://docs.oracle.com/database/121/ASOAG/asopart1.htm#ASOAG600) for more information about TDE.
+LogMiner支持透明数据加密(TDE)，`V$LOGMNR_CONTENTS`显示对具有加密列的表执行的DML操作(包括正在更新的加密列)，前提是LogMiner数据字典包含有关对象的元数据，并且Oracle wallet中有适当的主密钥。必须打开wallet，否则`V$LOGMNR_CONTENTS`无法解释相关的重做记录。如果数据库未打开(只读或读写)，则不支持TDE。
 
-Example of Querying V$LOGMNR_CONTENTS
+See [Oracle Database Advanced Security Guide](https://docs.oracle.com/database/121/ASOAG/asopart1.htm#ASOAG600) for more information about TDE.
 
-<!-- class="section" -->
+Example of Querying `V$LOGMNR_CONTENTS`
 
-Suppose you wanted to find out about any delete operations that a user named Ron had performed on the `oe.orders` table. You could issue a SQL query similar to the following:
+假设你想要查找有一个叫Ron的用户对`oe.orders`所做的删除操作，你可以执行一个类似于下面的SQL语句:
 
-<pre dir="ltr">
+```sql
 SELECT OPERATION, SQL_REDO, SQL_UNDO
    FROM V$LOGMNR_CONTENTS
    WHERE SEG_OWNER = 'OE' AND SEG_NAME = 'ORDERS' AND
    OPERATION = 'DELETE' AND USERNAME = 'RON';
-</pre>
+```
 
-The following output would be produced. The formatting may be different on your display than that shown here.
+下面是执行SQL查询出来的结果：
 
-<pre dir="ltr">
+```sql
 OPERATION   SQL_REDO                        SQL_UNDO
 
 DELETE      delete from "OE"."ORDERS"       insert into "OE"."ORDERS"        
@@ -442,13 +443,1261 @@ DELETE      delete from "OE"."ORDERS"        insert into "OE"."ORDERS"
             and "SALES_REP_ID" = '159'        '8','29669.9','159',NULL);
             and "PROMOTION_ID" IS NULL 
             and ROWID = 'AAAHTCAABAAAZAPAAe';
+```
+
+输出显示Ron从`oe.orders`表删除了两条数据. 他重构的SQL语句与Ron发出的实际语句是等价的，但不一定完全相同。. 造成这种差异的原因是原始的WHERE子句没有记录在重做日志文件中，所以LogMiner只能单独显示已删除(或更新或插入)的行。
+
+T因此，即使一条DELETE语句可能负责删除这两行，`V$LOGMNR_CONTENTS`中的输出也不能反映这一事实。 实际执行的`DELETE`可能是 `DELETE FROM OE.ORDERS WHERE CUSTOMER_ID ='101`' 或者是`DELETE FROM OE.ORDERS WHERE PROMOTION_ID = NULL.`
+
+### How the V$LOGMNR_CONTENTS View Is Populated
+
+`V$LOGMNR_CONTENTS`与其他视图不同，不是反应表中数据关系，而是反应Redo日志的关系表示。
+
+LogMiner仅在响应针对它的查询时填充视图。在查询`V$LOGMNR_CONTENTS`之前，必须成功启动LogMiner。
+
+当对`V$LOGMNR_CONTENTS`视图执行select操作时，将按顺序读取重做日志文件。来自重做日志文件的翻译信息在`V$LOGMNR_CONTENTS`视图中以行形式返回。这将一直持续到满足在启动时指定的筛选条件或到达重做日志文件的结尾。
+
+在某些情况下，`V$LOGMNR_CONTENTS`中的某些列可能不会被填充。例如：
+
+* 对于OPERATION列的值为DDL的行，不会填充TABLE_SPACE列。这是因为DDL可以在多个表空间上操作。例如，可以使用跨越多个表空间的多个分区创建一个表;因此，填充列并不准确。
+* LogMiner不为临时表生成SQL redo或SQL undo,  SQL_REDO列会包含"/* No SQL_REDO for temporary tables */"字符串，SQL_UNDO 列会包含"/* No SQL_UNDO for temporary tables */"字符串.
+
+LogMiner以SCN顺序返回所有行，除非您使用COMMITTED_DATA_ONLY选项指定只检索提交的事务。SCN顺序是媒体恢复中常用的顺序。
+
+See Also:
+
+[Showing Only Committed Transactions](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-6A2398F7-D484-495A-8AD2-0A6B34C03536 "When using the COMMITTED_DATA_ONLY option to DBMS_LOGMNR.START_LOGMNR, only rows belonging to committed transactions are shown in the V$LOGMNR_CONTENTS view.") for more information about the `COMMITTED_DATA_ONLY` option to `DBMS_LOGMNR.START_LOGMNR`
+
+
+Note:
+
+因为LogMiner只在响应查询时填充V$LOGMNR_CONTENTS视图，而不将请求的数据存储在数据库中，所以以下是正确的:
+
+* 每次查询`V$LOGMNR_CONTENTS`时，LogMiner都会分析您请求的数据的重做日志文件。
+
+* 查询消耗的内存量不依赖于必须返回满足查询的行数。
+
+* 返回请求的数据所需的时间取决于为找到该数据而必须挖掘的重做日志数据的数量和类型。
+
+基于上面的注意事项，如果你需要保持查询结果以便日后分析，Oracle建议在实体表保存从`V$LOGMNR_CONTENTS`视图中查询到的结果，特别是当查询返回的数据量与LogMiner必须分析才能提供数据的重做数据量相比很小时。
+
+### Querying V$LOGMNR_CONTENTS Based on Column Values
+
+LogMiner允许您基于列值进行查询。
+
+例如你可以查询所有对hr.employees做的salary增长超过一定值的update操作，这样的数据可以用来分析系统行为和执行审计任务。
+
+使用两个挖掘函数从重做日志文件中提取数据:DBMS_LOGMNR。MINE_VALUE DBMS_LOGMNR.COLUMN_PRESENT。V$LOGMNR_CONTENTS视图中的REDO_VALUE和UNDO_VALUE列提供了对这些mine函数的支持。
+
+下面是一个示例，演示如何使用MINE_VALUE函数来选择hr的所有更新。将工资栏增加到原来的两倍以上的员工:
+
+```sql
+SELECT SQL_REDO FROM V$LOGMNR_CONTENTS
+   WHERE
+   SEG_NAME = 'EMPLOYEES' AND
+   SEG_OWNER = 'HR' AND
+   OPERATION = 'UPDATE' AND
+   DBMS_LOGMNR.MINE_VALUE(REDO_VALUE, 'HR.EMPLOYEES.SALARY') >
+   2*DBMS_LOGMNR.MINE_VALUE(UNDO_VALUE, 'HR.EMPLOYEES.SALARY');
+```
+如下例所示，MINE_VALUE函数有两个参数:
+
+* 第一个参数指定是挖掘数据的redo (REDO_VALUE)部分还是undo (UNDO_VALUE)部分。数据的重做部分是插入、更新或删除操作后列中的数据;数据的撤消部分是插入、更新或删除操作之前列中的数据。将REDO_VALUE视为新值，将UNDO_VALUE视为旧值可能会有所帮助。
+
+* 第二个参数是一个字符串，它指定要挖掘的列的完全限定名(在本例中是hr.employee .salary)。MINE_VALUE函数总是返回一个可以转换回原始数据类型的字符串。
+
+#### The Meaning of NULL Values Returned by the MINE_VALUE Function
+
+描述MINE_VALUE函数返回的空值的含义。
+
+如果MINE_VALUE函数返回一个空值，那么它可以表示:
+
+* 指定的列在数据的重做或撤消部分中不存在。
+
+* 指定的列是存在的，并且有一个空值。
+
+要区分这两种情况，可以使用DBMS_LOGMNR.COLUMN_PRESENT函数，如果该列出现在数据的重做或撤消部分，则该函数返回1。否则，它返回0。例如，假设您希望找出修改salary列中的值的增量和相应的事务标识符。你可以发出以下SQL查询:
+
+```sql
+SELECT 
+  (XIDUSN || '.' || XIDSLT || '.' || XIDSQN) AS XID,
+  (DBMS_LOGMNR.MINE_VALUE(REDO_VALUE, 'HR.EMPLOYEES.SALARY') -
+   DBMS_LOGMNR.MINE_VALUE(UNDO_VALUE, 'HR.EMPLOYEES.SALARY')) AS INCR_SAL
+   FROM V$LOGMNR_CONTENTS
+   WHERE
+   OPERATION = 'UPDATE' AND
+   DBMS_LOGMNR.COLUMN_PRESENT(REDO_VALUE, 'HR.EMPLOYEES.SALARY') = 1 AND
+   DBMS_LOGMNR.COLUMN_PRESENT(UNDO_VALUE, 'HR.EMPLOYEES.SALARY') = 1;
+```
+
+#### Usage Rules for the MINE_VALUE and COLUMN_PRESENT Functions
+
+描述应用于MINE_VALUE和COLUMN_PRESENT函数的使用规则。
+
+具体来说:
+* 它们只能在LogMiner会话中使用。
+* 它们必须在`V$LOGMNR_CONTENTS`视图的select操作上下文中启动。
+* 它们不支持LONG、LONG RAW、CLOB、BLOB、NCLOB、ADT或集合数据类型。
+
+#### Restrictions When Using the MINE_VALUE Function To Get an NCHAR Value
+
+描述使用MINE_VALUE函数时的限制。
+
+如果DBMS_LOGMNR.MINE_VALUE函数用于获取一个NCHAR值，该值包含在数据库字符集中没有找到的字符，然后这些字符作为数据库字符集的替换字符(例如，反问号)返回。
+
+### Querying V$LOGMNR_CONTENTS Based on XMLType Columns and Tables
+
+(XMLType也不常用 就不一一翻译)
+LogMiner支持为XMLType列生成重做。在兼容性设置为11.0.0.0或更高的情况下生成重做时，支持将XMLType数据存储为CLOB。
+
+作为对象关系和二进制XML存储的XMLType数据支持在11.2.0.3或更高的兼容性设置下重新生成。
+
+LogMiner根据XMLType存储以不同的方式在`V$LOGMNR_CONTENTS`中显示SQL_REDO。在所有情况下，SQL_REDO列的内容和STATUS列都需要仔细检查，并且通常需要重新组装才能生成SQL或PL/SQL语句来重新执行更改。在某些情况下，可能无法使用SQL_REDO数据来构造这样的更改。以下小节中的示例基于存储为CLOB的XMLType，这通常是用于重建完整行更改的最简单方法。
+
+Note:存储为CLOB的XMLType数据在Oracle数据库12c版本1(12.1)中被弃用。
+
+Querying `V$LOGMNR_CONTENTS` For Changes to Tables With XMLType Columns
+
+The example in this section is for a table named `XML_CLOB_COL_TAB` that has the following columns:
+
+* f1 `NUMBER`
+
+* f2 `VARCHAR2(100)`
+
+* f3 `XMLTYPE`
+
+* f4 `XMLTYPE`
+
+* f5 `VARCHAR2(10)`
+
+Assume that a LogMiner session has been started with the logs and with the `COMMITED_DATA_ONLY` option. The following query is executed against `V$LOGMNR_CONTENTS` for changes to the `XML_CLOB_COL_TAB` table.
+
+```sql
+SELECT OPERATION, STATUS, SQL_REDO FROM V$LOGMNR_CONTENTS 
+  WHERE SEG_OWNER = 'SCOTT' AND TABLE_NAME = 'XML_CLOB_COL_TAB';
+```
+
+The query output looks similar to the following:
+
+```sql
+OPERATION         STATUS  SQL_REDO
+
+INSERT            0       insert into "SCOTT"."XML_CLOB_COL_TAB"("F1","F2","F5") values
+                             ('5010','Aho40431','PETER')
+
+XML DOC BEGIN     5       update "SCOTT"."XML_CLOB_COL_TAB" a set a."F3" = XMLType(:1)
+                             where a."F1" = '5010' and a."F2" = 'Aho40431' and a."F5" = 'PETER'
+
+XML DOC WRITE     5       XML Data
+
+XML DOC WRITE     5       XML Data
+
+XML DOC WRITE     5       XML Data
+
+XML DOC END       5
+
+```
+
+In the `SQL_REDO` columns for the `XML DOC WRITE` operations there will be actual data for the XML document. It will not be the string 'XML Data'.
+
+This output shows that the general model for an insert into a table with an `XMLType` column is the following:
+
+1.  An initial insert with all of the scalar columns.
+
+2.  An `XML DOC BEGIN `operation with an update statement that sets the value for one `XMLType` column using a bind variable.
+
+3.  One or more `XML DOC WRITE` operations with the data for the XML document.
+
+4.  An `XML DOC END` operation to indicate that all of the data for that XML document has been seen.
+
+5.  If there is more than one `XMLType` column in the table, then steps 2 through 4 will be repeated for each `XMLType` column that is modified by the original DML.
+
+If the XML document is not stored as an out-of-line column, then there will be no `XML DOC BEGIN`, `XML DOC WRITE`, or `XML DOC END` operations for that column. The document will be included in an update statement similar to the following:
+
+```sql
+OPERATION   STATUS         SQL_REDO
+
+UPDATE      0              update "SCOTT"."XML_CLOB_COL_TAB" a
+                           set a."F3" = XMLType('<?xml version="1.0"?>
+                           <PO pono="1">
+                           <PNAME>Po_99</PNAME> 
+                           <CUSTNAME>Dave Davids</CUSTNAME> 
+                           </PO>') 
+                           where a."F1" = '5006' and a."F2" = 'Janosik' and a."F5" = 'MMM' 
+```
+
+<!-- class="section" -->
+
+Querying V$LOGMNR_CONTENTS For Changes to XMLType Tables
+
+DMLs to `XMLType` tables are slightly different from DMLs to `XMLType` columns. The XML document represents the value for the row in the `XMLType` table. Unlike the `XMLType` column case, an initial insert cannot be done which is then followed by an update containing the XML document. Rather, the whole document must be assembled before anything can be inserted into the table.
+
+Another difference for `XMLType` tables is the presence of the `OBJECT_ID` column. An object identifier is used to uniquely identify every object in an object table. For `XMLType` tables, this value is generated by Oracle Database when the row is inserted into the table. The `OBJECT_ID` value cannot be directly inserted into the table using SQL. Therefore, LogMiner cannot generate `SQL_REDO` which is executable that includes this value.
+
+The `V$LOGMNR_CONTENTS` view has a new `OBJECT_ID` column which is populated for changes to `XMLType` tables. This value is the object identifier from the original table. However, even if this same XML document is inserted into the same `XMLType` table, a new object identifier will be generated. The `SQL_REDO` for subsequent DMLs, such as updates and deletes, on the `XMLType` table will include the object identifier in the `WHERE` clause to uniquely identify the row from the original table.
+
+#### Restrictions When Using LogMiner With XMLType Data
+
+Describes restrictions when using LogMiner with XMLType data.
+
+Mining `XMLType` data should only be done when using the `DBMS_LOGMNR.COMMITTED_DATA_ONLY` option. Otherwise, incomplete changes could be displayed or changes which should be displayed as XML might be displayed as `CLOB` changes due to missing parts of the row change. This can lead to incomplete and invalid `SQL_REDO` for these SQL DML statements.
+
+The `SQL_UNDO` column is not populated for changes to `XMLType` data.
+
+#### Example of a PL/SQL Procedure for Assembling XMLType Data
+
+Example showing a procedure that can be used to mine and assemble XML redo for tables that contain out of line XML data. 
+
+This shows how to assemble the XML data using a temporary LOB. Once the XML document is assembled, it can be used in a meaningful way. This example queries the assembled document for the `EmployeeName` element and then stores the returned name, the XML document and the `SQL_REDO` for the original DML in the `EMPLOYEE_XML_DOCS` table. 
+
+Note:
+
+This procedure is an example only and is simplified. It is only intended to illustrate that DMLs to tables with `XMLType` data can be mined and assembled using LogMiner.
+
+Before calling this procedure, all of the relevant logs must be added to a LogMiner session and `DBMS_LOGMNR.START_LOGMNR()` must be called with the `COMMITTED_DATA_ONLY` option. The `MINE_AND_ASSEMBLE()` procedure can then be called with the schema and table name of the table that has XML data to be mined.
+
+```sql
+-- table to store assembled XML documents
+create table employee_xml_docs  (
+  employee_name         varchar2(100),
+  sql_stmt                     varchar2(4000),
+  xml_doc                     SYS.XMLType);
+
+-- procedure to assemble the XML documents
+create or replace procedure mine_and_assemble(
+  schemaname        in varchar2,
+  tablename         in varchar2)
+AS
+  loc_c      CLOB; 
+  row_op     VARCHAR2(100); 
+  row_status NUMBER; 
+  stmt       VARCHAR2(4000);
+  row_redo   VARCHAR2(4000);
+  xml_data   VARCHAR2(32767 CHAR); 
+  data_len   NUMBER; 
+  xml_lob    clob;
+  xml_doc    XMLType;
+BEGIN 
+
+-- Look for the rows in V$LOGMNR_CONTENTS that are for the appropriate schema 
+-- and table name but limit it to those that are valid sql or that need assembly
+-- because they are XML documents.
+
+ For item in ( SELECT operation, status, sql_redo  FROM v$logmnr_contents
+ where seg_owner = schemaname and table_name = tablename
+ and status IN (DBMS_LOGMNR.VALID_SQL, DBMS_LOGMNR.ASSEMBLY_REQUIRED_SQL))
+ LOOP
+    row_op := item.operation;
+    row_status := item.status;
+    row_redo := item.sql_redo;
+
+     CASE row_op 
+
+          WHEN 'XML DOC BEGIN' THEN 
+             BEGIN 
+               -- save statement and begin assembling XML data 
+               stmt := row_redo; 
+               xml_data := ''; 
+               data_len := 0; 
+               DBMS_LOB.CreateTemporary(xml_lob, TRUE);
+             END; 
+
+          WHEN 'XML DOC WRITE' THEN 
+             BEGIN 
+               -- Continue to assemble XML data
+               xml_data := xml_data || row_redo; 
+               data_len := data_len + length(row_redo); 
+               DBMS_LOB.WriteAppend(xml_lob, length(row_redo), row_redo);
+             END; 
+
+          WHEN 'XML DOC END' THEN 
+             BEGIN 
+               -- Now that assembly is complete, we can use the XML document 
+              xml_doc := XMLType.createXML(xml_lob);
+              insert into employee_xml_docs values
+                        (extractvalue(xml_doc, '/EMPLOYEE/NAME'), stmt, xml_doc);
+              commit;
+
+              -- reset
+              xml_data := ''; 
+              data_len := 0; 
+              xml_lob := NULL;
+             END; 
+
+          WHEN 'INSERT' THEN 
+             BEGIN 
+                stmt := row_redo;
+             END; 
+
+          WHEN 'UPDATE' THEN 
+             BEGIN 
+                stmt := row_redo;
+             END; 
+
+          WHEN 'INTERNAL' THEN 
+             DBMS_OUTPUT.PUT_LINE('Skip rows marked INTERNAL'); 
+
+          ELSE 
+             BEGIN 
+                stmt := row_redo;
+                DBMS_OUTPUT.PUT_LINE('Other - ' || stmt); 
+                IF row_status != DBMS_LOGMNR.VALID_SQL then 
+                   DBMS_OUTPUT.PUT_LINE('Skip rows marked non-executable'); 
+                ELSE 
+                   dbms_output.put_line('Status : ' || row_status);
+                END IF; 
+             END; 
+
+     END CASE;
+
+ End LOOP; 
+
+End;
+/
+
+show errors;
+```
+
+This procedure can then be called to mine the changes to the `SCOTT.XML_DATA_TAB` and apply the DMLs.
+
+```sql
+EXECUTE MINE_AND_ASSEMBLE ('SCOTT', 'XML_DATA_TAB');
+```
+
+As a result of this procedure, the `EMPLOYEE_XML_DOCS` table will have a row for each out-of-line XML column that was changed. The `EMPLOYEE_NAME` column will have the value extracted from the XML document and the `SQL_STMT` column and the `XML_DOC` column reflect the original row change.
+
+The following is an example query to the resulting table that displays only the employee name and SQL statement:
+
+```sql
+SELECT EMPLOYEE_NAME, SQL_STMT FROM EMPLOYEE_XML_DOCS;
+
+EMPLOYEE_NAME          SQL_STMT                                                                                           
+
+Scott Davis          update "SCOTT"."XML_DATA_TAB" a set a."F3" = XMLType(:1) 
+                         where a."F1" = '5000' and a."F2" = 'Chen' and a."F5" = 'JJJ'
+
+Richard Harry        update "SCOTT"."XML_DATA_TAB" a set a."F4" = XMLType(:1)  
+                         where a."F1" = '5000' and a."F2" = 'Chen' and a."F5" = 'JJJ'
+
+Margaret Sally       update "SCOTT"."XML_DATA_TAB" a set a."F4" = XMLType(:1)  
+                         where a."F1" = '5006' and a."F2" = 'Janosik' and a."F5" = 'MMM'
+```
+
+## Filtering and Formatting Data Returned to V$LOGMNR_CONTENTS
+
+LogMiner可以处理大量的信息。您可以限制返回给`V$LOGMNR_CONTENTS`视图的信息，以及它返回的速度。
+
+### Showing Only Committed TransactionsShowing Only Committed Transactions
+
+当将COMMITTED_DATA_ONLY选项用于DBMS_LOGMNR时。START_LOGMNR中，只有属于提交事务的行才显示在`V$LOGMNR_CONTENTS`视图中。
+
+这使您能够过滤回滚的事务、正在进行的事务和内部操作。
+
+要启用此选项，请在启动LogMiner时指定它，如下所示:
+
+```sql
+EXECUTE DBMS_LOGMNR.START_LOGMNR(OPTIONS => DBMS_LOGMNR.COMMITTED_DATA_ONLY);
+```
+
+当您指定COMMITTED_DATA_ONLY选项时，LogMiner将属于同一事务的所有DML操作分组在一起。事务按提交的顺序返回。
+
+注意:如果指定了COMMITTED_DATA_ONLY选项，并且发出了一个查询，那么LogMiner将在内存中的单个事务中执行所有重做记录，直到LogMiner找到该事务的提交记录。因此，可能会耗尽内存，在这种情况下将返回“内存不足”错误。如果发生这种情况，则必须在不指定COMMITTED_DATA_ONLY选项的情况下重新启动LogMiner并重新发出查询。
+
+默认情况下，LogMiner将显示与所有事务对应的行，并按照它们在重做日志文件中遇到的顺序返回它们。
+
+例如，假设您在没有指定COMMITTED_DATA_ONLY选项的情况下启动LogMiner，然后执行以下查询:
+
+```sql
+SELECT (XIDUSN || '.' || XIDSLT || '.' || XIDSQN) AS XID, 
+   USERNAME, SQL_REDO FROM V$LOGMNR_CONTENTS WHERE USERNAME != 'SYS' 
+   AND SEG_OWNER IS NULL OR SEG_OWNER NOT IN ('SYS', 'SYSTEM');
+```
+输出如下。提交和未提交的事务都会返回，不同事务的行会交织在一起。
+```sql
+XID         USERNAME  SQL_REDO
+
+1.15.3045   RON       set transaction read write;
+1.15.3045   RON       insert into "HR"."JOBS"("JOB_ID","JOB_TITLE",
+                      "MIN_SALARY","MAX_SALARY") values ('9782',
+                      'HR_ENTRY',NULL,NULL);
+1.18.3046   JANE      set transaction read write;
+1.18.3046   JANE      insert into "OE"."CUSTOMERS"("CUSTOMER_ID",
+                      "CUST_FIRST_NAME","CUST_LAST_NAME",
+                      "CUST_ADDRESS","PHONE_NUMBERS","NLS_LANGUAGE",
+                      "NLS_TERRITORY","CREDIT_LIMIT","CUST_EMAIL",
+                      "ACCOUNT_MGR_ID") values ('9839','Edgar',
+                      'Cummings',NULL,NULL,NULL,NULL,
+                       NULL,NULL,NULL);
+1.9.3041    RAJIV      set transaction read write;
+1.9.3041    RAJIV      insert into "OE"."CUSTOMERS"("CUSTOMER_ID",
+                       "CUST_FIRST_NAME","CUST_LAST_NAME","CUST_ADDRESS",
+                       "PHONE_NUMBERS","NLS_LANGUAGE","NLS_TERRITORY",
+                       "CREDIT_LIMIT","CUST_EMAIL","ACCOUNT_MGR_ID") 
+                       values ('9499','Rodney','Emerson',NULL,NULL,NULL,NULL,
+                       NULL,NULL,NULL);
+1.15.3045    RON       commit;
+1.8.3054     RON       set transaction read write;
+1.8.3054     RON       insert into "HR"."JOBS"("JOB_ID","JOB_TITLE",
+                       "MIN_SALARY","MAX_SALARY") values ('9566',
+                       'FI_ENTRY',NULL,NULL);
+1.18.3046    JANE      commit;
+1.11.3047    JANE      set transaction read write;
+1.11.3047    JANE      insert into "OE"."CUSTOMERS"("CUSTOMER_ID",
+                       "CUST_FIRST_NAME","CUST_LAST_NAME",
+                       "CUST_ADDRESS","PHONE_NUMBERS","NLS_LANGUAGE",
+                       "NLS_TERRITORY","CREDIT_LIMIT","CUST_EMAIL",
+                       "ACCOUNT_MGR_ID") values ('8933','Ronald',
+                       'Frost',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+1.11.3047    JANE      commit;
+1.8.3054     RON       commit;
+```
+现在假设您启动了LogMiner，但是这一次您指定了COMMITTED_DATA_ONLY选项。如果再次执行前面的查询，则输出如下:
+```sql
+1.15.3045   RON       set transaction read write;
+1.15.3045   RON       insert into "HR"."JOBS"("JOB_ID","JOB_TITLE",
+                      "MIN_SALARY","MAX_SALARY") values ('9782',
+                      'HR_ENTRY',NULL,NULL);
+1.15.3045    RON       commit;
+1.18.3046   JANE      set transaction read write;
+1.18.3046   JANE      insert into "OE"."CUSTOMERS"("CUSTOMER_ID",
+                      "CUST_FIRST_NAME","CUST_LAST_NAME",
+                      "CUST_ADDRESS","PHONE_NUMBERS","NLS_LANGUAGE",
+                      "NLS_TERRITORY","CREDIT_LIMIT","CUST_EMAIL",
+                      "ACCOUNT_MGR_ID") values ('9839','Edgar',
+                      'Cummings',NULL,NULL,NULL,NULL,
+                       NULL,NULL,NULL);
+1.18.3046    JANE      commit;
+1.11.3047    JANE      set transaction read write;
+1.11.3047    JANE      insert into "OE"."CUSTOMERS"("CUSTOMER_ID",
+                       "CUST_FIRST_NAME","CUST_LAST_NAME",
+                       "CUST_ADDRESS","PHONE_NUMBERS","NLS_LANGUAGE",
+                       "NLS_TERRITORY","CREDIT_LIMIT","CUST_EMAIL",
+                       "ACCOUNT_MGR_ID") values ('8933','Ronald',
+                       'Frost',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+1.11.3047    JANE      commit;
+1.8.3054     RON       set transaction read write;
+1.8.3054     RON       insert into "HR"."JOBS"("JOB_ID","JOB_TITLE",
+                       "MIN_SALARY","MAX_SALARY") values ('9566',
+                       'FI_ENTRY',NULL,NULL);
+1.8.3054     RON       commit;
+```
+因为1.15.3045事务的COMMIT语句是在1.18.3046事务的COMMIT语句之前发出的，所以整个1.15.3045事务首先返回。即使1.18.3046事务是在1.15.3045事务之前启动的，也是如此。因为没有为1.9.3041事务发出COMMIT语句，所以没有返回任何事务。
+
+See Also:
+
+See [Examples Using LogMiner](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-40619B3B-8BDF-4D90-B924-5A0F8A631F98 "Examples using LogMiner.") for a complete example that uses the `COMMITTED_DATA_ONLY` option
+
+### Skipping Redo Corruptions
+
+当您将SKIP_CORRUPTION选项用于DBMS_LOGMNR时。START_LOGMNR，在`V$LOGMNR_CONTENTS`视图的选择操作期间，将跳过重做日志文件中的任何损坏。
+
+对于遇到的每个损坏的重做记录，都会返回一行，其中包含OPERATION列中的值ted_blocks、STATUS列中的1343和INFO列中跳过的块的数量。
+
+请注意，跳过的记录可能包括对已损坏块中正在进行的事务的更改;这些更改不会反映在`V$LOGMNR_CONTENTS`视图返回的数据中。
+
+默认情况下，select操作在重做日志文件中遇到第一个损坏时终止。
+
+下面的SQL示例演示了这个选项的工作方式:
+
+```sql
+-- Add redo log files of interest.
+--
+EXECUTE DBMS_LOGMNR.ADD_LOGFILE(-
+   logfilename => '/usr/oracle/data/db1arch_1_16_482701534.log' -
+   options => DBMS_LOGMNR.NEW);
+
+-- Start LogMiner
+--
+EXECUTE DBMS_LOGMNR.START_LOGMNR();
+
+-- Select from the V$LOGMNR_CONTENTS view. This example shows corruptions are -- in the redo log files.
+-- 
+SELECT rbasqn, rbablk, rbabyte, operation, status, info 
+   FROM V$LOGMNR_CONTENTS;
+
+ERROR at line 3:
+ORA-00368: checksum error in redo log block 
+ORA-00353: log corruption near block 6 change 73528 time 11/06/2011 11:30:23 
+ORA-00334: archived log: /usr/oracle/data/dbarch1_16_482701534.log
+
+-- Restart LogMiner. This time, specify the SKIP_CORRUPTION option.
+-- 
+EXECUTE DBMS_LOGMNR.START_LOGMNR(-
+   options => DBMS_LOGMNR.SKIP_CORRUPTION);
+
+-- Select from the V$LOGMNR_CONTENTS view again. The output indicates that 
+-- corrupted blocks were skipped: CORRUPTED_BLOCKS is in the OPERATION 
+-- column, 1343 is in the STATUS column, and the number of corrupt blocks 
+-- skipped is in the INFO column.
+--
+SELECT rbasqn, rbablk, rbabyte, operation, status, info 
+   FROM V$LOGMNR_CONTENTS;
+
+RBASQN  RBABLK RBABYTE  OPERATION        STATUS  INFO
+13      2        76     START              0
+13      2        76     DELETE             0
+13      3       100     INTERNAL           0
+13      3       380     DELETE             0
+13      0         0     CORRUPTED_BLOCKS   1343  corrupt blocks 4 to 19 skipped
+13      20      116     UPDATE             0
+```
+
+### Filtering Data by Time
+
+要按时间过滤数据，请在DBMS_LOGMNR.START_LOGMNR过程中设置STARTTIME和ENDTIME参数。
+
+为了避免在调用PL/SQL DBMS_LOGMNR时指定日期格式。START_LOGMNR过程中，可以首先使用SQL ALTER SESSION SET NLS_DATE_FORMAT语句，如下面的示例所示。
+
+```sql
+ALTER SESSION SET NLS_DATE_FORMAT = 'DD-MON-YYYY HH24:MI:SS';
+EXECUTE DBMS_LOGMNR.START_LOGMNR( -
+   DICTFILENAME => '/oracle/database/dictionary.ora', -
+   STARTTIME => '01-Jan-2012 08:30:00', -
+   ENDTIME => '01-Jan-2012 08:45:00'-
+   ); 
+```
+不应该使用时间戳来推断重做记录的顺序。您可以使用SCN来推断重做记录的顺序。
+
+### Filtering Data by SCN
+
+要根据SCN(系统更改号)过滤数据，请使用PL/SQL DBMS_LOGMNR的STARTSCN和ENDSCN参数。START_LOGMNR过程。例如：
+
+```sql
+EXECUTE DBMS_LOGMNR.START_LOGMNR(-
+    STARTSCN => 621047, -
+    ENDSCN   => 625695, -
+    OPTIONS  => DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG + -
+                );
+```
+
+在指定所有参数的情况下，STARTSCN和ENDSCN参数会覆盖STARTTIME和ENDTIME参数。
+
+### Formatting Reconstructed SQL Statements for Re-execution
+
+默认情况下，重构的SQL_REDO和SQL_UNDO语句中包含一个ROWID子句，这些语句以分号结束。
+
+但是，您可以覆盖默认设置，如下所示:
+
+* 在启动LogMiner时指定NO_ROWID_IN_STMT选项。
+  这将ROWID子句排除在重构语句之外。由于数据库之间的行id不一致，如果您打算针对不同于最初执行它们的数据库重新执行SQL_REDO或SQL_UNDO语句，那么在启动LogMiner时指定NO_ROWID_IN_STMT选项。
+
+* 在启动LogMiner时指定NO_SQL_DELIMITER选项。这将从重构语句中取消分号。这对于打开游标然后执行重构语句的应用程序很有帮助。
+
+注意，如果`V$LOGMNR_CONTENTS`视图的STATUS字段值为2(无效sql)，则无法执行关联的sql语句。
+
+### Formatting the Appearance of Returned Data for Readability
+
+LogMiner提供PRINT_PRETTY_SQL选项，用于格式化返回数据的外观，以提高可读性。
+
+有时候，一个查询可能会导致包含重构SQL语句的大量列，这些语句在视觉上很繁忙，很难阅读。LogMiner提供PRINT_PRETTY_SQL选项来解决这个问题。DBMS_LOGMNR的PRINT_PRETTY_SQL选项。START_LOGMNR过程将重建的SQL语句格式化如下，使其更易于阅读:
+
+```sql
+insert into "HR"."JOBS"
+ values
+    "JOB_ID" = '9782',
+    "JOB_TITLE" = 'HR_ENTRY',
+    "MIN_SALARY" IS NULL,
+    "MAX_SALARY" IS NULL;
+  update "HR"."JOBS"
+  set
+    "JOB_TITLE" = 'FI_ENTRY'
+  where
+    "JOB_TITLE" = 'HR_ENTRY' and
+    ROWID = 'AAAHSeAABAAAY+CAAX';
+
+update "HR"."JOBS"
+  set
+    "JOB_TITLE" = 'FI_ENTRY'
+  where
+    "JOB_TITLE" = 'HR_ENTRY' and
+    ROWID = 'AAAHSeAABAAAY+CAAX';
+
+delete from "HR"."JOBS"
+ where
+    "JOB_ID" = '9782' and
+    "JOB_TITLE" = 'FI_ENTRY' and
+    "MIN_SALARY" IS NULL and
+    "MAX_SALARY" IS NULL and
+    ROWID = 'AAAHSeAABAAAY+CAAX';
+```
+当启用PRINT_PRETTY_SQL选项时重建的SQL语句是不可执行的，因为它们不使用标准的SQL语法。
+
+## Reapplying DDL Statements Returned to V$LOGMNR_CONTENTS
+
+您发出的一些DDL语句会导致Oracle在内部执行一个或多个其他DDL语句。
+
+要从`V$LOGMNR_CONTENTS`视图的SQL_REDO或SQL_UNDO列重新应用最初应用于数据库的SQL DDL，请不要执行Oracle内部执行的语句。
+
+Note:
+
+If you execute DML statements that were executed internally by Oracle, then you may corrupt your database. See Step 5 of [Example 4: Using the LogMiner Dictionary in the Redo Log Files](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-90944343-46BB-4BD5-A0C6-7A4B79D9BEF0) for an example.
+
+要区分用户发出的DDL语句和Oracle内部发出的DDL语句，请查询`V$LOGMNR_CONTENTS`的INFO列。INFO列的值指示DDL是由用户执行还是由Oracle执行。
+
+## Calling DBMS_LOGMNR.START_LOGMNR Multiple Times
+
+即使您已经成功地调用了DBMS_LOGMNR.START_LOGMNR并从`V$LOGMNR_CONTENTS`视图中开始查询。你也能够再次以不同的参数配置调用START_LOGMNR切仍然不结束当前LogMiner会话。下面列出了你可能想要这样做的原因:
+
+* 您希望限制LogMiner必须分析的重做数据的数量。
+* 您希望指定不同的选项。例如，您可能决定指定PRINT_PRETTY_SQL选项，或者只希望看到提交的事务(因此您可以指定COMMITTED_DATA_ONLY选项)。
+* 您希望更改要分析的时间或SCN范围。
+
+Examples: Calling DBMS_LOGMNR.START_LOGMNR Multiple Times
+
+The following are some examples of when it could be useful to call` DBMS_LOGMNR.START_LOGMNR` multiple times.
+
+Example 1:  Mining Only a Subset of the Data in the Redo Log Files
+
+Suppose the list of redo log files that LogMiner has to mine include those generated for an entire week. However, you want to analyze only what happened from 12:00 to 1:00 each day. You could do this most efficiently by:
+
+1.  Calling `DBMS_LOGMNR.START_LOGMNR` with this time range for Monday. 
+
+2.  Selecting changes from the `V$LOGMNR_CONTENTS` view. 
+
+3.  Repeating Steps 1 and 2 for each day of the week.
+
+If the total amount of redo data is large for the week, then this method would make the whole analysis much faster, because only a small subset of each redo log file in the list would be read by LogMiner.
+
+Example 2: Adjusting the Time Range or SCN Range
+
+Suppose you specify a redo log file list and specify a time (or SCN) range when you start LogMiner. When you query the `V$LOGMNR_CONTENTS` view, you find that only part of the data of interest is included in the time range you specified. You can call `DBMS_LOGMNR.START_LOGMNR` again to expand the time range by an hour (or adjust the SCN range). 
+
+Example 3: Analyzing Redo Log Files As They Arrive at a Remote Database
+
+Suppose you have written an application to analyze changes or to replicate changes from one database to another database. The source database sends its redo log files to the mining database and drops them into an operating system directory. Your application: 
+
+1.  Adds all redo log files currently in the directory to the redo log file list
+
+2.  Calls `DBMS_LOGMNR.START_LOGMNR` with appropriate settings and selects from the `V$LOGMNR_CONTENTS` view
+
+3.  Adds additional redo log files that have newly arrived in the directory
+
+4.  Repeats Steps 2 and 3, indefinitely
+
+
+## Supplemental Logging
+
+描述补充日志记录。
+
+重做日志文件通常用于实例恢复和媒体恢复。这些操作所需的数据自动记录在重做日志文件中。但是，基于恢复的应用程序可能需要在重做日志文件中记录其他列。记录这些附加列的过程称为辅助日志记录。
+
+默认情况下，Oracle数据库不提供任何补充日志记录，这意味着在默认情况下LogMiner不可用。因此，在生成将由LogMiner分析的日志文件之前，必须至少启用最少的补充日志记录。
+
+以下是可能需要增加列的例子：
+
+* 将重新构造的SQL语句应用于不同数据库的应用程序必须通过一组列来标识update语句，这些列要是唯一地标识行(例如，主键)，不是由`V$LOGMNR_CONTENTS`视图返回的重构SQL中显示的ROWID，因为不同数据库的ROWID是不同的，因此在另一个数据库中没有意义。
+
+* 应用程序可能要求记录整个行的前映像，而不只是记录修改后的列，以便更有效地跟踪行更改。
+
+补充日志组是启用补充日志记录时要记录的一组附加列。有两种类型的补充日志组，它们决定了日志组中的列何时被记录:
+
+* Unconditional supplemental log groups:无论更新是否影响任何指定列，在更新行时都会记录指定列的前映像。这有时被称为总是日志组。
+* Conditional supplemental log groups: 只有更新日志组中的至少一列时，才会记录所有指定列的前映像。
+
+补充日志组可以由系统生成，也可以由用户定义。
+
+### Database-Level Supplemental Logging
+
+LogMiner提供不同类型的数据库级补充日志记录:最小补充日志记录、标识键日志记录和过程性补充日志记录，如本部分所述。
+
+最小的补充日志记录不会给生成重做日志文件的数据库带来很大的开销。但是，启用数据库范围的标识键日志记录会给生成重做日志文件的数据库带来开销。Oracle建议您至少为LogMiner启用最低限度的补充日志记录。
+
+#### Minimal Supplemental Logging
+
+最低限度的补充日志记录LogMiner识别、分组和合并与DML更改相关的重做操作所需的最低限度的信息。
+
+它确保LogMiner(以及任何基于LogMiner技术的产品)有足够的信息来支持链式行和各种存储安排，比如集群表和索引组织的表。要启用最小的辅助日志记录，请执行以下SQL语句:
+```sql
+ALTER DATABASE ADD SUPPLEMENTAL LOG DATA;
+```
+
+#### Database-Level Identification Key Logging
+
+当源数据库实例上不会挖掘重做日志文件时(例如，当在逻辑备用数据库上挖掘重做日志文件时)，标识键日志记录是必要的。
+
+使用数据库标识键日志记录，您可以通过为SQL ALTER database ADD additional LOG语句指定以下一个或多个选项来为所有更新启用数据库范围的before-image日志记录:
+
+* 这个选项指定当更新一行时，该行的所有列(lob、long和adt除外)都放在重做日志文件中。要启用数据库级别的所有列日志记录，请执行以下语句:这个选项指定当更新一行时，该行的所有列(lob、long和adt除外)都放在重做日志文件中。要启用数据库级别的所有列日志记录，请执行以下语句:
+      
+   ```sql
+      SQL> ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (ALL) COLUMNS;
+   ```
+* 主密钥系统生成的无条件补充日志组
+此选项使数据库在更新包含主键的行(即使主键中的值没有改变)时，将行主键的所有列放在重做日志文件中。
+如果一个表没有主键，但是有一个或多个非空惟一索引键约束或索引键，那么将选择其中一个惟一索引键进行日志记录，作为惟一标识更新行的一种方法。
+如果表既没有主键也没有非空的惟一索引键，那么除了LONG和LOB之外的所有列都被记录;这相当于为该行指定所有补充日志记录。因此，Oracle建议在使用数据库级主键补充日志记录时，将所有或大多数表定义为具有主键或惟一索引键。
+若要在数据库级别启用主键日志记录，请执行以下语句:
+   ```sql
+   SQL> ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS;
+   ```
+* 如果属于复合唯一键或位图索引的任何列被修改，则此选项会导致数据库将行的复合唯一键或位图索引的所有列放在重做日志文件中。惟一键可以由惟一约束或惟一索引决定。要在数据库级别启用唯一索引键和位图索引日志记录，请执行以下语句:
+   ```sql
+   SQL> ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (UNIQUE) COLUMNS;
+   ```
+* 外键系统生成的条件补充日志groupThis选项使数据库在任何属于外键的列被修改时将行外键的所有列放在重做日志文件中。要在数据库级别启用外键日志记录，请执行以下SQL语句:
+   ```sql
+   ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (FOREIGN KEY) COLUMNS;
+   ```
+
+Note:
+
+Regardless of whether identification key logging is enabled, the SQL statements returned by LogMiner always contain the `ROWID` clause. You can filter out the `ROWID` clause by using the `NO_ROWID_IN_STMT` option to the `DBMS_LOGMNR.START_LOGMNR` procedure call. See [Formatting Reconstructed SQL Statements for Re-execution](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-C2B8C741-9544-4A46-818E-16B233570599 "By default, a ROWID clause is included in the reconstructed SQL_REDO and SQL_UNDO statements and the statements are ended with a semicolon.") for details.
+
+
+当您使用识别键记录时，请记住以下几点:
+
+* 如果启用标识键记录时数据库处于打开状态，那么游标缓存中的所有DML游标都将无效。这会影响性能，直到重新填充游标缓存。
+* 当您在数据库级别启用标识键日志记录时，将隐式启用最低限度的补充日志记录。
+* 补充的日志语句是累积的。如果您发出以下SQL语句，那么主键和唯一键补充日志记录都是启用的:
+   ```sql
+   ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS;
+
+   ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (UNIQUE) COLUMNS;
+   ```
+
+
+要重新应用最初应用的SQL DDL，重新执行`V$LOGMNR_CONTENTS`INFO列包含USER_DDL值的SQL_REDO或SQL_UNDO列中包含的DDL SQL。
+
+#### Procedural Supplemental Logging
+
+过程性补充日志记录会导致LogMiner记录某些过程性调用来重做，以便通过滚动升级或Oracle GoldenGate来复制它们。
+
+对于滚动升级和Oracle GoldenGate必须启用过程性补充日志记录，以支持复制AQ队列表、启用分层结构的表以及具有SDO_TOPO_GEOMETRY或SDO_GEORASTER列的表。使用以下SQL语句来启用过程性补充日志记录:
+
+```sql
+ALTER DATABASE ADD SUPPLEMENTAL LOG DATA FOR PROCEDURAL REPLICATION END SUBHEADING
+```
+
+如果启用了过程性补充日志记录，则除非首先删除过程性补充日志记录，否则无法删除最低限度的补充日志记录。
+
+###  Disabling Database-Level Supplemental Logging
+使用带有DROP补充日志子句的SQL ALTER DATABASE语句禁用数据库级补充日志记录。
+
+您可以增量地删除附加的日志属性。例如，假设您按以下顺序发出以下SQL语句:
+
+```sql
+ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS;
+ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (UNIQUE) COLUMNS;
+ALTER DATABASE DROP SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS;
+ALTER DATABASE DROP SUPPLEMENTAL LOG DATA;
+
+```
+这些声明将产生下列影响:
+
+* 在第一个语句之后，启用主键补充日志记录。
+
+* 在第二个语句之后，将启用主键和惟一键补充日志记录。
+
+* 在第三条语句之后，只启用惟一的键补充日志记录。
+
+* 在第四个语句之后，没有禁用所有补充日志记录。返回以下错误: `ORA-32589: unable to drop minimal supplemental logging`.
+
+要禁用所有数据库补充日志记录，必须首先禁用已启用的任何标识键日志记录，然后禁用最小补充日志记录。下面的例子显示了正确的顺序:
+
+```sql
+ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS;
+ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (UNIQUE) COLUMNS;
+ALTER DATABASE DROP SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS;
+ALTER DATABASE DROP SUPPLEMENTAL LOG DATA (UNIQUE) COLUMNS;
+ALTER DATABASE DROP SUPPLEMENTAL LOG DATA;
+```
+
+只有在不启用数据库级补充日志记录的其他变体的情况下，才允许删除最小的补充日志数据。
+
+###  Table-Level Supplemental Logging
+（表级别的一般就不关心了，就不逐一分析了）
+在表级，级别的补充日志指定哪些列将被补充到日志中。
+#### Table-Level Identification Key Logging
+
+Identification key logging at the table level offers the same options as those provided at the database level: all, primary key, foreign key, and unique key. 
+
+However, when you specify identification key logging at the table level, only the specified table is affected. For example, if you enter the following SQL statement (specifying database-level supplemental logging), then whenever a column in any database table is changed, the entire row containing that column (except columns for LOBs, `LONG`s, and `ADT`s) will be placed in the redo log file:
+
+```sql
+ALTER DATABASE ADD SUPPLEMENTAL LOG DATA (ALL) COLUMNS;
+```
+
+However, if you enter the following SQL statement (specifying table-level supplemental logging) instead, then only when a column in the `employees` table is changed will the entire row (except for LOB, `LONG`s, and `ADT`s) of the table be placed in the redo log file. If a column changes in the `departments` table, then only the changed column will be placed in the redo log file.
+
+```sql
+ALTER TABLE HR.EMPLOYEES ADD SUPPLEMENTAL LOG DATA (ALL) COLUMNS;
+```
+
+Keep the following in mind when you use table-level identification key logging:
+
+* If the database is open when you enable identification key logging on a table, then all DML cursors for that table in the cursor cache are invalidated. This can affect performance until the cursor cache is repopulated.
+
+* Supplemental logging statements are cumulative. If you issue the following SQL statements, then both primary key and unique index key table-level supplemental logging is enabled:
+
+    ```sql
+    ALTER TABLE HR.EMPLOYEES 
+      ADD SUPPLEMENTAL LOG DATA (PRIMARY KEY) COLUMNS;
+    ALTER TABLE HR.EMPLOYEES 
+      ADD SUPPLEMENTAL LOG DATA (UNIQUE) COLUMNS;
+    ```
+
+See [Database-Level Identification Key Logging](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-E3E015C4-B0EB-4072-92A6-FD3079C68242 "Identification key logging is necessary when redo log files will not be mined at the source database instance, for example, when the redo log files will be mined at a logical standby database.") for a description of each of the identification key logging options.
+
+
+#### Table-Level User-Defined Supplemental Log Groups
+
+In addition to table-level identification key logging, Oracle supports user-defined supplemental log groups. 
+
+With user-defined supplemental log groups, you can specify which columns are supplementally logged. You can specify conditional or unconditional log groups, as follows:
+
+* User-defined unconditional log groups
+
+    To enable supplemental logging that uses user-defined unconditional log groups, use the `ALWAYS` clause as shown in the following example:
+
+    ```sql
+    ALTER TABLE HR.EMPLOYEES
+       ADD SUPPLEMENTAL LOG GROUP emp_parttime (EMPLOYEE_ID, LAST_NAME, 
+       DEPARTMENT_ID) ALWAYS;
+    ```
+
+    This creates a log group named `emp_parttime` on the `hr.employees` table that consists of the columns `employee_id`, `last_name`, and `department_id`. These columns are logged every time an `UPDATE` statement is executed on the `hr.employees` table, regardless of whether the update affected these columns. (To have the entire row image logged any time an update is made, use table-level `ALL` identification key logging, as described previously). 
+
+    Note:
+
+    LOB, `LONG`, and `ADT` columns cannot be supplementally logged.
+
+* User-defined conditional supplemental log groups
+
+    To enable supplemental logging that uses user-defined conditional log groups, omit the `ALWAYS` clause from the SQL `ALTER` `TABLE` statement, as shown in the following example: 
+
+    ```sql
+    ALTER TABLE HR.EMPLOYEES
+       ADD SUPPLEMENTAL LOG GROUP emp_fulltime (EMPLOYEE_ID, LAST_NAME, 
+       DEPARTMENT_ID);
+    ```
+
+    This creates a log group named `emp_fulltime` on table `hr.employees`. As in the previous example, it consists of the columns `employee_id`, `last_name`, and `department_id`. But because the `ALWAYS` clause was omitted, before-images of the columns are logged only if at least one of the columns is updated.
+
+For both unconditional and conditional user-defined supplemental log groups, you can explicitly specify that a column in the log group be excluded from supplemental logging by specifying the `NO LOG` option. When you specify a log group and use the `NO LOG` option, you must specify at least one column in the log group without the `NO LOG` option, as shown in the following example:
+
+```sql
+ALTER TABLE HR.EMPLOYEES
+   ADD SUPPLEMENTAL LOG GROUP emp_parttime(
+   DEPARTMENT_ID NO LOG, EMPLOYEE_ID);
+```
+
+This enables you to associate this column with other columns in the named supplemental log group such that any modification to the `NO LOG` column causes the other columns in the supplemental log group to be placed in the redo log file. This might be useful, for example, for logging certain columns in a group if a `LONG` column changes. You cannot supplementally log the `LONG` column itself; however, you can use changes to that column to trigger supplemental logging of other columns in the same row.
+
+
+#### Usage Notes for User-Defined Supplemental Log Groups
+
+Hints for using user-defined supplemental log groups.
+
+Keep the following in mind when you specify user-defined supplemental log groups:
+
+* A column can belong to more than one supplemental log group. However, the before-image of the columns gets logged only once.
+
+* If you specify the same columns to be logged both conditionally and unconditionally, then the columns are logged unconditionally.
+
+### Tracking DDL Statements in the LogMiner Dictionary
+
+LogMiner从LogMiner字典自动构建自己的内部字典，该字典是在启动LogMiner时指定的(在线目录、重做日志文件中的字典或平面文件)。
+
+此字典提供数据库对象及其定义的快照。
+
+如果LogMiner字典在重做日志文件中，或者是平面文件，那么可以使用PL/SQL DBMS_LOGMNR.START_LOGMNR过程的DDL_DICT_TRACKING选项，用于指示LogMiner跟踪数据定义语言(DDL)语句。DDL跟踪使LogMiner能够成功地跟踪对数据库对象所做的结构更改，比如从表中添加或删除列。例如:
+
+```sql
+EXECUTE DBMS_LOGMNR.START_LOGMNR(OPTIONS => -
+   DBMS_LOGMNR.DDL_DICT_TRACKING + DBMS_LOGMNR.DICT_FROM_REDO_LOGS);
+```
+
+过设置这个选项，LogMiner将在重做日志文件中看到的任何DDL语句应用到它的内部字典中。
+
+注意:一般来说，最好启用补充日志记录和DDL跟踪功能，因为如果没有启用这些功能，并且发生了DDL事件，那么LogMiner将一些重做数据作为二进制数据返回。此外，可能会出现元数据版本不匹配。
+
+启用DDL_DICT_TRACKING时，可以正确显示在提取LogMiner字典后创建的表上执行的数据操作语言(DML)操作。
+
+例如，如果通过两个连续的DDL操作更新一个表employees，比如在一个操作中添加列gender，在下一个操作中删除列commiton_pct，那么LogMiner将为每个这些更改保留雇员的版本信息。这意味着LogMiner可以成功地挖掘来自这些DDL更改之前和之后的重做日志文件，并且不会为SQL_REDO或SQL_UNDO列显示二进制数据。
+
+因为LogMiner自动将版本分配给数据库元数据，所以它将检测并通知您其内部字典与重做日志文件中的字典之间的任何不匹配。如果LogMiner检测到不匹配，那么它将在`V$LOGMNR_CONTENTS`视图的SQL_REDO列中生成二进制数据，INFO列包含字符串“Dictionary Version mismatch”，STATUS列将包含值2。
+
+注意:LogMiner内部字典与平面文件、重做日志文件或在线目录中包含的LogMiner字典不同，理解这一点很重要。LogMiner会更新它的内部字典，但它不会更新平面文件、重做日志文件或在线目录中包含的字典。
+
+下面的列表描述了使用DBMS_LOGMNR.START_LOGMNR过程指定DDL_DICT_TRACKING选项的要求。
+
+* DDL_DICT_TRACKING选项对于DICT_FROM_ONLINE_CATALOG选项无效。
+* DDL_DICT_TRACKING选项要求数据库打开。
+* 必须在整个数据库范围内启用补充日志记录，或者必须为感兴趣的表创建日志组。
+
+###  DDL_DICT_TRACKING and Supplemental Logging Settings
+
+描述合并字典跟踪和辅助日志记录的各种设置时发生的交互。
+
+Note the following:
+
+* If `DDL_DICT_TRACKING` is enabled, but supplemental logging is not enabled and:
+
+    * A DDL transaction is encountered in the redo log file, then a query of `V$LOGMNR_CONTENTS` will terminate with the ORA-01347 error.
+
+    * A DML transaction is encountered in the redo log file, then LogMiner will not assume that the current version of the table (underlying the DML) in its dictionary is correct, and columns in `V$LOGMNR_CONTENTS` will be set as follows:
+
+        * The `SQL_REDO` column will contain binary data.
+
+        * The `STATUS` column will contain a value of `2` (which indicates that the SQL is not valid).
+
+        * The `INFO` column will contain the string 'Dictionary Mismatch'.
+
+* If `DDL_DICT_TRACKING` is not enabled and supplemental logging is not enabled, and the columns referenced in a DML operation match the columns in the LogMiner dictionary, then LogMiner assumes that the latest version in its dictionary is correct, and columns in `V$LOGMNR_CONTENTS` will be set as follows:
+
+    * LogMiner will use the definition of the object in its dictionary to generate values for the `SQL_REDO` and `SQL_UNDO` columns. 
+
+    * The status column will contain a value of `3` (which indicates that the SQL is not guaranteed to be accurate). 
+
+    * The `INFO` column will contain the string 'no supplemental log data found'. 
+
+* If `DDL_DICT_TRACKING` is not enabled and supplemental logging is not enabled and there are more modified columns in the redo log file for a table than the LogMiner dictionary definition for the table defines, then:
+
+    * The `SQL_REDO` and `SQL_UNDO` columns will contain the string 'Dictionary Version Mismatch'. 
+
+    * The `STATUS` column will contain a value of `2` (which indicates that the SQL is not valid). 
+
+    * The `INFO` column will contain the string 'Dictionary Mismatch'.
+
+    Also be aware that it is possible to get unpredictable behavior if the dictionary definition of a column indicates one type but the column is really another type.
+
+### DDL_DICT_TRACKING and Specified Time or SCN Ranges
+
+Because LogMiner must not miss a DDL statement if it is to ensure the consistency of its dictionary, LogMiner may start reading redo log files before your requested starting time or SCN (as specified with `DBMS_LOGMNR.START_LOGMNR`) when the `DDL_DICT_TRACKING` option is enabled. 
+
+The actual time or SCN at which LogMiner starts reading redo log files is referred to as the required starting time or the required starting SCN. 
+
+No missing redo log files (based on sequence numbers) are allowed from the required starting time or the required starting SCN.
+
+LogMiner determines where it will start reading redo log data as follows:
+
+* After the dictionary is loaded, the first time that you call `DBMS_LOGMNR.START_LOGMNR`, LogMiner begins reading as determined by one of the following, whichever causes it to begin earlier:
+
+    * Your requested starting time or SCN value 
+
+    * The commit SCN of the dictionary dump
+
+* On subsequent calls to `DBMS_LOGMNR.START_LOGMNR`, LogMiner begins reading as determined for one of the following, whichever causes it to begin earliest:
+
+    * Your requested starting time or SCN value
+
+    * The start of the earliest DDL transaction where the `COMMIT` statement has not yet been read by LogMiner
+
+    * The highest SCN read by LogMiner
+
+The following scenario helps illustrate this: 
+
+Suppose you create a redo log file list containing five redo log files. Assume that a dictionary is contained in the first redo file, and the changes that you have indicated you want to see (using `DBMS_LOGMNR.START_LOGMNR`) are recorded in the third redo log file. You then do the following:
+
+1.  Call `DBMS_LOGMNR.START_LOGMNR`. LogMiner will read:
+
+    1.  The first log file to load the dictionary
+
+    2.  The second redo log file to pick up any possible DDLs contained within it
+
+    3.  The third log file to retrieve the data of interest
+
+2.  Call `DBMS_LOGMNR.START_LOGMNR` again with the same requested range. 
+
+    LogMiner will begin with redo log file 3; it no longer needs to read redo log file 2, because it has already processed any DDL statements contained within it.
+
+3.  Call `DBMS_LOGMNR.START_LOGMNR` again, this time specifying parameters that require data to be read from redo log file 5. 
+
+    LogMiner will start reading from redo log file 4 to pick up any DDL statements that may be contained within it. 
+
+Query the `REQUIRED_START_DATE` or the `REQUIRED_START_SCN` columns of the `V$LOGMNR_PARAMETERS` view to see where LogMiner will actually start reading. Regardless of where LogMiner starts reading, only rows in your requested range will be returned from the `V$LOGMNR_CONTENTS` view.
+
+## Accessing LogMiner Operational Information in Views
+
+LogMiner操作信息(相对于重做数据)包含在视图中。
+
+可以像查询其他视图一样使用SQL查询它们。
+
+1.  `V$LOGMNR_DICTIONARY`
+
+    Shows information about a LogMiner dictionary file that was created using the `STORE_IN_FLAT_FILE` option to `DBMS_LOGMNR.START_LOGMNR`. The information shown includes information about the database from which the LogMiner dictionary was created.
+
+2.  `V$LOGMNR_LOGS`
+
+    Shows information about specified redo log files, as described in [Querying `V$LOGMNR_LOGS`](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-A4779AA3-EE5B-43CA-A64A-0A6B8CFC5D4F "You can query the V$LOGMNR_LOGS view to determine which redo log files have been manually or automatically added to the list of redo log files for LogMiner to analyze.").
+
+3.  `V$LOGMNR_PARAMETERS`
+
+    Shows information about optional LogMiner parameters, including starting and ending system change numbers (SCNs) and starting and ending times.
+
+4.  `V$DATABASE`, `DBA_LOG_GROUPS`, `ALL_LOG_GROUPS`, `USER_LOG_GROUPS`, `DBA_LOG_GROUP_COLUMNS`, `ALL_LOG_GROUP_COLUMNS`, `USER_LOG_GROUP_COLUMNS`
+
+### Querying V$LOGMNR_LOGS
+
+您可以查询`V$LOGMNR_LOGS`视图，以确定哪些重做日志文件已手动或自动添加到重做日志文件列表中，以便LogMiner进行分析。
+
+此视图包含每个重做日志文件的一行。它提供关于每个重做日志文件的有价值的信息，包括文件名、SCN和时间范围，以及它是否包含LogMiner字典的全部或部分内容。
+成功调用DBMS_LOGMNR.START_LOGMNR之后, `V$LOGMNR_LOGS`视图的STATUS 列包含以下值之一:
+
+1.  `0`
+
+    指示将在`V$LOGMNR_CONTENTS`视图的查询期间处理重做日志文件。
+
+2.  `1`
+
+    指示这将是LogMiner在对`V$LOGMNR_CONTENTS`视图执行选择操作期间要处理的第一个重做日志文件。
+
+3.  `2`
+
+    指示重做日志文件已被删除，因此在查询`V$LOGMNR_CONTENTS`视图期间LogMiner不会处理该文件。它已经修剪，因为它不需要满足您所要求的时间或SCN范围。.
+
+4.  `4`
+
+    指示在LogMiner重做日志文件列表中缺少重做日志文件(基于序列号)。
+
+`V$LOGMNR_LOGS`视图包含列表中缺少的每个重做日志文件的行，如下所示:
+
+1.  FILENAME列将包含序列号的连续范围和总SCN范围间隔。
+
+    例如:线程1的日志文件丢失，序列号从100到102'。
+
+2. NFO列将包含字符串'MISSING_LOGFILE'。
+
+关于从重做日志文件列表中丢失的文件的信息是有用的，原因如下:
+
+1.  The `DDL_DICT_TRACKING` option that can be specified when you call `DBMS_LOGMNR.START_LOGMNR` will not allow redo log files to be missing from the LogMiner redo log file list for the requested time or SCN range. If a call to `DBMS_LOGMNR.START_LOGMNR` fails, then you can query the `STATUS` column in the `V$LOGMNR_LOGS` view to determine which redo log files are missing from the list. You can then find and manually add these redo log files and attempt to call `DBMS_LOGMNR.START_LOGMNR` again.
+
+    Note:The `continuous_mine` option for the `dbms_logmnr.start_logmnr` package is desupported in Oracle Database 19c (19.1), and is no longer available.
+
+2.  Although all other options that can be specified when you call `DBMS_LOGMNR.START_LOGMNR` allow files to be missing from the LogMiner redo log file list, you may not want to have missing files. You can query the `V$LOGMNR_LOGS` view before querying the `V$LOGMNR_CONTENTS` view to ensure that all required files are in the list. If the list is left with missing files and you query the `V$LOGMNR_CONTENTS` view, then a row is returned in `V$LOGMNR_CONTENTS` with the following column values:
+
+    * In the `OPERATION` column, a value of 'MISSING_SCN'
+
+    * In the `STATUS` column, a value of `1291`
+
+    * In the `INFO` column, a string indicating the missing SCN range (for example, 'Missing SCN 100 - 200')
+
+
+### Querying Views for Supplemental Logging Settings
+
+描述如何查询多个视图以确定补充日志记录的当前设置。
+
+Specificallyt:
+
+* `V$DATABASE` view
+
+    * `SUPPLEMENTAL_LOG_DATA_FK` column
+
+        This column contains one of the following values:
+        * `NO` - if database-level identification key logging with the `FOREIGN KEY` option is not enabled
+
+        * `YES` - if database-level identification key logging with the `FOREIGN KEY` option is enabled
+
+    * `SUPPLEMENTAL_LOG_DATA_ALL` column
+
+        This column contains one of the following values:
+        * `NO` - if database-level identification key logging with the `ALL` option is not enabled
+
+        * `YES` - if database-level identification key logging with the `ALL` option is enabled
+
+    * `SUPPLEMENTAL_LOG_DATA_UI` column
+
+        * `NO` - if database-level identification key logging with the `UNIQUE` option is not enabled
+
+        * `YES` - if database-level identification key logging with the `UNIQUE` option is enabled
+
+    * `SUPPLEMENTAL_LOG_DATA_MIN` column
+
+        This column contains one of the following values:
+        * `NO` - if no database-level supplemental logging is enabled
+
+        * `IMPLICIT` - if minimal supplemental logging is enabled because database-level identification key logging options is enabled
+
+        * `YES` - if minimal supplemental logging is enabled because the SQL `ALTER` `DATABASE` `ADD` `SUPPLEMENTAL` `LOG` `DATA` statement was issued
+
+* `DBA_LOG_GROUPS`, `ALL_LOG_GROUPS`, and `USER_LOG_GROUPS` views
+
+    * `ALWAYS` column
+
+        This column contains one of the following values:
+        * `ALWAYS` - indicates that the columns in this log group will be supplementally logged if any column in the associated row is updated
+
+        * `CONDITIONAL` - indicates that the columns in this group will be supplementally logged only if a column in the log group is updated
+
+    * `GENERATED` column
+
+        This column contains one of the following values:
+        * `GENERATED NAME` - if the `LOG_GROUP` name was system-generated
+
+        * `USER NAME` - if the `LOG_GROUP` name was user-defined
+
+    * `LOG_GROUP_TYPE` column
+
+        This column contains one of the following values to indicate the type of logging defined for this log group. `USER LOG GROUP` indicates that the log group was user-defined (as opposed to system-generated).
+
+        * `ALL COLUMN LOGGING`
+
+        * `FOREIGN KEY LOGGING`
+
+        * `PRIMARY KEY LOGGING`
+
+        * `UNIQUE KEY LOGGING`
+
+        * `USER LOG GROUP`
+
+* `DBA_LOG_GROUP_COLUMNS`, `ALL_LOG_GROUP_COLUMNS`, and `USER_LOG_GROUP_COLUMNS` views
+
+    * The `LOGGING_PROPERTY` column 
+
+        This column contains one of the following values:
+        * `LOG` - indicates that this column in the log group will be supplementally logged
+
+        * `NO` `LOG` - indicates that this column in the log group will not be supplementally logged
+
+## Steps in a Typical LogMiner Session
+
+描述典型LogMiner会话中的步骤。
+
+要运行LogMiner，可以使用DBMS_LOGMNR PL/SQL包。此外，如果选择提取LogMiner字典而不是使用联机编目，还可以使用DBMS_LOGMNR_D包。
+
+DBMS_LOGMNR包包含用于初始化和运行LogMiner的过程，包括用于指定重做日志文件名称、筛选条件和会话特征的接口。DBMS_LOGMNR_D包查询当前数据库的数据库字典表，以创建LogMiner字典文件。
+
+ogMiner PL/SQL包属于SYS模式。因此，如果您没有作为用户系统连接，则:
+
+1.  You must include `SYS` in your call. For example:
+
+    ```codeph
+    EXECUTE SYS.DBMS_LOGMNR.END_LOGMNR
+    ```;
+
+2.  You must have been granted the `EXECUTE_CATALOG_ROLE` role.
+
+    See Also:
+
+    * [Oracle Database PL/SQL Packages and Types Reference](https://www.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/19/sutil&id=ARPLS022) for details about syntax and parameters for these LogMiner packages
+
+    * [Oracle Database Development Guide](https://www.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/19/sutil&id=ADFNS1398) for more information about PL/SQL packages
+
+### Typical LogMiner Session Task 1: Enable Supplemental Logging
+
+使补充日志记录。启用要使用的辅助日志记录类型。至少，您必须启用最低限度的补充日志记录，如下所示:
+
+```sql
+ALTER DATABASE ADD SUPPLEMENTAL LOG DATA;
+```
+
+### Typical LogMiner Session Task 2: Extract a LogMiner Dictionary
+
+提取LogMiner字典。要使用LogMiner，您必须通过以下操作之一为它提供一个字典:
+
+1.  Specify use of the online catalog by using the `DICT_FROM_ONLINE_CATALOG` option when you start LogMiner. See [Using the Online Catalog](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-1D510A2F-4CE8-4D69-AB18-CDD58FB3458C "To direct LogMiner to use the dictionary currently in use for the database, specify the online catalog as your dictionary source when you start LogMiner.").
+
+2.  Extract database dictionary information to the redo log files. See [Extracting a LogMiner Dictionary to the Redo Log Files](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-A0D89906-C787-4EB4-BA47-171A457445EC "To extract a LogMiner dictionary to the redo log files, the database must be open and in ARCHIVELOG mode and archiving must be enabled."). 
+
+3.  Extract database dictionary information to a flat file. See [Extracting the LogMiner Dictionary to a Flat File ](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-DA37874F-6637-4205-AB5C-A8AC1914D018 "When the LogMiner dictionary is in a flat file, fewer system resources are used than when it is contained in the redo log files. Oracle recommends that you regularly back up the dictionary extract to ensure correct analysis of older redo log files.").
+
+### Typical LogMiner Session Task 3: Specify Redo Log Files for Analysis
+
+指定用于分析的重做日志文件。在启动LogMiner之前，必须指定要分析的重做日志文件。为此，执行DBMS_LOGMNR。ADD_LOGFILE过程，如下面的步骤所示。您可以按任何顺序添加和删除重做日志文件。
+
+Note:
+
+If you are mining in the database instance that is generating the redo log files, then you only need to specify one of the following when you start LogMiner:
+
+* The `STARTSCN` parameter
+
+* The `STARTTIME` parameter
+
+1.  Use SQL*Plus to start an Oracle instance, with the database either mounted or unmounted. For example, enter the `STARTUP` statement at the SQL prompt:
+
+    <pre class="oac_no_warn" dir="ltr">
+    STARTUP
+    </pre>
+
+2.  Create a list of redo log files. Specify the `NEW` option of the `DBMS_LOGMNR.ADD_LOGFILE` PL/SQL procedure to signal that this is the beginning of a new list. For example, enter the following to specify the `/oracle/logs/log1.f` redo log file: 
+
+    <pre class="oac_no_warn" dir="ltr">
+    EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
+       LOGFILENAME => '/oracle/logs/log1.f', -
+       OPTIONS => DBMS_LOGMNR.NEW);
+    </pre>
+
+3.  If desired, add more redo log files by specifying the `ADDFILE` option of the `DBMS_LOGMNR.ADD_LOGFILE` PL/SQL procedure. For example, enter the following to add the `/oracle/logs/log2.f` redo log file:
+
+    <pre class="oac_no_warn" dir="ltr">
+    EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
+       LOGFILENAME => '/oracle/logs/log2.f', -
+       OPTIONS => DBMS_LOGMNR.ADDFILE);
+    </pre>
+
+    The `OPTIONS` parameter is optional when you are adding additional redo log files. For example, you could simply enter the following:
+
+    <pre class="oac_no_warn" dir="ltr">
+    EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
+       LOGFILENAME=>'/oracle/logs/log2.f');
+    </pre>
+
+4.  If desired, remove redo log files by using the `DBMS_LOGMNR.REMOVE_LOGFILE `PL/SQL procedure. For example, enter the following to remove the `/oracle/logs/log2.f` redo log file:
+
+    <pre class="oac_no_warn" dir="ltr">
+    EXECUTE DBMS_LOGMNR.REMOVE_LOGFILE( -
+       LOGFILENAME => '/oracle/logs/log2.f');
+    </pre>
+
+### Typical LogMiner Session Task 4: Start LogMiner
+
+LogMiner开始。创建LogMiner字典文件并指定要分析哪些重做日志文件之后，必须启动LogMiner。采取以下步骤:
+
+1.  Execute the `DBMS_LOGMNR.START_LOGMNR` procedure to start LogMiner.
+
+    Oracle recommends that you specify a LogMiner dictionary option. If you do not, then LogMiner cannot translate internal object identifiers and data types to object names and external data formats. Therefore, it would return internal object IDs and present data as binary data. Additionally, the `MINE_VALUE` and `COLUMN_PRESENT` functions cannot be used without a dictionary.
+
+    If you are specifying the name of a flat file LogMiner dictionary, then you must supply a fully qualified file name for the dictionary file. For example, to start LogMiner using `/oracle/database/dictionary.ora`, issue the following statement:
+
+    <pre class="oac_no_warn" dir="ltr">
+    EXECUTE DBMS_LOGMNR.START_LOGMNR( -
+       DICTFILENAME =>'/oracle/database/dictionary.ora');
+    </pre>
+
+    If you are not specifying a flat file dictionary name, then use the `OPTIONS` parameter to specify either the `DICT_FROM_REDO_LOGS` or `DICT_FROM_ONLINE_CATALOG` option. 
+
+    If you specify `DICT_FROM_REDO_LOGS`, then LogMiner expects to find a dictionary in the redo log files that you specified with the `DBMS_LOGMNR.ADD_LOGFILE` procedure. To determine which redo log files contain a dictionary, look at the `V$ARCHIVED_LOG` view. See [Extracting a LogMiner Dictionary to the Redo Log Files](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-A0D89906-C787-4EB4-BA47-171A457445EC "To extract a LogMiner dictionary to the redo log files, the database must be open and in ARCHIVELOG mode and archiving must be enabled.") for an example.
+
+    Note:
+
+    If you add additional redo log files after LogMiner has been started, you must restart LogMiner. LogMiner will not retain options that were included in the previous call to `DBMS_LOGMNR.START_LOGMNR`; you must respecify the options you want to use. However, LogMiner will retain the dictionary specification from the previous call if you do not specify a dictionary in the current call to `DBMS_LOGMNR.START_LOGMNR`.
+
+    For more information about the `DICT_FROM_ONLINE_CATALOG` option, see [Using the Online Catalog](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-1D510A2F-4CE8-4D69-AB18-CDD58FB3458C "To direct LogMiner to use the dictionary currently in use for the database, specify the online catalog as your dictionary source when you start LogMiner.").
+
+2.  Optionally, you can filter your query by time or by SCN. See [Filtering Data by Time](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-0AA13EFD-8118-4061-A215-9D3AF9EEB1D5 "To filter data by time, set the STARTTIME and ENDTIME parameters in the DBMS_LOGMNR.START_LOGMNR procedure.") or [Filtering Data by SCN](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-011AA230-32A7-4DE7-9DC0-CE1FF55CFAF3 "To filter data by SCN (system change number), use the STARTSCN and ENDSCN parameters to the PL/SQL DBMS_LOGMNR.START_LOGMNR procedure.").
+3.  You can also use the `OPTIONS` parameter to specify additional characteristics of your LogMiner session. For example, you might decide to use the online catalog as your LogMiner dictionary and to have only committed transactions shown in the `V$LOGMNR_CONTENTS` view, as follows:
+
+    <pre class="oac_no_warn" dir="ltr">
+    EXECUTE DBMS_LOGMNR.START_LOGMNR(OPTIONS => -
+       DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG + -
+       DBMS_LOGMNR.COMMITTED_DATA_ONLY);
+    </pre>
+
+    For more information about `DBMS_LOGMNR.START_LOGMNR` options, see [Oracle Database PL/SQL Packages and Types Reference](https://www.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/19/sutil&id=ARPLS022).
+
+    You can execute the `DBMS_LOGMNR`.`START_LOGMNR` procedure multiple times, specifying different options each time. This can be useful, for example, if you did not get the desired results from a query of `V$LOGMNR_CONTENTS`, and want to restart LogMiner with different options. Unless you need to respecify the LogMiner dictionary, you do not need to add redo log files if they were already added with a previous call to `DBMS_LOGMNR`.`START_LOGMNR`.
+
+   
+### Typical LogMiner Session Task 5: Query V$LOGMNR_CONTENTS
+
+Querying the `V$LOGMNR_CONTENTS` view.
+
+At this point, LogMiner is started. You can perform queries against the `V$LOGMNR_CONTENTS` view. See[Filtering and Formatting Data Returned to `V$LOGMNR_CONTENTS`](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-C659DAB0-03D0-4958-BB2F-E81C2928BE24 "LogMiner can potentially deal with large amounts of information. You can limit the information that is returned to the V$LOGMNR_CONTENTS view, and the speed at which it is returned.") for examples of this.
+
+###  Typical LogMiner Session Task 6: End the LogMiner Session
+
+Ending the LogMiner session.
+
+To properly end a LogMiner session, use the `DBMS_LOGMNR.END_LOGMNR` PL/SQL procedure, as follows:
+
+<pre class="oac_no_warn" dir="ltr">
+EXECUTE DBMS_LOGMNR.END_LOGMNR;
 </pre>
 
-This output shows that user Ron deleted two rows from the `oe.orders` table. The reconstructed SQL statements are equivalent, but not necessarily identical, to the actual statement that Ron issued. The reason for this is that the original `WHERE` clause is not logged in the redo log files, so LogMiner can only show deleted (or updated or inserted) rows individually.
+This procedure closes all the redo log files and allows all the database and system resources allocated by LogMiner to be released. 
 
-Therefore, even though a single `DELETE` statement may have been responsible for the deletion of both rows, the output in `V$LOGMNR_CONTENTS` does not reflect that. Thus, the actual `DELETE` statement may have been `DELETE FROM OE.ORDERS WHERE CUSTOMER_ID ='101`' or it might have been `DELETE FROM OE.ORDERS WHERE PROMOTION_ID = NULL.`
+If this procedure is not executed, then LogMiner retains all its allocated resources until the end of the Oracle session in which it was called. It is particularly important to use this procedure to end the LogMiner session if either the `DDL_DICT_TRACKING` option or the `DICT_FROM_REDO_LOGS` option was used.
 
-注意，在调用DBMS_LOGMNR.START_LOGMNR时，参数和选项不是持久的。每次调用DBMS_LOGMNR.START_LOGMNR时，必须指定所有需要的参数和选项(包括SCN和时间范围)。
 
 
 你可以从命令行使用LogMiner，也可以通过Oracle LogMiner Viewer图形用户界面访问它。Oracle LogMiner Viewer是Oracle Enterprise Manager的一部分。有关Oracle LogMiner查看器的更多信息，请参阅Oracle Enterprise Manager联机帮助。
