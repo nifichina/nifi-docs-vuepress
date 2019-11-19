@@ -270,5 +270,3 @@ NIFI就使用了nar包的依赖解决了这个问题：
 ![](./img/nifi-ssl-context-service-nar.png)
 
 注意：type = nar并不会将被依赖的nar包打进当前nar包
-
-对于类加载器的深入学习，可以连接到我的[个人博客](https://cool-cheng.github.io)文档中的[类加载器](https://cool-cheng.github.io/java-source-code/ClassLoader.html)和[上下文类加载器](https://cool-cheng.github.io/java-source-code/ContextClassLoader.html)了解一下

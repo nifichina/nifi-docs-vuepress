@@ -9,6 +9,7 @@ module.exports = {
         lastUpdated: 'Last Updated',
         sidebar:  [
             ['/', '首頁'],
+            ['/comment', '评论区'],
             {
               title: 'General',
               children: [
@@ -35,6 +36,7 @@ module.exports = {
                 ['/processors/AttributesToCSV','AttributesToCSV'],
                 ['/processors/AttributesToJSON','AttributesToJSON'],
                 ['/processors/Base64EncodeContent','Base64EncodeContent'],
+                ['/processors/CalculateRecordStats','CalculateRecordStats'],
                 ['/processors/ConvertJSONToAvro','ConvertJSONToAvro'],
                 ['/processors/CryptographicHashAttribute','CryptographicHashAttribute'],
                 ['/processors/DistributeLoad','DistributeLoad'],
@@ -135,8 +137,8 @@ module.exports = {
             {
               title: 'oracle',
               children: [
-                ['/oracle/oracle 12C的新特性-CDB和PDB','oracle 12C的新特性-CDB和PDB']
-                
+                ['/oracle/oracle 12C的新特性-CDB和PDB','oracle 12C的新特性-CDB和PDB'],
+                ['/oracle/Oracle12cLogMiner分析Redo日志文件','Oracle12cLogMiner分析Redo日志文件部分文档翻译']
                
               ]
             }

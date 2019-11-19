@@ -17,11 +17,22 @@ NIFI中文文档暂时由酷酷的诚自己维护，时间有限，能力不足�
 # tip
 
 文档下方有无需登录的评论功能，在评论时可以给自己起一个昵称，建议在评论时填写自己的邮箱(他人不可见)，这样在你的评论得到回复时，会以邮件形式通知你。
+评论服务器架设在免费的LearnCloud中，免费服务有强制休眠策略，所以偶尔评论功能异常也是正常的。
 
 ![](./img/moment.png)
 
 ## 更新日志
 
+### 2019-11-19
+
+* 修复[扩展开发Controller Service的项目结构规范](./extend/ControllerServiceArchive.md)跳转[NIFI nar包加载机制源码解读](./code/nifi-nar-classloader.md)404问题(感谢匿名同学的细心发现)
+* 修改入门文档的一些语句错误
+
+### 2019-11-16
+
+* 更新CalculateRecordStats组件 统计个数
+* 新建评论页面
+* Oracle LogMiner官方文档学习及部分翻译
 ### 2019-10-30
 
 #### Processor更新
