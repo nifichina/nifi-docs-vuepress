@@ -55,13 +55,8 @@
 
 ## 示例说明
 
-<details>
-<summary>示例流程模板xml</summary>
-<p>流程图</p>
-<img src="./img/FlattenJson/demo.png">
 <p>流程模板xml(1.9.2)</p>
-链接: <a target="_blank" href="https://pan.baidu.com/s/15F7aADQdDlVAZzoQN70JWQ&shfl=shareset">百度云盘</a> 提取码: fw3h 
-</details>
+<a href="../template/FlattenJson.xml" download="FlattenJson.xml">FlattenJson.xml</a>
 
 使用默认配置：
 

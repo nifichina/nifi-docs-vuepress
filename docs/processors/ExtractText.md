@@ -77,13 +77,8 @@
 
 ## 示例说明
 
-<details>
-<summary>示例流程模板xml</summary>
-<p>流程图</p>
-<img src="./img/ExtractText/demo.png">
 <p>流程模板xml(1.9.2)</p>
-链接: <a target="_blank" href="https://pan.baidu.com/s/1o6mK_RRLM3ZBgI48AW3C3g&shfl=shareset">百度云盘</a> 提取码: 8d46 
-</details>
+<a href="../template/ExtractText.xml" download="ExtractText.xml">ExtractText.xml</a>
 
 1：将流内容（文本）输出到流属性当中 
 

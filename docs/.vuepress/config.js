@@ -9,6 +9,7 @@ module.exports = {
         lastUpdated: 'Last Updated',
         sidebar:  [
             ['/', '首頁'],
+            ['/updateLog', '更新日志'],
             ['/comment', '评论区'],
             {
               title: 'General',

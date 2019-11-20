@@ -25,13 +25,8 @@ SQL select query                        |           |                           
 
 ## 示例说明
 
-<details>
-<summary>示例流程模板xml</summary>
-<p>流程图</p>
-<img src="./img/ExecuteSQL/demo.png">
 <p>流程模板xml(1.9.2)</p>
-链接: <a target="_blank" href="https://pan.baidu.com/s/1kwSjFDT1kfZcGOcc35GqBg&shfl=shareset">百度云盘</a> 提取码: y88g 
-</details>
+<a href="../template/ExecuteSQL.xml" download="ExecuteSQL.xml">ExecuteSQL.xml</a>
 
 1：Avro Logical Types ，没有接触过的人可能会一头雾水。简单来说，数据库有自己的数据类型，avro格式数据也有自己的数据类型，两方的数据类型有些是能直接映射的，有些是需要转换的，文档中所说的DECIMAL/NUMBER, DATE, TIME 和TIMESTAMP这些来源数据的类型在avro中就无法直接映射类型；这里提供了两种解决方法，第一种是上述类型统一转成字符串类型，具体值不变；另一种是转换成avro Logical Types，但数据值会变动转换。按我使用一般这个属性设置为false，十进制/数字、日期、时间和时间戳列就写成字符串。最大的好处就是值不变（如下）![](./img/ExecuteSQL/1.png)
 

@@ -67,13 +67,8 @@
 
 ## 示例说明
 
-<details>
-<summary>示例流程模板xml</summary>
-<p>流程图</p>
-<img src="./img/CryptographicHashAttribute/demo.png">
 <p>流程模板xml(1.9.2)</p>
-链接: <a target="_blank" href="https://pan.baidu.com/s/1_l4zYkFzg_SJWihv620QYg&shfl=shareset">百度云盘</a> 提取码: hyi5 
-</details>
+<a href="../template/CryptographicHashAttribute.xml" download="CryptographicHashAttribute.xml">CryptographicHashAttribute.xml</a>
 
 1：Allow missing attributes 
 

@@ -61,15 +61,8 @@
 
 ## 示例说明
 
-<details>
-<summary>示例流程模板xml</summary>
-<p>流程图</p>
-
-GenerateFlowFile负责生成带特定attribute的流文件，AttributesToJSON配置json输出到流属性
-<img src="./img/AttributesToJSON/demo.png">
 <p>流程模板xml(1.9.2)</p>
-链接: <a target="_blank" href="https://pan.baidu.com/s/1zthgUtOV46K4vI1SvM0gZw&shfl=shareset">百度云盘</a> 提取码: wh47 
-</details>
+<a href="../template/AttributesToJSON.xml" download="AttributesToJSON.xml">AttributesToJSON.xml</a>
 
 1：如图为GenerateFlowFile生成的流文件，AttributesToJSON配置json输出到流属性中，包含核心属性 
 

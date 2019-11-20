@@ -67,13 +67,8 @@ Groovy脚本处理器。脚本负责处理传入的流文件以及任何脚本�
 
 ## 示例说明
 
-<details>
-<summary>示例流程模板xml</summary>
-<p>流程图</p>
-<img src="./img/ExecuteGroovyScript/demo.png">
 <p>流程模板xml(1.9.2)</p>
-链接: <a target="_blank" href="https://pan.baidu.com/s/1iTQNOeBRlH_wTJ3R3mmIAA&shfl=shareset">百度云盘</a> 提取码: nnt8 
-</details>
+<a href="../template/ExecuteGroovyScript.xml" download="ExecuteGroovyScript.xml">ExecuteGroovyScript.xml</a>
 
 1.使用Groovy脚本组装数据
 

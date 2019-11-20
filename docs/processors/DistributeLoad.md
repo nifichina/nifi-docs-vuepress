@@ -70,13 +70,8 @@
 
 ## 示例说明
 
-<details>
-<summary>示例流程模板xml</summary>
-<p>流程图</p>
-<img src="./img/DistributeLoad/demo.png">
 <p>流程模板xml(1.9.2)</p>
-链接: <a target="_blank" href="https://pan.baidu.com/s/1BRDmWSC64NkySli89RksPA&shfl=shareset">百度云盘</a> 提取码: 7mv4 
-</details>
+<a href="../template/DistributeLoad.xml" download="DistributeLoad.xml">DistributeLoad.xml</a>
 
 配置3个relationship，再分别配置不同的权重。
 
