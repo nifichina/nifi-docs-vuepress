@@ -56,7 +56,7 @@ failure | 任何没有被成功编码或解码的流文件都将被路由到此�
 <details>
 <summary>示例流程模板xml</summary>
 <p>流程模板xml(1.9.2)</p>
-链接: <a target="_blank" href="https://pan.baidu.com/s/17U9gi8iZyUsYXJ5ymjykIw">百度云盘</a> 提取码: 4m7e 
+链接: <a target="_blank" href="https://raw.githubusercontent.com/nifichina/nifi-docs-vuepress/master/docs/template/Base64EncodeContent.xml">百度云盘</a> 提取码: 4m7e 
 </details>
 
 
