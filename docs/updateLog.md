@@ -1,10 +1,15 @@
 # 更新日志
 
+**2019-11-30**
+
+* 新增NIFI扩展系列:[JOLT 详解](./jolt/jolt详解.md),对使用JoltJsonTransform还有疑惑的同学的解药
+* 由上面翻译过来的英文简易版JOLT教程[Json Jolt Tutorial](./jolt/joltdoc.md)
+
 **2019-10-20**
 
 * 更新日志单独做出页面
 * 已有的模板demo.xml文件  由百度云盘下载改为直接使用GitHub 浏览器点击下载
-* 
+* 编辑管理员指南文档格式(还未修订)
 
 **2019-11-19**
 

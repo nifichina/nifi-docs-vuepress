@@ -94,7 +94,9 @@ module.exports = {
                 ['/extend/ControllerServiceArchive','ControllerService扩展开发的项目结构'],
                 ['/extend/JsonJoltShift','JSONJOLT介绍及语法详解-shift篇'],
                 ['/extend/通过配置优化NiFi性能','通过配置优化NiFi性能'],
-                ['/extend/NIFI Linux系统配置的最佳实践','NIFI Linux系统配置的最佳实践']
+                ['/extend/NIFI Linux系统配置的最佳实践','NIFI Linux系统配置的最佳实践'],
+                ['/jolt/jolt详解','JOLT 详解'],
+                ['/jolt/joltdoc','Json Jolt Tutorial']
                ]
             },
             {

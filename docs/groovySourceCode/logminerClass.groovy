@@ -22,7 +22,9 @@ import java.util.Collection
 import java.util.List
 import java.util.Set
 import java.sql.SQLException
+import java.text.SimpleDateFormat
 import groovy.sql.Sql
+import groovy.time.*
 
 class AnalyzeLogMinerProcessor implements Processor {
 
@@ -57,12 +59,17 @@ class AnalyzeLogMinerProcessor implements Processor {
     
     static final PropertyDescriptor SCHEMA_NAME = new PropertyDescriptor.Builder()
             .name('SCHEMA NAME').description('指定LogMiner分析Oracle日志的SEG_OWNER,即指定schema名称')
-            .required(false).addValidator(Validator.VALID).build()
+            .required(true).addValidator(Validator.VALID).build()
+
+    static final PropertyDescriptor Max_Transaction_Length = new PropertyDescriptor.Builder()
+            .name('事务最大时长').description('输入期望事务所需的最长时间(单位s)。默认300s')
+            .required(true).addValidator(Validator.VALID).defaultValue("300").build()
 
     static final PropertyDescriptor TABLE_NAME_REGEXP = new PropertyDescriptor.Builder()
             .name("TABLE NAME Regular Expression").description("使用Oracle正则表达式指定LogMiner分析Oracle日志需要过滤的表名,要求Oracle版本在10g及以上")
             .required(false).addValidator(StandardValidators.REGULAR_EXPRESSION_VALIDATOR).build()
 
+    static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     @Override
     void initialize(ProcessorInitializationContext context) {}
 
@@ -75,7 +82,8 @@ class AnalyzeLogMinerProcessor implements Processor {
             return
         }
         def conn = dbcpService.getConnection()
-        if(conn == null){
+        def conn2 = dbcpService.getConnection()
+        if(conn == null || conn2 == null){
             throw new ProcessException("数据库连接不可用")
         }
         //获取当前组件的状态存储管理器 存取SCN号
@@ -90,27 +98,33 @@ class AnalyzeLogMinerProcessor implements Processor {
             return
         }
         long scn = getStateScn(stateMap)
-        long maxCommittedScn
+        long maxViewScn
         long scnStepSize = Long.parseLong(context.getProperty(SCN_STEP_SIZE).getValue())
         String initScn = context.getProperty(INIT_SCN).getValue()
         def schemaName = context.getProperty(SCHEMA_NAME).getValue()
         def sql
+        def sql2
         try {
             sql = new Sql(conn)
+            sql2 = new Sql(conn2)
             //0、判断是否需要初始化State中scn
             if (scn == -1) {
                 scn = initScnFun(sql, initScn)
+                updateStateScn(stateManager, stateMap, scn)
+                return
             }
             //1、执行添加日志SQL语句
             executeAddLogFileSql(sql)
             //2、执行启动LogMiner SQL
             executeStartLogMinerSql(sql, scn, scnStepSize)
             //3、查询视图，并输出结果
-            maxCommittedScn = getCurrentViewMaxCommitScn(sql)
-            if(maxCommittedScn == -1){
+            maxViewScn = getCurrentViewMaxScn(sql)
+            log.debug("最大scn:${maxViewScn}")
+            if(maxViewScn == -1){
+                log.debug("无法获取最大事物scn号，本次调度结束")
                 return
             }
-            executeSelectContentSql(context, session, sql,maxCommittedScn)
+            executeSelectContentSql(context, session, sql,sql2,maxViewScn,scn+1)
             //4、结束LogMiner
             executeEndLogMinerSql(sql)
         } catch(e) {
@@ -118,10 +132,11 @@ class AnalyzeLogMinerProcessor implements Processor {
         }finally {
             log.debug("Close Sql")
             sql?.close() 
+            sql2?.close() 
         }
-        //更新state逻辑 取到此次查询扫描到的最后commit scn号.
-        log.debug("本次调度查询到的最大事物提交scn:${maxCommittedScn}")
-        updateStateScn(stateManager, stateMap, maxCommittedScn)
+        //更新state逻辑 取到此次查询扫描到的最后 scn号.
+        log.debug("本次调度查询到的最大事物提交scn:${maxViewScn}")
+        updateStateScn(stateManager, stateMap, maxViewScn)
     }
 
     @Override
@@ -135,6 +150,7 @@ class AnalyzeLogMinerProcessor implements Processor {
             case 'SCN  STEP SIZE': return SCN_STEP_SIZE
             case 'SCHEMA NAME': return SCHEMA_NAME
             case 'TABLE NAME Regular Expression': return TABLE_NAME_REGEXP
+            case 'TABLE NAME Regular Expression': return Max_Transaction_Length
             default: return null
         }
     }
@@ -143,7 +159,7 @@ class AnalyzeLogMinerProcessor implements Processor {
     void onPropertyModified(PropertyDescriptor descriptor, String oldValue, String newValue) { }
 
     @Override
-    List<PropertyDescriptor> getPropertyDescriptors() { return [DBCP_SERVICE,INIT_SCN,SCN_STEP_SIZE,SCHEMA_NAME,TABLE_NAME_REGEXP] as List }
+    List<PropertyDescriptor> getPropertyDescriptors() { return [DBCP_SERVICE,INIT_SCN,SCN_STEP_SIZE,SCHEMA_NAME,Max_Transaction_Length,TABLE_NAME_REGEXP] as List }
 
     @Override
     String getIdentifier() { return 'AnalyzeLogMinerProcessor-InvokeScriptedProcessor' }
@@ -190,35 +206,45 @@ class AnalyzeLogMinerProcessor implements Processor {
      * @param sql sql
      * @param context   context
      */
-    void executeSelectContentSql(ProcessContext context, ProcessSession session, Sql sql, long maxScn) {
+    void executeSelectContentSql(ProcessContext context, ProcessSession session, Sql sql,Sql sql2,long maxScn,long minScn) {
+        String noRedoSql = "/* No SQL_REDO for temporary tables */"
         String schemaName = context.getProperty(SCHEMA_NAME).getValue()
+        int maxTranLength = Integer.parseInt(context.getProperty(Max_Transaction_Length).getValue())
+        // 因为commit表名是没有的  所以commit条件添加表名过滤可能造成数据遗漏
         String tableNameRegularStr = context.getProperty(TABLE_NAME_REGEXP).getValue()
-        StringBuilder selectRedoSql = new StringBuilder("SELECT SCN,TABLE_NAME,SEG_OWNER,OPERATION,SQL_REDO,CSF FROM " +
-                "v\$logmnr_contents where SEG_TYPE=2 AND OPERATION_CODE IN (1,2,3)").append(" AND SCN <=").append(maxScn)
-        if (!StringUtils.isBlank(schemaName)) {
-            selectRedoSql.append(" AND SEG_OWNER = '").append(schemaName).append("' AND USERNAME != 'SYS' ")
-        } else {
-            selectRedoSql.append(" AND SEG_OWNER NOT IN ('SYS', 'SYSTEM') AND USERNAME != 'SYS' ")
-        }
+        StringBuilder selectRedoSql = new StringBuilder("SELECT SCN,START_SCN,COMMIT_SCN,TABLE_NAME,SEG_OWNER,OPERATION,SQL_REDO,CSF FROM " +
+                "v\$logmnr_contents where ( OPERATION_CODE IN (1,2,3) ").append(" AND SEG_OWNER ='").append(schemaName).append("'")
         if(!StringUtils.isBlank(tableNameRegularStr)){
             selectRedoSql.append(" AND REGEXP_LIKE(TABLE_NAME,'").append(tableNameRegularStr).append("')")
         }
+        selectRedoSql.append(")  OR (OPERATION_CODE = 7 AND START_SCN = 0 ) AND SCN <=").append(maxScn).append(" AND USERNAME != 'SYS' ") 
+        //  AND SESSION_INFO != 'UNKNOWN'
+        
         log.debug("执行${selectRedoSql.toString()}")
         StringBuilder bigSqlRedo = null
+        long fixCommitScn = 0
         sql.rows(selectRedoSql.toString()).eachWithIndex { row, idx ->
-            def csf = row.getProperty("CSF")
-            // csf为1 说明SQL超过4000字节 多行存储
-            if (csf == 1){
+            long scn = row.getProperty("SCN").longValue()
+            long csf = row.getProperty("CSF").longValue()
+            long startScn = row.getProperty("START_SCN").longValue()
+            long commitScn = row.getProperty("COMMIT_SCN").longValue()
+            def operation =  row.getProperty("OPERATION")
+            if(fixCommitScn != 0 && fixCommitScn != commitScn){
+                log.debug("进入修补数据逻辑")
+                fixData(session,sql2,fixCommitScn,maxTranLength)
+                fixCommitScn = 0
+            }
+            if(startScn == 0 ){
+                log.debug("发现遗漏数据，事务提交SCN号：${commitScn}.当前SCN号：${scn}")
+                fixCommitScn = commitScn
+            }else if (csf == 1){
+                // csf为1 说明SQL超过4000字节 多行存储
                 if(bigSqlRedo == null){
                     bigSqlRedo = new StringBuilder()
                 }
                 bigSqlRedo.append(row.getProperty("SQL_REDO"))
-            }else {
-                FlowFile ff = session.create()
-                ff = session.putAttribute(ff, "SCN",row.getProperty("SCN")?.toString())
-                ff = session.putAttribute(ff, "tableName", row.getProperty("TABLE_NAME")?.toString())
-                ff = session.putAttribute(ff, "segOwner", row.getProperty("SEG_OWNER")?.toString())
-                ff = session.putAttribute(ff, "operation", row.getProperty("OPERATION")?.toString())
+            }else{
+                // operation 不为COMMIT ,才输出数据流   if(operation != "COMMIT")
                 String sqlRedo
                 if(bigSqlRedo != null){
                     sqlRedo =bigSqlRedo.append(row.getProperty("SQL_REDO")?.toString()).toString()
@@ -226,60 +252,94 @@ class AnalyzeLogMinerProcessor implements Processor {
                 }else {
                     sqlRedo = row.getProperty("SQL_REDO")?.toString()
                 }
-                ff = session.write(ff, {outputStream ->
+                if(noRedoSql != sqlRedo){
+                    FlowFile ff = session.create()
+                    ff = session.putAttribute(ff, "SCN",scn?.toString())
+                    ff = session.putAttribute(ff, "tableName", row.getProperty("TABLE_NAME")?.toString())
+                    ff = session.putAttribute(ff, "segOwner", row.getProperty("SEG_OWNER")?.toString())
+                    ff = session.putAttribute(ff, "operation", operation?.toString())
+                    ff = session.write(ff, {outputStream ->
                     outputStream.write(sqlRedo.getBytes(StandardCharsets.UTF_8))
                 } as OutputStreamCallback)
-                session.transfer(ff, REL_SUCCESS)
-                session.commit()
+                    session.transfer(ff, REL_SUCCESS)
+                    session.commit()
+                }
             }
+        }
+        if(fixCommitScn != 0){
+            log.debug("进入修补数据逻辑")
+            fixData(session,sql2,fixCommitScn,maxTranLength)
         }
     }
 
 
     /**
-     * 获取当前视图最大的事物scn
+     * 获取当前视图最大的scn
      *
      * @param Sql sql
-     * @return 返回当前视图事物最大scn号
+     * @return 返回当前视图最大scn号
      * */
-    private long getCurrentViewMaxCommitScn(Sql sql) {
-        String selectMaxCommitScnSql = "SELECT Max(SCN) as MAX FROM v\$logmnr_contents where OPERATION_CODE =7"
+    private long getCurrentViewMaxScn(Sql sql) {
+        String selectMaxCommitScnSql = "SELECT Max(SCN) as MAX FROM v\$logmnr_contents"
         log.debug("执行${selectMaxCommitScnSql}")
-        String maxScn = sql.rows(selectMaxCommitScnSql).get(0)?.getProperty("MAX")?.toString()
+        def maxScn = sql.firstRow(selectMaxCommitScnSql).getProperty("MAX")?.toString()
+        log.debug(""+maxScn)
         if(StringUtils.isBlank(maxScn)){
             maxScn = "-1"
         }
         return Long.parseLong(maxScn)
     }
     /**
-     * 启动LogMiner
+     * 启动LogMiner 按照SCN范围
      *
      * @param sql   sql
      * @param scn         scn
      * @param scnStepSize scnStepSize
      */
     void executeStartLogMinerSql(Sql sql, long scn, long scnStepSize) {
-        StringBuilder startLogMinerSql = new StringBuilder("BEGIN DBMS_LOGMNR.START_LOGMNR(")
-        String startLogMinerSuffix =
-                //线上数据字典
-                "OPTIONS => DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG " +
-                        //自动注册日志 自动注册日志很慢
-                //      "+ DBMS_LOGMNR.CONTINUOUS_MINE " +
-                        //SQL 去掉分号
-                        "+ DBMS_LOGMNR.NO_SQL_DELIMITER  " +
-                        //去掉rowid
-                        "+ DBMS_LOGMNR.NO_ROWID_IN_STMT " +
-                        //过滤 只取committed DML
-                        "+ DBMS_LOGMNR.COMMITTED_DATA_ONLY " +
-                        //指定sql_redo和sql_undo中的number，日期、时间格式类型按照字面值表示
-                        "+ DBMS_LOGMNR.STRING_LITERALS_IN_STMT " +
-                        //调过损坏数据
-                        "+ DBMS_LOGMNR.SKIP_CORRUPTION);END;"
-        log.debug("本次SCN号:${scn}")
+        StringBuilder startLogMinerSql = new StringBuilder(getStartLogMinerPrefix())
         startLogMinerSql.append("STARTSCN => ").append(scn + 1)
-                .append(",ENDSCN =>").append(scn + scnStepSize).append(",").append(startLogMinerSuffix)
+                .append(",ENDSCN =>").append(scn + scnStepSize).append(",").append(getStartLogMinerSuffix())
         log.debug("执行 ${startLogMinerSql.toString()} ")
         sql.call(startLogMinerSql.toString())
+    }
+     /**
+     * 启动LogMiner 按照时间范围范围
+     *
+     * @param sql   sql
+     * @param scn         scn
+     * @param scnStepSize scnStepSize
+     */
+    void executeStartLogMinerSql(Sql sql, String startTime, String endTime) {
+        StringBuilder startLogMinerSql = new StringBuilder(getStartLogMinerPrefix())
+        startLogMinerSql.append("STARTTIME => '").append(startTime)
+                .append("',ENDTIME =>'").append(endTime).append("',").append(getStartLogMinerSuffix())
+        log.debug("执行 ${startLogMinerSql.toString()} ")
+        sql.call(startLogMinerSql.toString())
+    }
+    /**
+    * 获取开启LogMiner日志前缀
+    */
+    String getStartLogMinerPrefix(){
+        return "BEGIN DBMS_LOGMNR.START_LOGMNR("
+    }
+    /**
+    * 获取开启LogMiner日志后缀
+    */
+    String getStartLogMinerSuffix(){
+        return "OPTIONS => DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG " + //线上数据字典
+            //自动注册日志 自动注册日志很慢
+            //"+ DBMS_LOGMNR.CONTINUOUS_MINE " +
+            //SQL 去掉分号
+            "+ DBMS_LOGMNR.NO_SQL_DELIMITER  " +
+            //去掉rowid
+            "+ DBMS_LOGMNR.NO_ROWID_IN_STMT " +
+            //过滤 只取committed DML
+            "+ DBMS_LOGMNR.COMMITTED_DATA_ONLY " +
+            //指定sql_redo和sql_undo中的number，日期、时间格式类型按照字面值表示
+            "+ DBMS_LOGMNR.STRING_LITERALS_IN_STMT " +
+            //调过损坏数据
+            "+ DBMS_LOGMNR.SKIP_CORRUPTION);END;"
     }
 
      /**
@@ -344,6 +404,83 @@ class AnalyzeLogMinerProcessor implements Processor {
         log.debug("执行${selectCurrentScnSql}")
         String currentScn = sql.rows(selectCurrentScnSql).get(0)?.getProperty("CURRENT_SCN")?.toString()
         return Long.parseLong(currentScn);
+    }
+    /**
+    * 当发现事务start scn号小于当前开始scn号，说明有遗漏数据，启动另一个LogMiner进行修补数据
+    *
+    * @param sql sql
+    */
+    String scnToTimeStamp(Sql sql,long scn){
+        String selectSql = "select to_char(scn_to_timestamp(${scn}),'YYYY-MM-DD HH24:MI:SS') as STRAT_TIME from dual"
+        return sql.firstRow(selectSql).getProperty("STRAT_TIME").toString()
+    }
+    /**
+    * 
+    * @param sql sql
+    */
+    long timeStampToScn(Sql sql,String time){
+        String selectSql = "select timestamp_to_scn(to_date('${time}','YYYY-MM-DD HH24:MI:SS')) as STRAT_SCN from dual"
+        return Long.parseLong(sql.firstRow(selectSql).getProperty("STRAT_SCN").toString())
+    }
+
+
+    /**
+    * 当发现事务start scn号小于当前开始scn号，说明有遗漏数据，启动另一个LogMiner进行修补数据
+    * 测试环境发现  指定STARTTIME 比指定SCN号慢了20倍  同样的范围前者240s 后者10秒
+    * @param sql sql
+    */
+    void fixData(ProcessSession session,Sql sql,long commitScn,int maxTranLength){
+        String noRedoSql = "/* No SQL_REDO for temporary tables */"
+        String endTime = scnToTimeStamp(sql,commitScn)
+        Date endDate =  sdf.parse(endTime)
+        Date startDate
+        use (groovy.time.TimeCategory) {
+            startDate = endDate - maxTranLength.seconds
+        }
+        String startTime = sdf.format(startDate)
+        long startScn = timeStampToScn(sql,startTime)-2
+        // String alterTimeFoemat = "ALTER SESSION SET NLS_DATE_FORMAT = 'YYYY-MM-DD HH24:MI:SS'"
+        //1、执行添加日志SQL语句
+        executeAddLogFileSql(sql)
+        //2、执行启动LogMiner SQL
+        // sql.execute(alterTimeFoemat)
+        executeStartLogMinerSql(sql, startScn, commitScn-startScn)
+        StringBuilder selectRedoSql = new StringBuilder("SELECT SCN,START_SCN,COMMIT_SCN,TABLE_NAME,SEG_OWNER,OPERATION,SQL_REDO,CSF FROM " +
+                "v\$logmnr_contents where SEG_TYPE=2 AND OPERATION_CODE IN (1,2,3) ").append(" AND COMMIT_SCN =").append(commitScn).append(" AND USERNAME != 'SYS'")
+        // 
+        log.debug("执行修复数据SQL${selectRedoSql.toString()}")
+        StringBuilder bigSqlRedo = null
+        sql.rows(selectRedoSql.toString()).eachWithIndex { row, idx ->
+            def csf = row.getProperty("CSF")
+            // csf为1 说明SQL超过4000字节 多行存储
+            if (csf == 1){
+                if(bigSqlRedo == null){
+                    bigSqlRedo = new StringBuilder()
+                }
+                bigSqlRedo.append(row.getProperty("SQL_REDO"))
+            }else {
+                String sqlRedo
+                if(bigSqlRedo != null){
+                    sqlRedo =bigSqlRedo.append(row.getProperty("SQL_REDO")?.toString()).toString()
+                    bigSqlRedo = null
+                }else {
+                    sqlRedo = row.getProperty("SQL_REDO")?.toString()
+                }
+                if(noRedoSql != sqlRedo){
+                    FlowFile ff = session.create()
+                    ff = session.putAttribute(ff, "SCN",row.getProperty("SCN")?.toString())
+                    ff = session.putAttribute(ff, "tableName", row.getProperty("TABLE_NAME")?.toString())
+                    ff = session.putAttribute(ff, "segOwner", row.getProperty("SEG_OWNER")?.toString())
+                    ff = session.putAttribute(ff, "operation", row.getProperty("OPERATION")?.toString())
+                    ff = session.write(ff, {outputStream ->
+                    outputStream.write(sqlRedo.getBytes(StandardCharsets.UTF_8))
+                } as OutputStreamCallback)
+                    session.transfer(ff, REL_SUCCESS)
+                    session.commit()
+                }
+                
+            }
+        }
     }
 }
 
