@@ -12,19 +12,19 @@ module.exports = {
             ['/updateLog', '更新日志'],
             ['/comment', '评论区'],
             {
-              title: 'General',
+              title: '基础文档',
               children: [
                 ['/general/overview','概览'],
                 ['/general/GettingStarted','入门'],
                 ['/general/UserGuide','用户指南'],
-                ['/general/ExpressionLanguageGuide','Expression Language Guide'],
-                ['/general/RecordPathGuide','RecordPath Guide'],
+                ['/general/ExpressionLanguageGuide','表达式语言'],
+                ['/general/RecordPathGuide','RecordPath指南'],
                 ['/general/AdminGuide','管理员指南'],
-                ['/general/ToolkitGuide','Toolkit Guide']
+                ['/general/ToolkitGuide','Toolkit指南']
               ]
             },
             {
-              title: 'Developer',
+              title: '开发文档',
               children: [
                 ['/developer/RestApi','Rest Api'],
                 ['/developer/DeveloperGuide','Developer Guide'],
@@ -32,7 +32,7 @@ module.exports = {
                ]
             },
             {
-              title: 'Processors',
+              title: '组件Processors',
               children: [
                 ['/processors/AttributesToCSV','AttributesToCSV'],
                 ['/processors/AttributesToJSON','AttributesToJSON'],
@@ -50,6 +50,8 @@ module.exports = {
                 ['/processors/GenerateTableFetch','GenerateTableFetch'],
                 ['/processors/HandleHttpRequest_HandleHttpResponse','HandleHttpRequest_HandleHttpResponse'],
                 ['/processors/InvokeHTTP','InvokeHTTP'],
+                ['/processors/JoltTransformJSON','JoltTransformJSON'],
+                ['/processors/JoltTransformRecord','JoltTransformRecord'],
                 ['/processors/LogAttribute','LogAttribute'],
                 ['/processors/LogMessage','LogMessage'],
                 ['/processors/PutHiveStreaming','PutHiveStreaming'],
@@ -63,13 +65,13 @@ module.exports = {
                ]
             },
             {
-              title: 'Controller Services',
+              title: '组件Controller Services',
               children: [
                 
                ]
             },
             {
-              title: 'Reporting Tasks',
+              title: '组件Reporting Tasks',
               children: [
                 
                ]
@@ -89,60 +91,32 @@ module.exports = {
                ]
             },
             {
-              title: 'NIFI 扩展开发系列',
+              title: 'NIFI 扩展知识',
               children: [
                 ['/extend/ControllerServiceArchive','ControllerService扩展开发的项目结构'],
-                ['/extend/JsonJoltShift','JSONJOLT介绍及语法详解-shift篇'],
                 ['/extend/通过配置优化NiFi性能','通过配置优化NiFi性能'],
                 ['/extend/NIFI Linux系统配置的最佳实践','NIFI Linux系统配置的最佳实践'],
-                ['/jolt/jolt详解','JOLT 详解'],
-                ['/jolt/joltdoc','Json Jolt Tutorial']
+                ['/extend/JsonJoltShift','JSONJOLT介绍及语法详解-shift篇'],
+                ['/jolt/jolt详解','JOLT 教程'],
+                ['/jolt/joltdoc','Json Jolt Tutorial'],
+                ['/http/聊聊HTTPS和SS、TLS协议','HTTPS和SS、TLS协议'],
+                ['/mysql/Java Mysql连接池配置和案例分析--超时异常和处理','Java Mysql连接池配置和案例分析--超时异常和处理'],
+                ['/oracle/oracle 12C的新特性-CDB和PDB','oracle 12C的新特性-CDB和PDB'],
+                ['/oracle/Oracle12cLogMiner分析Redo日志文件','Oracle12cLogMiner分析Redo日志文件部分文档翻译']
                ]
             },
             {
-              title: 'Java source code',
+              title: '其他源码',
               children: [
-                ['/java-source-code/ProcessBuilder','ProcessBuilder'],
-                ['/java-source-code/ClassLoader','ClassLoader'],
-                ['/java-source-code/Thread','Thread'],
+                ['/java-source-code/ProcessBuilder','ProcessBuilder类'],
+                ['/java-source-code/ClassLoader','ClassLoader类'],
+                ['/java-source-code/Thread','Thread类'],
+                ['/java-source-code/ProcessBuilder','ProcessBuilder类'],
                 ['/java-source-code/ContextClassLoader','线程上下文类加载器'],
                 ['/java-source-code/从jvm源码解读Java运行时的类加载','从jvm源码解读Java运行时的类加载'],
-                ['/java-source-code/Socket','Java socket详解（转）'],
-                ['/java-source-code/HashMap','Java HashMap 新增方法(merge,compute)（转）']
+                ['/java-source-code/Socket','Java socket详解(转)'],
+                ['/java-source-code/HashMap','Java HashMap 新增方法(merge,compute)(转)']
                 
-               
-              ]
-            },
-            {
-              title: 'Jetty source code',
-              children: [
-                ['/java-source-code/ProcessBuilder','ProcessBuilder']
-                
-               
-              ]
-            },
-            {
-              title: 'http',
-              children: [
-                ['/http/聊聊HTTPS和SS、TLS协议','聊聊HTTPS和SS、TLS协议']
-                
-               
-              ]
-            },
-            {
-              title: 'mysql',
-              children: [
-                ['/mysql/Java Mysql连接池配置和案例分析--超时异常和处理','Java Mysql连接池配置和案例分析--超时异常和处理']
-                
-               
-              ]
-            },
-            {
-              title: 'oracle',
-              children: [
-                ['/oracle/oracle 12C的新特性-CDB和PDB','oracle 12C的新特性-CDB和PDB'],
-                ['/oracle/Oracle12cLogMiner分析Redo日志文件','Oracle12cLogMiner分析Redo日志文件部分文档翻译']
-               
               ]
             }
           ]

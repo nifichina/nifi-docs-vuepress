@@ -4,6 +4,9 @@
 ***
 内容：
 
+最新的更为系统全面的JOLT教程请看[JOLT教程](../jolt/jolt详解.md)
+See the latest JOLT tutorial[JOLT tutorial](../jolt/joltdoc.md)
+
 ## 一 什么是JOLT ？
 
 json与json转换的库，是一个很强大的json转json的工具。在我们涉及Cassandra, ElasticSearch, Mongo的时候，很有可能就有这方面的需求  。另写代码又不灵活，使用JOLT就很好了。

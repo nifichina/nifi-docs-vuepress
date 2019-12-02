@@ -6,9 +6,9 @@
 
 这是国内外目前第一篇较为详细系统的讲述Java JOLT用法及部分原理的文章，如有错误，请及时留言指出。如有转载，请标明出处。
 
-Jolt GitHub: https://github.com/bazaarvoice/jolt
+Jolt GitHub: <a href="https://github.com/bazaarvoice/jolt">https://github.com/bazaarvoice/jolt</a>
 
-Jolt online demo: https://jolt-demo.appspot.com/#modify-stringFunctions
+Jolt online demo: <a href="https://jolt-demo.appspot.com">https://jolt-demo.appspot.com</a>
 
 Jolt是用Java编写的JSON到JSON转换库，其中指示如何转换的"specification"本身就是一个JSON文档。以下文档中，我统一以 Spec 代替如何转换的"specification"json文档。以LHS(left hand side)代表Spec json的keys,RHS(right hand side)代表Spec json的values。部分示例都是摘取于Jolt源代码注释文档。
 
@@ -1011,7 +1011,9 @@ Spec
 这部分文档源码项目也没有整理，以下是个人由源码以及示例整理而出
 
 overwrite modify-overwrite-beta Overwritr：总是写
+
 default modify-default-beta Defaultr：当键值对应的值是null时写入
+
 define modify-define-beta Definr：当键值不存在时写入
 
 modify模式包含了一系列函数，函数其本质是Java自带的,在Spec以下是函数及其对应的源码：

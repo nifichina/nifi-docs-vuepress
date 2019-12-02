@@ -6,9 +6,9 @@ Content：
 
 If there is any mistake, please leave a message.If reproduced, please indicate the source.
 
-Jolt GitHub: https://github.com/bazaarvoice/jolt
+Jolt GitHub: <a href="https://github.com/bazaarvoice/jolt">https://github.com/bazaarvoice/jolt</a>
 
-Jolt online demo: https://jolt-demo.appspot.com/#modify-stringFunctions
+Jolt online demo: <a href="https://jolt-demo.appspot.com">https://jolt-demo.appspot.com</a>
 
 JSON to JSON transformation library written in Java where the "specification" for the transform is itself a JSON document.In the following documents, I use 'Spec' instead of "specification" json document . LHS(left hand side) represents the keys of Spec json, and RHS(right hand side) represents the values of Spec json. Some of the examples are referenced Jolt source code comment documents.
 
