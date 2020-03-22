@@ -1,5 +1,11 @@
 # 更新日志
 
+**2019-12-03**
+
+* 新增[Java注解](./java-source-code/java注解.md)
+* 新增[nifi注解](./code/nifi注解.md)
+* 新增[新手常见问题](./newQuestions.md)页面
+
 **2019-12-02**
 
 * 新增[JoltTransformJSON](./processors/JoltTransformJSON.md)文档

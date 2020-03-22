@@ -6,9 +6,9 @@
 
 这是国内外目前第一篇较为详细系统的讲述Java JOLT用法及部分原理的文章，如有错误，请及时留言指出。如有转载，请标明出处。
 
-Jolt GitHub: <a href="https://github.com/bazaarvoice/jolt">https://github.com/bazaarvoice/jolt</a>
+Jolt GitHub: [https://github.com/bazaarvoice/jolt](https://github.com/bazaarvoice/jolt)
 
-Jolt online demo: <a href="https://jolt-demo.appspot.com">https://jolt-demo.appspot.com</a>
+Jolt online demo: [https://jolt-demo.appspot.com](https://jolt-demo.appspot.com)
 
 Jolt是用Java编写的JSON到JSON转换库，其中指示如何转换的"specification"本身就是一个JSON文档。以下文档中，我统一以 Spec 代替如何转换的"specification"json文档。以LHS(left hand side)代表Spec json的keys,RHS(right hand side)代表Spec json的values。部分示例都是摘取于Jolt源代码注释文档。
 
@@ -72,7 +72,7 @@ modify-define-beta:当键值不存在时写入
 
 这里是一份英文版的Jolt简介PDF:<a href="../jolt/JOLTIntroduction.pdf" download="JOLTIntroduction.pdf">Jolt介绍</a>
 
-在线的谷歌文档PPT地址：<a href="https://docs.google.com/presentation/d/1sAiuiFC4Lzz4-064sg1p8EQt2ev0o442MfEbvrpD1ls/edit?usp=sharing">https://docs.google.com/presentation/d/1sAiuiFC4Lzz4-064sg1p8EQt2ev0o442MfEbvrpD1ls/edit?usp=sharing</a>
+在线的谷歌文档PPT地址：[https://docs.google.com/presentation/d/1sAiuiFC4Lzz4-064sg1p8EQt2ev0o442MfEbvrpD1ls/edit?usp=sharing](https://docs.google.com/presentation/d/1sAiuiFC4Lzz4-064sg1p8EQt2ev0o442MfEbvrpD1ls/edit?usp=sharing)
 ## shift
 
 Shiftr指定来自输入JSON的数据应该放在输出JSON中的什么位置，也就是输入JSON的数据应该如何进行移位，以生成输出JSON数据。
@@ -925,7 +925,7 @@ Spec
 
 例如，假设您知道文档中将有一个"photos"元素。如果您的底层数据源想要变得更好，那么它可能会根据实际有多少张照片来调整photos元素的"类型"。
 
-### 关键词:
+### 关键词
 
 1. 只在RHS
 

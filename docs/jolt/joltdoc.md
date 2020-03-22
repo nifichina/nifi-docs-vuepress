@@ -6,9 +6,9 @@ Content：
 
 If there is any mistake, please leave a message.If reproduced, please indicate the source.
 
-Jolt GitHub: <a href="https://github.com/bazaarvoice/jolt">https://github.com/bazaarvoice/jolt</a>
+Jolt GitHub: [https://github.com/bazaarvoice/jolt](https://github.com/bazaarvoice/jolt)
 
-Jolt online demo: <a href="https://jolt-demo.appspot.com">https://jolt-demo.appspot.com</a>
+Jolt online demo: [https://jolt-demo.appspot.com](https://jolt-demo.appspot.com)
 
 JSON to JSON transformation library written in Java where the "specification" for the transform is itself a JSON document.In the following documents, I use 'Spec' instead of "specification" json document . LHS(left hand side) represents the keys of Spec json, and RHS(right hand side) represents the values of Spec json. Some of the examples are referenced Jolt source code comment documents.
 
@@ -78,7 +78,7 @@ The out-of-the-box Jolt transforms should be able to do most of your structural 
 
 Here is a Jolt guide in PDF:<a href="../jolt/JOLTIntroduction.pdf" download="JOLTIntroduction.pdf">Jolt介绍</a>
 
-Google document PPT address online：<a href="https://docs.google.com/presentation/d/1sAiuiFC4Lzz4-064sg1p8EQt2ev0o442MfEbvrpD1ls/edit?usp=sharing">https://docs.google.com/presentation/d/1sAiuiFC4Lzz4-064sg1p8EQt2ev0o442MfEbvrpD1ls/edit?usp=sharing</a>
+Google document PPT address online：[https://docs.google.com/presentation/d/1sAiuiFC4Lzz4-064sg1p8EQt2ev0o442MfEbvrpD1ls/edit?usp=sharing](https://docs.google.com/presentation/d/1sAiuiFC4Lzz4-064sg1p8EQt2ev0o442MfEbvrpD1ls/edit?usp=sharing)
 ## shift
 
 Shiftr is a kind of JOLT transform that specifies where "data" from the input JSON should be placed in the output JSON, aka how the input JSON/data should be shifted around to make the output JSON/data.

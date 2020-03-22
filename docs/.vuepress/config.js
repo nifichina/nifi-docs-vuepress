@@ -11,6 +11,7 @@ module.exports = {
             ['/', '首頁'],
             ['/updateLog', '更新日志'],
             ['/comment', '评论区'],
+            ['/newQuestions', '新手常见问题'],
             {
               title: '基础文档',
               children: [
@@ -87,7 +88,8 @@ module.exports = {
                 ['/code/RunNiFi','RunNiFi.java 源码解读'],
                 ['/code/NiFi','NiFi.java 源码解读'],
                 ['/code/UnpackNar','Nar包下的MANIFEST.MF'],
-                ['/code/Content Repository Archiving','理解内容存储库归档']
+                ['/code/Content Repository Archiving','理解内容存储库归档'],
+                ['/code/nifi注解','nifi注解']
                ]
             },
             {
@@ -115,8 +117,8 @@ module.exports = {
                 ['/java-source-code/ContextClassLoader','线程上下文类加载器'],
                 ['/java-source-code/从jvm源码解读Java运行时的类加载','从jvm源码解读Java运行时的类加载'],
                 ['/java-source-code/Socket','Java socket详解(转)'],
-                ['/java-source-code/HashMap','Java HashMap 新增方法(merge,compute)(转)']
-                
+                ['/java-source-code/HashMap','Java HashMap 新增方法(merge,compute)(转)'],
+                ['/java-source-code/java注解','Java注解(转)']
               ]
             }
           ]
