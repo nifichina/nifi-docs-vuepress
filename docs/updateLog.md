@@ -1,5 +1,9 @@
 # 更新日志
 
+**2020-03-22**
+
+* 增加[自定义开发NIFI表达式语言](./code/ExpressionLanguage.md)
+
 **2019-12-05**
 
 * 增加了一个JOLT嵌套数组的实际案例[jolt教程](./jolt/jolt详解.md)
