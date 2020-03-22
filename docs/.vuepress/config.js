@@ -87,7 +87,8 @@ module.exports = {
                 ['/code/RunNiFi','RunNiFi.java 源码解读'],
                 ['/code/NiFi','NiFi.java 源码解读'],
                 ['/code/UnpackNar','Nar包下的MANIFEST.MF'],
-                ['/code/Content Repository Archiving','理解内容存储库归档']
+                ['/code/Content Repository Archiving','理解内容存储库归档'],
+                ['/code/ExpressionLanguage','自定义开发NIFI表达式语言']
                ]
             },
             {

@@ -1,5 +1,9 @@
 # 更新日志
 
+**2020-03-22**
+
+* 新增[自定义开发NIFI表达式语言](./code/ExpressionLanguage.md)文档
+
 **2019-12-02**
 
 * 新增[JoltTransformJSON](./processors/JoltTransformJSON.md)文档
