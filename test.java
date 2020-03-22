@@ -9,6 +9,7 @@ public class JettyServer implements NiFiServer {
     private static final Logger logger = LoggerFactory.getLogger(JettyServer.class);
     private static final String WEB_DEFAULTS_XML = "org/apache/nifi/web/webdefault.xml";
     //文件过滤  从lib下过滤出war包
+    
     private static final FileFilter WAR_FILTER = new FileFilter() {
         @Override
         public boolean accept(File pathname) {

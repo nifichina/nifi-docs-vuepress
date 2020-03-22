@@ -1605,39 +1605,39 @@ If you are mining in the database instance that is generating the redo log files
 
 1.  Use SQL*Plus to start an Oracle instance, with the database either mounted or unmounted. For example, enter the `STARTUP` statement at the SQL prompt:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     STARTUP
-    </pre>
+    ```
 
 2.  Create a list of redo log files. Specify the `NEW` option of the `DBMS_LOGMNR.ADD_LOGFILE` PL/SQL procedure to signal that this is the beginning of a new list. For example, enter the following to specify the `/oracle/logs/log1.f` redo log file: 
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
        LOGFILENAME => '/oracle/logs/log1.f', -
        OPTIONS => DBMS_LOGMNR.NEW);
-    </pre>
+    ```
 
 3.  If desired, add more redo log files by specifying the `ADDFILE` option of the `DBMS_LOGMNR.ADD_LOGFILE` PL/SQL procedure. For example, enter the following to add the `/oracle/logs/log2.f` redo log file:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
        LOGFILENAME => '/oracle/logs/log2.f', -
        OPTIONS => DBMS_LOGMNR.ADDFILE);
-    </pre>
+    ```
 
     The `OPTIONS` parameter is optional when you are adding additional redo log files. For example, you could simply enter the following:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
        LOGFILENAME=>'/oracle/logs/log2.f');
-    </pre>
+    ```
 
 4.  If desired, remove redo log files by using the `DBMS_LOGMNR.REMOVE_LOGFILE `PL/SQL procedure. For example, enter the following to remove the `/oracle/logs/log2.f` redo log file:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.REMOVE_LOGFILE( -
        LOGFILENAME => '/oracle/logs/log2.f');
-    </pre>
+    ```
 
 ### Typical LogMiner Session Task 4: Start LogMiner
 
@@ -1649,10 +1649,10 @@ LogMiner开始。创建LogMiner字典文件并指定要分析哪些重做日志�
 
     If you are specifying the name of a flat file LogMiner dictionary, then you must supply a fully qualified file name for the dictionary file. For example, to start LogMiner using `/oracle/database/dictionary.ora`, issue the following statement:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.START_LOGMNR( -
        DICTFILENAME =>'/oracle/database/dictionary.ora');
-    </pre>
+    ```
 
     If you are not specifying a flat file dictionary name, then use the `OPTIONS` parameter to specify either the `DICT_FROM_REDO_LOGS` or `DICT_FROM_ONLINE_CATALOG` option. 
 
@@ -1667,11 +1667,11 @@ LogMiner开始。创建LogMiner字典文件并指定要分析哪些重做日志�
 2.  Optionally, you can filter your query by time or by SCN. See [Filtering Data by Time](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-0AA13EFD-8118-4061-A215-9D3AF9EEB1D5 "To filter data by time, set the STARTTIME and ENDTIME parameters in the DBMS_LOGMNR.START_LOGMNR procedure.") or [Filtering Data by SCN](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-011AA230-32A7-4DE7-9DC0-CE1FF55CFAF3 "To filter data by SCN (system change number), use the STARTSCN and ENDSCN parameters to the PL/SQL DBMS_LOGMNR.START_LOGMNR procedure.").
 3.  You can also use the `OPTIONS` parameter to specify additional characteristics of your LogMiner session. For example, you might decide to use the online catalog as your LogMiner dictionary and to have only committed transactions shown in the `V$LOGMNR_CONTENTS` view, as follows:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.START_LOGMNR(OPTIONS => -
        DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG + -
        DBMS_LOGMNR.COMMITTED_DATA_ONLY);
-    </pre>
+    ```
 
     For more information about `DBMS_LOGMNR.START_LOGMNR` options, see [Oracle Database PL/SQL Packages and Types Reference](https://www.oracle.com/pls/topic/lookup?ctx=en/database/oracle/oracle-database/19/sutil&id=ARPLS022).
 
@@ -1690,9 +1690,9 @@ Ending the LogMiner session.
 
 To properly end a LogMiner session, use the `DBMS_LOGMNR.END_LOGMNR` PL/SQL procedure, as follows:
 
-<pre class="oac_no_warn" dir="ltr">
+```
 EXECUTE DBMS_LOGMNR.END_LOGMNR;
-</pre>
+```
 
 This procedure closes all the redo log files and allows all the database and system resources allocated by LogMiner to be released. 
 
@@ -1706,21 +1706,21 @@ Note:
 
 All examples in this section assume that minimal supplemental logging has been enabled:
 
-<pre class="oac_no_warn" dir="ltr">
+```
 SQL> ALTER DATABASE ADD SUPPLEMENTAL LOG DATA;
-</pre>
+```
 
 See [Supplemental Logging](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-D857AF96-AC24-4CA1-B620-8EA3DF30D72E "Describes supplemental logging.") for more information.
 
 All examples, except [Example 2: Mining the Redo Log Files in a Given SCN Range](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-97F5B369-A905-4BCF-AA7F-E9F932D3D14A) and the [Example Scenarios](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-143798E2-B0E0-4E9D-A70C-08593A117027 "Examples of how to use LogMiner for typical scenarios."), assume that the `NLS_DATE_FORMAT` parameter has been set as follows:
 
-<pre class="oac_no_warn" dir="ltr">
+```
 SQL>  ALTER SESSION SET NLS_DATE_FORMAT = 'dd-mon-yyyy hh24:mi:ss';
-</pre>
+```
 
-<pre class="oac_no_warn" dir="ltr">
+```
 
-</pre>
+```
 
 Because LogMiner displays date data using the setting for the `NLS_DATE_FORMAT`   parameter that is active for the user session, this step is optional. However, setting the parameter explicitly lets you predict the date format.
 
@@ -1742,35 +1742,33 @@ This example assumes that you know you want to mine the redo log file that was m
 
 1.  Determine which redo log file was most recently archived.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     SELECT NAME FROM V$ARCHIVED_LOG
-       WHERE FIRST_TIME = (SELECT MAX(FIRST_TIME) FROM V$ARCHIVED_LOG);
-
+       WHERE FIRST_TIME = (SELECT MAX(FIRST_TIME) FROM V$ARCHIVED_LOG);   
     NAME                            
     -------------------------------------------
     /usr/oracle/data/db1arch_1_16_482701534.dbf
-    </pre>
-
+```
 2.  Specify the list of redo log files to be analyzed. In this case, it is the redo log file that was returned by the query in Step 1.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
       LOGFILENAME => '/usr/oracle/data/db1arch_1_16_482701534.dbf', -
       OPTIONS => DBMS_LOGMNR.NEW);
-    </pre>
+```
 
 3.  Start LogMiner and specify the dictionary to use.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     EXECUTE DBMS_LOGMNR.START_LOGMNR( -
        OPTIONS => DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG);
-    </pre>
+```
 
 4.  Query the `V$LOGMNR_CONTENTS` view.
 
     Note that there are four transactions (two of them were committed within the redo log file being analyzed, and two were not). The output shows the DML statements in the order in which they were executed; thus transactions interleave among themselves.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     SELECT username AS USR, (XIDUSN || '.' || XIDSLT || '.' ||  XIDSQN) AS XID, 
        SQL_REDO, SQL_UNDO FROM V$LOGMNR_CONTENTS WHERE username IN ('HR', 'OE');
 
@@ -1856,13 +1854,13 @@ This example assumes that you know you want to mine the redo log file that was m
                       ROWID = 'AAAHTKAABAAAY9tAAD';       ROWID ='AAAHTKAABAAAY9tAAD'; 
 
     HR     1.11.1476  commit;
-    </pre>
+```
 
 5.  End the LogMiner session.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     SQL> EXECUTE DBMS_LOGMNR.END_LOGMNR();
-    </pre>
+```
 
 
 #### Example 2: Grouping DML Statements into Committed Transactions 
@@ -1871,36 +1869,36 @@ As shown in the first example, [Example 1: Finding All Modifications in the Last
 
 1.  Determine which redo log file was most recently archived by the database.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     SELECT NAME FROM V$ARCHIVED_LOG
        WHERE FIRST_TIME = (SELECT MAX(FIRST_TIME) FROM V$ARCHIVED_LOG);
 
     NAME                            
     -------------------------------------------
     /usr/oracle/data/db1arch_1_16_482701534.dbf
-    </pre>
+```
 
 2.  Specify the redo log file that was returned by the query in Step 1. The list will consist of one redo log file.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
        LOGFILENAME => '/usr/oracle/data/db1arch_1_16_482701534.dbf', -
        OPTIONS => DBMS_LOGMNR.NEW);
-    </pre>
+```
 
 3.  Start LogMiner by specifying the dictionary to use and the `COMMITTED_DATA_ONLY` option.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
        LOGFILENAME => '/usr/oracle/data/db1arch_1_16_482701534.dbf', -
        OPTIONS => DBMS_LOGMNR.NEW);
-    </pre>
+```
 
 4.  Query the `V$LOGMNR_CONTENTS` view.
 
     Although transaction 1.11.1476 was started before transaction 1.1.1484 (as revealed in [Example 1: Finding All Modifications in the Last Archived Redo Log File](https://docs.oracle.com/en/database/oracle/oracle-database/19/sutil/oracle-logminer-utility.html#GUID-E3820793-B482-48C4-9F44-C0D7A062E318)), it committed after transaction 1.1.1484 committed. In this example, therefore, transaction 1.1.1484 is shown in its entirety before transaction 1.11.1476. The two transactions that did not commit within the redo log file being analyzed are not returned.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     SELECT username AS USR, (XIDUSN || '.' || XIDSLT || '.' ||  XIDSQN) AS XID, SQL_REDO, 
        SQL_UNDO FROM V$LOGMNR_CONTENTS WHERE username IN ('HR', 'OE');
     ;
@@ -1958,13 +1956,13 @@ As shown in the first example, [Example 1: Finding All Modifications in the Last
                       '105','50');                
 
     HR     1.11.1476  commit;
-    </pre>
+```
 
 5.  End the LogMiner session.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     EXECUTE DBMS_LOGMNR.END_LOGMNR();
-    </pre>
+```
 
 
 
@@ -1974,37 +1972,36 @@ As shown in [Example 2: Grouping DML Statements into Committed Transactions ](ht
 
 1.  Determine which redo log file was most recently archived.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     SELECT NAME FROM V$ARCHIVED_LOG
        WHERE FIRST_TIME = (SELECT MAX(FIRST_TIME) FROM V$ARCHIVED_LOG);
 
     NAME                            
     -------------------------------------------
     /usr/oracle/data/db1arch_1_16_482701534.dbf
-    </pre>
+```
 
 2.  Specify the redo log file that was returned by the query in Step 1.
 
-    <pre class="oac_no_warn" dir="ltr">
+```
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
        LOGFILENAME => '/usr/oracle/data/db1arch_1_16_482701534.dbf', -
-       OPTIONS => DBMS_LOGMNR.NEW);
-    </pre>
+```
 
 3.  Start LogMiner by specifying the dictionary to use and the `COMMITTED_DATA_ONLY` and `PRINT_PRETTY_SQL` options.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.START_LOGMNR(-
        OPTIONS => DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG + -
                   DBMS_LOGMNR.COMMITTED_DATA_ONLY + -
                   DBMS_LOGMNR.PRINT_PRETTY_SQL);
-    </pre>
+    ```
 
     The `DBMS_LOGMNR.PRINT_PRETTY_SQL` option changes only the format of the reconstructed SQL, and therefore is useful for generating reports for visual inspection.
 
 4.  Query the `V$LOGMNR_CONTENTS` view for `SQL_REDO` statements.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT username AS USR, (XIDUSN || '.' || XIDSLT || '.' ||  XIDSQN) AS XID, SQL_REDO 
        FROM V$LOGMNR_CONTENTS;
 
@@ -2063,11 +2060,11 @@ As shown in [Example 2: Grouping DML Statements into Committed Transactions ](ht
                            "MANAGER_ID" = 105,
                            "DEPARTMENT_ID" = 50;
     HR     1.11.1476    commit;
-    </pre>
+    ```
 
 5.  Query the `V$LOGMNR_CONTENTS` view for reconstructed `SQL_UNDO` statements.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT username AS USR, (XIDUSN || '.' || XIDSLT || '.' ||  XIDSQN) AS XID, SQL_UNDO 
        FROM V$LOGMNR_CONTENTS;
 
@@ -2129,13 +2126,13 @@ As shown in [Example 2: Grouping DML Statements into Committed Transactions ](ht
                            "DEPARTMENT_ID" = 50 and
                            ROWID = 'AAAHSkAABAAAY6rAAP'; 
     HR     1.11.1476    commit;
-    </pre>
+    ```
 
 6.  End the LogMiner session.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.END_LOGMNR();
-    </pre>
+    ```
 
 
 #### Example 4: Using the LogMiner Dictionary in the Redo Log Files
@@ -2144,20 +2141,20 @@ This example shows how to use the dictionary that has been extracted to the redo
 
 1.  Determine which redo log file was most recently archived by the database.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT NAME, SEQUENCE# FROM V$ARCHIVED_LOG
        WHERE FIRST_TIME = (SELECT MAX(FIRST_TIME) FROM V$ARCHIVED_LOG);
 
     NAME                                           SEQUENCE#
     --------------------------------------------   --------------
     /usr/oracle/data/db1arch_1_210_482701534.dbf   210
-    </pre>
+    ```
 
 2.  The dictionary may be contained in more than one redo log file. Therefore, you need to determine which redo log files contain the start and end of the dictionary. Query the `V$ARCHIVED_LOG` view, as follows:
 
     1.  Find a redo log file that contains the end of the dictionary extract. This redo log file must have been created before the redo log file that you want to analyze, but should be as recent as possible. 
 
-        <pre class="oac_no_warn" dir="ltr">
+        ```
         SELECT NAME, SEQUENCE#, DICTIONARY_BEGIN d_beg, DICTIONARY_END d_end
            FROM V$ARCHIVED_LOG
            WHERE SEQUENCE# = (SELECT MAX (SEQUENCE#) FROM V$ARCHIVED_LOG
@@ -2166,11 +2163,11 @@ This example shows how to use the dictionary that has been extracted to the redo
         NAME                                           SEQUENCE#    D_BEG  D_END
         --------------------------------------------   ----------   -----  ------
         /usr/oracle/data/db1arch_1_208_482701534.dbf   208          NO     YES
-        </pre>
+        ```
 
     2.  Find the redo log file that contains the start of the data dictionary extract that matches the end of the dictionary found in the previous step: 
 
-        <pre class="oac_no_warn" dir="ltr">
+        ```
         SELECT NAME, SEQUENCE#, DICTIONARY_BEGIN d_beg, DICTIONARY_END d_end
            FROM V$ARCHIVED_LOG
            WHERE SEQUENCE# = (SELECT MAX (SEQUENCE#) FROM V$ARCHIVED_LOG
@@ -2179,11 +2176,11 @@ This example shows how to use the dictionary that has been extracted to the redo
         NAME                                           SEQUENCE#    D_BEG  D_END
         --------------------------------------------   ----------   -----  ------
         /usr/oracle/data/db1arch_1_207_482701534.dbf   207          YES     NO
-        </pre>
+        ```
 
     3.  Specify the list of the redo log files of interest. Add the redo log files that contain the start and end of the dictionary and the redo log file that you want to analyze. You can add the redo log files in any order.
 
-        <pre class="oac_no_warn" dir="ltr">
+        ```
         EXECUTE DBMS_LOGMNR.ADD_LOGFILE(-
            LOGFILENAME => '/usr/oracle/data/db1arch_1_210_482701534.dbf', -
                OPTIONS => DBMS_LOGMNR.NEW);
@@ -2191,7 +2188,7 @@ This example shows how to use the dictionary that has been extracted to the redo
            LOGFILENAME => '/usr/oracle/data/db1arch_1_208_482701534.dbf');
         EXECUTE DBMS_LOGMNR.ADD_LOGFILE(-
            LOGFILENAME => '/usr/oracle/data/db1arch_1_207_482701534.dbf');
-        </pre>
+        ```
 
     4.  Query the `V$LOGMNR_LOGS` view to display the list of redo log files to be analyzed, including their timestamps. 
 
@@ -2199,12 +2196,12 @@ This example shows how to use the dictionary that has been extracted to the redo
 
 3.  Start LogMiner by specifying the dictionary to use and the `COMMITTED_DATA_ONLY` and `PRINT_PRETTY_SQL` options.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.START_LOGMNR(-
        OPTIONS => DBMS_LOGMNR.DICT_FROM_REDO_LOGS + -
                   DBMS_LOGMNR.COMMITTED_DATA_ONLY + -
                   DBMS_LOGMNR.PRINT_PRETTY_SQL);
-    </pre>
+    ```
 
 4.  Query the `V$LOGMNR_CONTENTS` view.
 
@@ -2216,7 +2213,7 @@ This example shows how to use the dictionary that has been extracted to the redo
 
     (The next example shows how to run LogMiner with the `DDL_DICT_TRACKING` option so that all SQL statements are fully translated; no binary data is returned.)
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT USERNAME AS usr, SQL_REDO FROM V$LOGMNR_CONTENTS 
        WHERE SEG_OWNER IS NULL OR SEG_OWNER NOT IN ('SYS', 'SYSTEM') AND
        TIMESTAMP > '10-jan-2012 15:59:53';
@@ -2279,7 +2276,7 @@ This example shows how to use the dictionary that has been extracted to the redo
                                     "COL 4" = HEXTORAW('800000053c');
 
     OE              1.9.1598     commit;
-    </pre>
+    ```
 
 5.  Issue additional queries, if desired.
 
@@ -2579,20 +2576,20 @@ By using the `DBMS_LOGMNR.DDL_DICT_TRACKING` option, this example ensures that t
 
 1.  Determine which redo log file was most recently archived by the database.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT NAME, SEQUENCE# FROM V$ARCHIVED_LOG 
        WHERE FIRST_TIME = (SELECT MAX(FIRST_TIME) FROM V$ARCHIVED_LOG);
 
     NAME                                           SEQUENCE#
     --------------------------------------------   --------------
     /usr/oracle/data/db1arch_1_210_482701534.dbf   210
-    </pre>
+    ```
 
 2.  Because the dictionary may be contained in more than one redo log file, you need to determine which redo log files contain the start and end of the data dictionary. Query the `V$ARCHIVED_LOG` view, as follows:
 
     1.  Find a redo log that contains the end of the data dictionary extract. This redo log file must have been created before the redo log files that you want to analyze, but should be as recent as possible. 
 
-        <pre class="oac_no_warn" dir="ltr">
+        ```
         SELECT NAME, SEQUENCE#, DICTIONARY_BEGIN d_beg, DICTIONARY_END d_end
            FROM V$ARCHIVED_LOG
            WHERE SEQUENCE# = (SELECT MAX (SEQUENCE#) FROM V$ARCHIVED_LOG
@@ -2601,11 +2598,11 @@ By using the `DBMS_LOGMNR.DDL_DICT_TRACKING` option, this example ensures that t
         NAME                                           SEQUENCE#    D_BEG  D_END
         --------------------------------------------   ----------   -----  ------
         /usr/oracle/data/db1arch_1_208_482701534.dbf   208          NO     YES
-        </pre>
+        ```
 
     2.  Find the redo log file that contains the start of the data dictionary extract that matches the end of the dictionary found by the previous SQL statement: 
 
-        <pre class="oac_no_warn" dir="ltr">
+        ```
         SELECT NAME, SEQUENCE#, DICTIONARY_BEGIN d_beg, DICTIONARY_END d_end
            FROM V$ARCHIVED_LOG
            WHERE SEQUENCE# = (SELECT MAX (SEQUENCE#) FROM V$ARCHIVED_LOG
@@ -2614,13 +2611,13 @@ By using the `DBMS_LOGMNR.DDL_DICT_TRACKING` option, this example ensures that t
         NAME                                           SEQUENCE#    D_BEG  D_END
         --------------------------------------------   ----------   -----  ------
         /usr/oracle/data/db1arch_1_208_482701534.dbf   207          YES     NO
-        </pre>
+        ```
 
 3.  Ensure that you have a complete list of redo log files.
 
     To successfully apply DDL statements encountered in the redo log files, ensure that all files are included in the list of redo log files to mine. The missing log file corresponding to sequence# 209 must be included in the list. Determine the names of the redo log files that you need to add to the list by issuing the following query:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT NAME FROM V$ARCHIVED_LOG
        WHERE SEQUENCE# >= 207 AND SEQUENCE# <= 210 
        ORDER BY SEQUENCE# ASC;
@@ -2631,39 +2628,39 @@ By using the `DBMS_LOGMNR.DDL_DICT_TRACKING` option, this example ensures that t
     /usr/oracle/data/db1arch_1_208_482701534.dbf  
     /usr/oracle/data/db1arch_1_209_482701534.dbf  
     /usr/oracle/data/db1arch_1_210_482701534.dbf  
-    </pre>
+    ```
 
 4.  Specify the list of the redo log files of interest.
 
     Include the redo log files that contain the beginning and end of the dictionary, the redo log file that you want to mine, and any redo log files required to create a list without gaps. You can add the redo log files in any order.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE(-
        LOGFILENAME => '/usr/oracle/data/db1arch_1_210_482701534.dbf', -
-    </pre>
+    ```
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
           OPTIONS => DBMS_LOGMNR.NEW);
-    </pre>
+    ```
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE(-
        LOGFILENAME => '/usr/oracle/data/db1arch_1_209_482701534.dbf');
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE(-
        LOGFILENAME => '/usr/oracle/data/db1arch_1_208_482701534.dbf');
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE(-
        LOGFILENAME => '/usr/oracle/data/db1arch_1_207_482701534.dbf');
-    </pre>
+    ```
 
 5.  Start LogMiner by specifying the dictionary to use and the `DDL_DICT_TRACKING`, `COMMITTED_DATA_ONLY`, and `PRINT_PRETTY_SQL` options.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.START_LOGMNR(-
        OPTIONS => DBMS_LOGMNR.DICT_FROM_REDO_LOGS + -
                   DBMS_LOGMNR.DDL_DICT_TRACKING + -
                   DBMS_LOGMNR.COMMITTED_DATA_ONLY + -
                   DBMS_LOGMNR.PRINT_PRETTY_SQL);
-    </pre>
+    ```
 
 6.  Query the `V$LOGMNR_CONTENTS` view.
 
@@ -2671,7 +2668,7 @@ By using the `DBMS_LOGMNR.DDL_DICT_TRACKING` option, this example ensures that t
 
     The query returns all the reconstructed SQL statements correctly translated and the insert operations on the `oe.product_tracking` table that occurred because of the trigger execution.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT USERNAME AS usr,(XIDUSN || '.' || XIDSLT || '.' || XIDSQN) as XID, SQL_REDO FROM  
        V$LOGMNR_CONTENTS 
        WHERE SEG_OWNER IS NULL OR SEG_OWNER NOT IN ('SYS', 'SYSTEM') AND
@@ -2736,13 +2733,13 @@ By using the `DBMS_LOGMNR.DDL_DICT_TRACKING` option, this example ensures that t
                                     "OLD_WARRANTY_PERIOD" = TO_YMINTERVAL('+05-00');
 
     OE              1.9.1598     commit;
-    </pre>
+    ```
 
 7.  End the LogMiner session.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.END_LOGMNR();
-    </pre>
+    ```
 
 #### Example 6: Filtering Output by Time Range
 
@@ -2752,7 +2749,7 @@ In the previous two examples, rows were filtered by specifying a timestamp-based
 
     Suppose you want to mine redo log files generated since a given time. The following procedure creates a list of redo log files based on a specified time. The subsequent SQL `EXECUTE` statement calls the procedure and specifies the starting time as 2 p.m. on Jan-13-2012.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     --
     -- my_add_logfiles
     -- Add all archived logs generated after a specified start_time.
@@ -2777,13 +2774,13 @@ In the previous two examples, rows were filtered by specifying a timestamp-based
     /
 
     EXECUTE my_add_logfiles(in_start_time => '13-jan-2012 14:00:00');
-    </pre>
+    ```
 
 2.  Query the `V$LOGMNR_LOGS` to see the list of redo log files.
 
     This example includes the size of the redo log files in the output.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT FILENAME name, LOW_TIME start_time, FILESIZE bytes 
         FROM V$LOGMNR_LOGS;
 
@@ -2798,7 +2795,7 @@ In the previous two examples, rows were filtered by specifying a timestamp-based
     /usr/orcl/arch1_316_482932022.dbf    13-jan-2012 16:03:10  23683584
     /usr/orcl/arch1_317_482932022.dbf    13-jan-2012 16:33:43  23683584
     /usr/orcl/arch1_318_482932022.dbf    13-jan-2012 17:23:10  23683584
-    </pre>
+    ```
 
 3.  Adjust the list of redo log files.
 
@@ -2810,22 +2807,22 @@ In the previous two examples, rows were filtered by specifying a timestamp-based
 
     Although this does not change the list of redo log files, LogMiner will mine only those redo log files that fall in the time range specified. 
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.START_LOGMNR(-
        STARTTIME => '13-jan-2012 15:00:00', -
        ENDTIME   => '13-jan-2012 16:00:00', -
        OPTIONS   => DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG + -
                     DBMS_LOGMNR.COMMITTED_DATA_ONLY + -
                     DBMS_LOGMNR.PRINT_PRETTY_SQL);
-    </pre>
+    ```
 
 4.  Query the `V$LOGMNR_CONTENTS` view.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT TIMESTAMP, (XIDUSN || '.' || XIDSLT || '.' || XIDSQN) AS XID,
-    </pre>
+    ```
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SQL_REDO FROM V$LOGMNR_CONTENTS WHERE SEG_OWNER = 'OE';
 
     TIMESTAMP              XID          SQL_REDO
@@ -2860,13 +2857,13 @@ In the previous two examples, rows were filtered by specifying a timestamp-based
                                             'dd-mon-yyyy hh24:mi:ss'),
                                             "OLD_LIST_PRICE" = 715,
                                             "OLD_WARRANTY_PERIOD" = TO_YMINTERVAL('+02-00');
-    </pre>
+    ```
 
 5.  End the LogMiner session.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.END_LOGMNR();
-    </pre>
+    ```
 
 ### Examples of Mining Without Specifying the List of Redo Log Files Explicitly
 
@@ -2887,22 +2884,22 @@ This example is similar to Example 4: Using the LogMiner Dictionary in the Redo 
 
 1.  Determine the timestamp of the redo log file that contains the start of the data dictionary.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT NAME, FIRST_TIME FROM V$ARCHIVED_LOG
-    </pre>
+    ```
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
        WHERE SEQUENCE# = (SELECT MAX(SEQUENCE#) FROM V$ARCHIVED_LOG 
         WHERE DICTIONARY_BEGIN = 'YES');
 
     NAME                                          FIRST_TIME
     --------------------------------------------  --------------------
     /usr/oracle/data/db1arch_1_207_482701534.dbf  10-jan-2012 12:01:34
-    </pre>
+    ```
 
 2.  Display all the redo log files that have been generated so far.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT FILENAME name FROM V$LOGMNR_LOGS
        WHERE LOW_TIME > '10-jan-2012 12:01:34';
 
@@ -2912,11 +2909,11 @@ This example is similar to Example 4: Using the LogMiner Dictionary in the Redo 
     /usr/oracle/data/db1arch_1_208_482701534.dbf
     /usr/oracle/data/db1arch_1_209_482701534.dbf
     /usr/oracle/data/db1arch_1_210_482701534.dbf
-    </pre>
+    ```
 
 3.  Start LogMiner by specifying the dictionary to use and the `COMMITTED_DATA_ONLY` and `PRINT_PRETTY_SQL` options.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.START_LOGMNR(-
        STARTTIME => '10-jan-2012 12:01:34', -
          ENDTIME => SYSDATE, -
@@ -2924,13 +2921,13 @@ This example is similar to Example 4: Using the LogMiner Dictionary in the Redo 
                     DBMS_LOGMNR.COMMITTED_DATA_ONLY + -
                     DBMS_LOGMNR.PRINT_PRETTY_SQL + -
                         );
-    </pre>
+    ```
 
 4.  Query the `V$LOGMNR_LOGS` view.
 
     This step shows that the `DBMS_LOGMNR.START_LOGMNR` procedure includes all of the redo log files that have been generated so far, as expected. (Compare the output in this step to the output in Step 2.)
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT FILENAME name FROM V$LOGMNR_LOGS;
 
     NAME
@@ -2939,7 +2936,7 @@ This example is similar to Example 4: Using the LogMiner Dictionary in the Redo 
     /usr/oracle/data/db1arch_1_208_482701534.dbf
     /usr/oracle/data/db1arch_1_209_482701534.dbf
     /usr/oracle/data/db1arch_1_210_482701534.dbf
-    </pre>
+    ```
 
 5.  Query the `V$LOGMNR_CONTENTS` view.
 
@@ -2947,7 +2944,7 @@ This example is similar to Example 4: Using the LogMiner Dictionary in the Redo 
 
     Note that all reconstructed SQL statements returned by the query are correctly translated.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT USERNAME AS usr,(XIDUSN || '.' || XIDSLT || '.' || XIDSQN) as XID, 
        SQL_REDO FROM V$LOGMNR_CONTENTS 
        WHERE SEG_OWNER IS NULL OR SEG_OWNER NOT IN ('SYS', 'SYSTEM') AND
@@ -3012,13 +3009,13 @@ This example is similar to Example 4: Using the LogMiner Dictionary in the Redo 
                                     "OLD_WARRANTY_PERIOD" = TO_YMINTERVAL('+05-00');
 
     OE              1.9.1598     commit;
-    </pre>
+    ```
 
 6.  End the LogMiner session.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.END_LOGMNR();
-    </pre>
+    ```
 
 
 #### Example 2: Mining the Redo Log Files in a Given SCN Range
@@ -3029,53 +3026,53 @@ Note that in this example (unlike the other examples) it is not assumed that you
 
 1.  Determine the SCN of the last checkpoint taken.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT CHECKPOINT_CHANGE#, CURRENT_SCN FROM V$DATABASE;
-    </pre>
+    ```
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     CHECKPOINT_CHANGE#  CURRENT_SCN
     ------------------  ---------------
               56453576         56454208
-    </pre>
+    ```
 
 2.  Start LogMiner.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.START_LOGMNR(-
-    </pre>
+    ```
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
       STARTSCN => 56453576, -
        ENDSCN   => 56454208, -
        OPTIONS  => DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG + -
                    DBMS_LOGMNR.COMMITTED_DATA_ONLY + -
                    DBMS_LOGMNR.PRINT_PRETTY_SQL + -
                    );
-    </pre>
+    ```
 
 3.  Display the list of archived redo log files added by LogMiner.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT FILENAME name, LOW_SCN, NEXT_SCN FROM V$LOGMNR_LOGS;
-    </pre>
+    ```
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     NAME                                           LOW_SCN   NEXT_SCN
     --------------------------------------------   --------  --------
     /usr/oracle/data/db1arch_1_215_482701534.dbf   56316771  56453579
-    </pre>
+    ```
 
     Note that the redo log file that LogMiner added does not contain the whole SCN range. LogMiner adds the rest of the SCN range contained in the online redo log files automatically, as needed during the query execution. Use the following query to determine whether the redo log file added is the latest archived redo log file produced.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT NAME FROM V$ARCHIVED_LOG 
        WHERE SEQUENCE# = (SELECT MAX(SEQUENCE#) FROM V$ARCHIVED_LOG);
 
     NAME
     -------------------------------------------- 
     /usr/oracle/data/db1arch_1_215_482701534.dbf 
-    </pre>
+    ```
 
 4.  Query the `V$LOGMNR_CONTENTS` view for changes made to the user tables.
 
@@ -3083,7 +3080,7 @@ Note that in this example (unlike the other examples) it is not assumed that you
 
     Note that the default `NLS_DATE_FORMAT`, 'DD-MON-RR', is used to display the column `MODIFIED_TIME` of type `DATE`.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT SCN, (XIDUSN || '.' || XIDSLT || '.' ||  XIDSQN) as XID, SQL_REDO 
         FROM V$LOGMNR_CONTENTS
         WHERE SEG_OWNER NOT IN ('SYS', 'SYSTEM');
@@ -3118,13 +3115,13 @@ Note that in this example (unlike the other examples) it is not assumed that you
                                "MODIFIED_TIME" = TO_DATE('17-JAN-03', 'DD-MON-RR'),
                                "OLD_LIST_PRICE" = 150,
                                "OLD_WARRANTY_PERIOD" = TO_YMINTERVAL('+02-00');
-    </pre>
+    ```
 
 5.  End the LogMiner session.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.END_LOGMNR();
-    </pre>
+    ```
 
 
 #### Example 3: Using Continuous Mining to Include Future Values in a Query 
@@ -3135,15 +3132,15 @@ This examples assumes that you want to monitor all changes made to the table `hr
 
 1.  Start LogMiner.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.START_LOGMNR(-
-    </pre>
+    ```
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
       STARTTIME => SYSDATE, -
        ENDTIME   => SYSDATE + 5/24, -
        OPTIONS   => DBMS_LOGMNR.DICT_FROM_ONLINE_CATALOG);
-    </pre>
+    ```
 
 2.  Query the `V$LOGMNR_CONTENTS` view.
 
@@ -3151,17 +3148,17 @@ This examples assumes that you want to monitor all changes made to the table `hr
 
     This example specifies the `SET` `ARRAYSIZE` statement so that rows are displayed as they are entered in the redo log file. If you do not specify the `SET ARRAYSIZE` statement, then rows are not returned until the SQL internal buffer is full. 
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SET ARRAYSIZE 1;
     SELECT USERNAME AS usr, SQL_REDO FROM V$LOGMNR_CONTENTS
        WHERE  SEG_OWNER = 'HR' AND TABLE_NAME = 'EMPLOYEES';
-    </pre>
+    ```
 
 3.  End the LogMiner session.
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.END_LOGMNR();
-    </pre>
+    ```
 
 
 ### Example Scenarios
@@ -3183,41 +3180,41 @@ This example shows how to see all changes made to the database in a specific tim
 
     Assume that `joedevo` has made some changes to the database. You can now specify the names of the redo log files that you want to analyze, as follows:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
        LOGFILENAME => 'log1orc1.ora', -
        OPTIONS => DBMS_LOGMNR.NEW);
-    </pre>
+    ```
 
     If desired, add additional redo log files, as follows:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.ADD_LOGFILE( -
        LOGFILENAME => 'log2orc1.ora', -
        OPTIONS => DBMS_LOGMNR.ADDFILE);
-    </pre>
+    ```
 
 3.  Start LogMiner and limit the search to the specified time range:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     EXECUTE DBMS_LOGMNR.START_LOGMNR( -
        DICTFILENAME => 'orcldict.ora', -
        STARTTIME => TO_DATE('01-Jan-1998 08:30:00','DD-MON-YYYY HH:MI:SS'), -
        ENDTIME => TO_DATE('01-Jan-1998 08:45:00', 'DD-MON-YYYY HH:MI:SS'));
-    </pre>
+    ```
 
 4.  Query the `V$LOGMNR_CONTENTS` view.
 
     At this point, the `V$LOGMNR_CONTENTS` view is available for queries. You decide to find all of the changes made by user `joedevo` to the `salary` table. Execute the following `SELECT` statement:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SELECT SQL_REDO, SQL_UNDO FROM V$LOGMNR_CONTENTS 
        WHERE USERNAME = 'joedevo' AND SEG_NAME = 'salary';
-    </pre>
+    ```
 
     For both the `SQL_REDO` and `SQL_UNDO` columns, two rows are returned (the format of the data display will be different on your screen). You discover that `joedevo` requested two operations: he deleted his old salary and then inserted a new, higher salary. You now have the data necessary to undo this operation. 
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     SQL_REDO                              SQL_UNDO
     --------                              --------
     delete from SALARY                    insert into SALARY(NAME, EMPNO, SAL)
@@ -3229,15 +3226,15 @@ This example shows how to see all changes made to the database in a specific tim
     values('JOEDEVO',12345, 2500)         where EMPNO = 12345
                                           and NAME = 'JOEDEVO'
     2 rows selected                       and SAL = 2500;
-    </pre>
+    ```
 
 5.  End the LogMiner session.
 
     Use the `DBMS_LOGMNR.END_LOGMNR` procedure to finish the LogMiner session properly:
 
-    <pre class="oac_no_warn" dir="ltr">
+    ```
     DBMS_LOGMNR.END_LOGMNR( );
-    </pre>
+    ```
 
 
 #### Scenario 2: Using LogMiner to Calculate Table Access Statistics
