@@ -55,6 +55,7 @@ module.exports = {
                 ['/processors/JoltTransformRecord','JoltTransformRecord'],
                 ['/processors/LogAttribute','LogAttribute'],
                 ['/processors/LogMessage','LogMessage'],
+                ['/processors/PutEmail','PutEmail'],
                 ['/processors/PutHiveStreaming','PutHiveStreaming'],
                 ['/processors/ReplaceText','ReplaceText'],
                 ['/processors/RouteOnAttribute','RouteOnAttribute'],
@@ -89,7 +90,8 @@ module.exports = {
                 ['/code/NiFi','NiFi.java 源码解读'],
                 ['/code/UnpackNar','Nar包下的MANIFEST.MF'],
                 ['/code/Content Repository Archiving','理解内容存储库归档'],
-                ['/code/nifi注解','nifi注解']
+                ['/code/nifi注解','nifi注解'],
+                ['/code/Processor方法','Processor代码中的一些方法']
                ]
             },
             {
@@ -120,6 +122,12 @@ module.exports = {
                 ['/java-source-code/HashMap','Java HashMap 新增方法(merge,compute)(转)'],
                 ['/java-source-code/java注解','Java注解(转)']
               ]
+            },
+            {
+              title: '相关书籍及读书笔记',
+              children: [
+                
+               ]
             }
           ]
       },

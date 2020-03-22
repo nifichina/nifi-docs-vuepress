@@ -1,5 +1,14 @@
 # 更新日志
 
+**2019-12-05**
+
+* 增加了一个JOLT嵌套数组的实际案例[jolt教程](./jolt/jolt详解.md)
+* 新增[PutEmail](./processors/PutEmail.md)
+
+**2019-12-04**
+
+* 新增[Processor代码中的一些方法](./code/Processor方法.md)
+
 **2019-12-03**
 
 * 新增[Java注解](./java-source-code/java注解.md)

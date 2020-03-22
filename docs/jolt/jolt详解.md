@@ -43,13 +43,13 @@ Jolt的主要目标是提供一种可声明的方式快速的去转换json,也�
 
 实际运行中：
 
-1. 转换可以使用其Spec初始化一次，并在多线程环境中多次重用
+1. 转换可以使其Spec初始化一次，并在多线程环境中多次重用
 2. '*'通配符逻辑被重做，以减少在常见情况下使用Regex，这是一个显著的速度改进。
 3. 对Shiftr并行树步进行了优化。
 
 有两点需要注意:
 
-1. Jolt不是基于流的，所以如果您有一个非常大的Json文档要转换，您需要有足够的内存来容纳它。
+1. Jolt不是基于流的，所以如果有一个非常大的Json文档要转换，则需要有足够的内存来容纳它。
 2. 转换过程将创建和丢弃大量对象，因此垃圾收集器将有工作要做。
 
 ## Stock Transforms
@@ -59,7 +59,7 @@ Jolt的主要目标是提供一种可声明的方式快速的去转换json,也�
 shift       : 复制输入json到输出json
 default     : 为json树增加默认值
 remove      : 从json树中去除数据
-sort        : 按字母顺序排序映射键值(用于调试和人工可读性)
+sort        : 按字母顺序排序映射键值(一般用于调试和增加人工可读性)
 cardinality : 修正输入数据的基数。urls元素通常是一个List，但是如果只有一个，那么它就是一个字符串
 modify-overwrite-beta:总是写
 modify-default-beta:当键值对应的值是null时写入
@@ -67,7 +67,7 @@ modify-define-beta:当键值不存在时写入
 自定义Java类全路径名称:实现Transform或ContextualTransform接口,可选择SpecDriven接口
 ```
 每个转换都有自己的DSL(领域特定语言)，以便简化其工作。
-目前，上面前五个转换只影响数据的结构。要进行数据操作，需要编写Java代码或者使用modify。如果您实现转换接口编写Java数据操作代码，那么您可以将代码插入转换链中。
+目前，上面前五个转换只影响数据的结构。要进行数据操作，需要编写Java代码或者使用modify。如果你编写Java代码实现了转换接口，那么你可以将代码插入转换链中。
 使用自定义Java转换实现数据操作，开箱即用的Java转换应该能够完成大多数结构转换。
 
 这里是一份英文版的Jolt简介PDF:<a href="../jolt/JOLTIntroduction.pdf" download="JOLTIntroduction.pdf">Jolt介绍</a>
@@ -1133,6 +1133,38 @@ Spec 使用相应函数基本格式是  =函数名(参数1，参数2)
   }
 ]
 ```
+举个例子，将一个json中key全部转小写:
+```json
+[
+  {
+    "operation": "shift",
+    "spec": {
+      "*": {
+        "$": "&1.key",
+        "@": "&1.value"
+      }
+    }
+  },
+  {
+    "operation": "modify-overwrite-beta",
+    "spec": {
+      "*": {
+        "key": "=toLower"
+      }
+    }
+  },
+  {
+    "operation": "shift",
+    "spec": {
+      "*": {
+        "value": "@(1,key)"
+      }
+    }
+  }
+]
+
+```
+![](./img/23.png)
 
 ## 扩展自定义
 
@@ -1476,4 +1508,258 @@ Spec
         }
     }
 }
+```
+
+## 一些例子
+
+**E1**
+在Github issue上看到一个[挺有意思的问题](https://github.com/bazaarvoice/jolt/issues/904)，说的是嵌套数组的问题，看数据是从ES查询出来的
+
+输入数据如下,是一个嵌套数组，最外层root数组，里层hits数组，需求是想要把hits数组切分成一个个元素，比如示例中有两个hits数组，一共三个元素，最后结果数组里应该就有三个元素，详细请对照期望输出json
+```json
+[
+  {
+    "_id": "W55553",
+    "inner_hits": {
+      "items": {
+        "hits": {
+          "hits": [
+            {
+              "_source": {
+                "status": 3200,
+                "item_no": 1
+              }
+            }
+          ]
+        }
+      }
+    }
+  },
+  {
+    "_id": "W55555",
+    "inner_hits": {
+      "items": {
+        "hits": {
+          "hits": [
+            {
+              "_source": {
+                "status": 3500,
+                "item_no": 2
+              }
+            },
+            {
+              "_source": {
+                "status": 3200,
+                "item_no": 3
+              }
+            }
+          ]
+        }
+      }
+    }
+  }
+]
+
+```
+期望输出如下:
+```json
+[
+	{
+		"id": "W55553",
+		"order": {
+			"customer_order": {
+				"sales_order": {
+					"sales_order_items": [
+						{
+							"status": 3200,
+							"item_no": 1
+						}
+					]
+				}
+			}
+		}
+	},
+	{
+		"id": "W55555",
+		"order": {
+			"customer_order": {
+				"sales_order": {
+					"sales_order_items": [
+						{
+							"status": 3500,
+							"item_no": 2
+						}
+					]
+				}
+			}
+		}
+	},
+	{
+		"id": "W55555",
+		"order": {
+			"customer_order": {
+				"sales_order": {
+					"sales_order_items": [
+						{
+							"status": 3200,
+							"item_no": 3
+						}
+					]
+				}
+			}
+		}
+	}
+]
+```
+我给出的方案如下:
+
+The problem of nested arrays is really funny. And I try to get around it.
+
+First, I add a ID field for each '_source' element of 'hits' array.
+
+Then, I add every '_source' that JOLT found to an new array -> '_source:[].order......'
+
+Finally, exact the id field
+
+总的策略是化嵌套数组为非嵌套问题
+```json
+[
+  {
+    "operation": "modify-define-beta",
+    "spec": {
+      //第一步，循环处理每个_source,并为_source添加相应的id字段
+      "*": {
+        "inner_hits": {
+          "items": {
+            "hits": {
+              "hits": {
+                "*": {
+                  "\\_source": {
+                    "id": "@(7,_id)"
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "operation": "shift",
+    "spec": {
+      //第二步，把处理过程中遇到的每一个_source都输出到一个新的数组中
+      "*": {
+        "inner_hits": {
+          "items": {
+            "hits": {
+              "hits": {
+                "*": {
+                  "_source": "[].order.customer_order.sales_order.sales_order_items[]"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  },
+  {
+    "operation": "shift",
+    "spec": {
+      //第三步 提取ID字段，达成期望json格式
+      "*": {
+        "order": {
+          "customer_order": {
+            "sales_order": {
+              "sales_order_items": {
+                "0": {
+                  "*": {
+                    "@": "[#8].order.customer_order.sales_order.sales_order_items[0].&"
+                  },
+                  "id": "[#7].id"
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+]
+```
+
+
+**E2**
+
+jolt github issue上帮忙解决的第二个问题[Issue906](https://github.com/bazaarvoice/jolt/issues/906)，输入json如下
+
+```json
+{
+  "params": {
+    "key1": "value2",
+    "key4": "value33",
+    "key_mult5": ["value_mult11","value_mult12"]
+  }
+}
+```
+期望的输出如下，他想把输入json的params下的每一个元素的key和value都提到数组params里，但是，输入json的params每个元素的key有可能是数组，有可能不是，这就有些难度了。
+```json
+{
+  "params": [
+    { 
+       "key": "key1",
+       "value": "value2"   
+   },
+ { 
+       "key": "key4",
+       "value": "value33"   
+   },
+{ 
+       "key": "key_mult5",
+       "value": "value_mult11"   
+   },
+{ 
+       "key": "key_mult5",
+       "value": "value_mult12"   
+   }
+  ]
+}
+```
+我提出的解决方案是
+```json
+[
+  {
+    "operation": "cardinality",//先统一格式，把每一个元素都变成数组
+    "spec": {
+      "params": {
+        "*": "MANY"
+      }
+    }
+  }, {
+    "operation": "shift",//然后遍历每个元素数组下的value
+    "spec": {
+      "params": {
+        "*": {
+          "*": {
+            "@": "params[].&2"
+          }
+        }
+      }
+    }
+  },
+  {
+    "operation": "shift",//最后提取到key value
+    "spec": {
+      "params": {
+        "*": {
+          "*": {
+            "$": "params[#3].key",
+            "@": "params[#3].value"
+          }
+        }
+      }
+    }
+  }
+]
 ```

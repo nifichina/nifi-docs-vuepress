@@ -22,19 +22,20 @@ import java.util.Collection
 import java.util.List
 import java.util.Set
 import java.sql.SQLException
+import java.sql.Connection
 import java.text.SimpleDateFormat
 import groovy.sql.Sql
 import groovy.time.*
 
 class AnalyzeLogMinerProcessor implements Processor {
 
-    def dbcpService
+    DBCPService dbcpService
 
     ComponentLog log
 
     final static Relationship  REL_SUCCESS = new Relationship.Builder()
-            .name('success')
-            .description('成功从LogMiner视图中读取出来的redo_sql语句')
+            .name("success")
+            .description("成功从LogMiner视图中读取出来的redo_sql语句")
             .build()
 
     @Override
@@ -54,40 +55,58 @@ class AnalyzeLogMinerProcessor implements Processor {
             .required(false).addValidator(StandardValidators.LONG_VALIDATOR).build()
 
     static final PropertyDescriptor SCN_STEP_SIZE = new PropertyDescriptor.Builder()
-            .name("SCN  STEP SIZE").description("指定LogMiner分析Oracle日志步长，即每次最多加载多少scn行的数据,默认值为8000，请根据实际流量合理配置此值")
+            .name("SCN STEP SIZE").description("指定LogMiner分析Oracle日志步长，即每次最多加载多少scn行的数据,默认值为8000，请根据实际流量合理配置此值")
             .required(true).addValidator(StandardValidators.LONG_VALIDATOR).defaultValue("8000").build()
     
     static final PropertyDescriptor SCHEMA_NAME = new PropertyDescriptor.Builder()
-            .name('SCHEMA NAME').description('指定LogMiner分析Oracle日志的SEG_OWNER,即指定schema名称')
+            .name("SCHEMA NAME").description("指定LogMiner分析Oracle日志的SEG_OWNER,即指定schema名称")
             .required(true).addValidator(Validator.VALID).build()
 
     static final PropertyDescriptor Max_Transaction_Length = new PropertyDescriptor.Builder()
-            .name('事务最大时长').description('输入期望事务所需的最长时间(单位s)。默认300s')
-            .required(true).addValidator(Validator.VALID).defaultValue("300").build()
+            .name("事务最大时长").description("输入期望事务所需的最长时间(单位s)。默认600s")
+            .required(true).addValidator(Validator.VALID).defaultValue("600").build()
 
     static final PropertyDescriptor TABLE_NAME_REGEXP = new PropertyDescriptor.Builder()
             .name("TABLE NAME Regular Expression").description("使用Oracle正则表达式指定LogMiner分析Oracle日志需要过滤的表名,要求Oracle版本在10g及以上")
             .required(false).addValidator(StandardValidators.REGULAR_EXPRESSION_VALIDATOR).build()
 
-    static SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
+    static final PropertyDescriptor EXACT_METHOD = new PropertyDescriptor.Builder()
+            .name("Exact RedoLog Method").description("读取分析RedoLog的方式,CommitDataOnly表示每次从日志中只提取已经commit的数据，NoCommitDataOnly表示没有提交的数据也会被读取出来。前者会多出
+            组件修补遗漏事务部分任务的资源，优点的数据不丢失。后者会占用组件环境的内存资源，且当服务器宕机等情况有概率丢失内存信息。两种方式都依赖事务最大时长")
+            .required(true).addValidator(Validator.VALID).allowableValues("CommitDataOnly", "NoCommitDataOnly").defaultValue("CommitDataOnly".build()
+
+    static final PropertyDescriptor INCLUDE_INSERT = new PropertyDescriptor.Builder()
+            .name("Include Insert").description("SQL是否包含Insert语句,默认为包含")
+            .required(true).addValidator(StandardValidators.BOOLEAN_VALIDATOR).allowableValues("true", "false").defaultValue("true").build()
+
+    static final PropertyDescriptor INCLUDE_UPDATE = new PropertyDescriptor.Builder()
+            .name("Include Update").description("SQL是否包含Update语句,默认为包含")
+            .required(true).addValidator(StandardValidators.BOOLEAN_VALIDATOR).allowableValues("true", "false").defaultValue("true").build()
+
+    static final PropertyDescriptor INCLUDE_DELETE = new PropertyDescriptor.Builder()
+            .name("Include Delete").description("SQL是否包含Delete语句,默认为包含")
+            .required(true).addValidator(StandardValidators.BOOLEAN_VALIDATOR).allowableValues("true", "false").defaultValue("true").build()
+
+    static final PropertyDescriptor ANA_DELETE = new PropertyDescriptor.Builder()
+            .name("重塑 Delete").description("SQL是否重新构造Delete语句,使Delete语句where条件只有主键唯一键，默认否即包含所有列条件")
+            .required(true).addValidator(StandardValidators.BOOLEAN_VALIDATOR).allowableValues("true", "false").defaultValue("false").build()
+
+    static final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss")
     @Override
     void initialize(ProcessorInitializationContext context) {}
 
     @Override
     void onTrigger(ProcessContext context, ProcessSessionFactory sessionFactory) throws ProcessException {
-        def session = sessionFactory.createSession()
+        ProcessSession session = sessionFactory.createSession()
         //获取数据库连接池
-        def dbcpService = context.getProperty(DBCP_SERVICE).asControllerService(DBCPService)
-        if(dbcpService == null){
-            return
-        }
-        def conn = dbcpService.getConnection()
-        def conn2 = dbcpService.getConnection()
-        if(conn == null || conn2 == null){
-            throw new ProcessException("数据库连接不可用")
-        }
+        dbcpService = context.getProperty(DBCP_SERVICE).asControllerService(DBCPService)
+        validateNull(dbcpService,"数据库连接池服务不可用")
+        Connection conn = dbcpService.getConnection()
+        validateNull(conn,"数据库连接不可用")
+        Connection conn2 = dbcpService.getConnection()
+        validateNull(conn2,"数据库连接不可用")
         //获取当前组件的状态存储管理器 存取SCN号
-        def stateManager = context.stateManager
+        StateManager stateManager = context.stateManager
         StateMap stateMap
         try {
             stateMap = stateManager.getState(Scope.CLUSTER)
@@ -101,9 +120,9 @@ class AnalyzeLogMinerProcessor implements Processor {
         long maxViewScn
         long scnStepSize = Long.parseLong(context.getProperty(SCN_STEP_SIZE).getValue())
         String initScn = context.getProperty(INIT_SCN).getValue()
-        def schemaName = context.getProperty(SCHEMA_NAME).getValue()
-        def sql
-        def sql2
+        String schemaName = context.getProperty(SCHEMA_NAME).getValue()
+        Sql sql
+        Sql sql2
         try {
             sql = new Sql(conn)
             sql2 = new Sql(conn2)
@@ -163,7 +182,13 @@ class AnalyzeLogMinerProcessor implements Processor {
 
     @Override
     String getIdentifier() { return 'AnalyzeLogMinerProcessor-InvokeScriptedProcessor' }
-    
+
+    void validateNull(Object obj,String errorMsg)throws ProcessException{
+        if(null == obj){
+            throw new ProcessException(errorMsg)
+        }
+    }
+
     void setLogger(ComponentLog logger){
         log = logger
     }
@@ -212,13 +237,12 @@ class AnalyzeLogMinerProcessor implements Processor {
         int maxTranLength = Integer.parseInt(context.getProperty(Max_Transaction_Length).getValue())
         // 因为commit表名是没有的  所以commit条件添加表名过滤可能造成数据遗漏
         String tableNameRegularStr = context.getProperty(TABLE_NAME_REGEXP).getValue()
-        StringBuilder selectRedoSql = new StringBuilder("SELECT SCN,START_SCN,COMMIT_SCN,TABLE_NAME,SEG_OWNER,OPERATION,SQL_REDO,CSF FROM " +
+        StringBuilder selectRedoSql = new StringBuilder("SELECT (XIDUSN || '.' || XIDSLT || '.' || XIDSQN) AS XID,SCN,START_SCN,COMMIT_SCN,TABLE_NAME,SEG_OWNER,OPERATION,SQL_REDO,CSF FROM " +
                 "v\$logmnr_contents where ( OPERATION_CODE IN (1,2,3) ").append(" AND SEG_OWNER ='").append(schemaName).append("'")
         if(!StringUtils.isBlank(tableNameRegularStr)){
             selectRedoSql.append(" AND REGEXP_LIKE(TABLE_NAME,'").append(tableNameRegularStr).append("')")
         }
         selectRedoSql.append(")  OR (OPERATION_CODE = 7 AND START_SCN = 0 ) AND SCN <=").append(maxScn).append(" AND USERNAME != 'SYS' ") 
-        //  AND SESSION_INFO != 'UNKNOWN'
         
         log.debug("执行${selectRedoSql.toString()}")
         StringBuilder bigSqlRedo = null
@@ -228,7 +252,7 @@ class AnalyzeLogMinerProcessor implements Processor {
             long csf = row.getProperty("CSF").longValue()
             long startScn = row.getProperty("START_SCN").longValue()
             long commitScn = row.getProperty("COMMIT_SCN").longValue()
-            def operation =  row.getProperty("OPERATION")
+            String operation =  row.getProperty("OPERATION")?toString()
             if(fixCommitScn != 0 && fixCommitScn != commitScn){
                 log.debug("进入修补数据逻辑")
                 fixData(session,sql2,fixCommitScn,maxTranLength)
@@ -244,7 +268,7 @@ class AnalyzeLogMinerProcessor implements Processor {
                 }
                 bigSqlRedo.append(row.getProperty("SQL_REDO"))
             }else{
-                // operation 不为COMMIT ,才输出数据流   if(operation != "COMMIT")
+                // 输出数据
                 String sqlRedo
                 if(bigSqlRedo != null){
                     sqlRedo =bigSqlRedo.append(row.getProperty("SQL_REDO")?.toString()).toString()
@@ -257,7 +281,7 @@ class AnalyzeLogMinerProcessor implements Processor {
                     ff = session.putAttribute(ff, "SCN",scn?.toString())
                     ff = session.putAttribute(ff, "tableName", row.getProperty("TABLE_NAME")?.toString())
                     ff = session.putAttribute(ff, "segOwner", row.getProperty("SEG_OWNER")?.toString())
-                    ff = session.putAttribute(ff, "operation", operation?.toString())
+                    ff = session.putAttribute(ff, "operation", operation)
                     ff = session.write(ff, {outputStream ->
                     outputStream.write(sqlRedo.getBytes(StandardCharsets.UTF_8))
                 } as OutputStreamCallback)
@@ -282,7 +306,7 @@ class AnalyzeLogMinerProcessor implements Processor {
     private long getCurrentViewMaxScn(Sql sql) {
         String selectMaxCommitScnSql = "SELECT Max(SCN) as MAX FROM v\$logmnr_contents"
         log.debug("执行${selectMaxCommitScnSql}")
-        def maxScn = sql.firstRow(selectMaxCommitScnSql).getProperty("MAX")?.toString()
+        String maxScn = sql.firstRow(selectMaxCommitScnSql).getProperty("MAX")?.toString()
         log.debug(""+maxScn)
         if(StringUtils.isBlank(maxScn)){
             maxScn = "-1"
@@ -451,9 +475,8 @@ class AnalyzeLogMinerProcessor implements Processor {
         log.debug("执行修复数据SQL${selectRedoSql.toString()}")
         StringBuilder bigSqlRedo = null
         sql.rows(selectRedoSql.toString()).eachWithIndex { row, idx ->
-            def csf = row.getProperty("CSF")
             // csf为1 说明SQL超过4000字节 多行存储
-            if (csf == 1){
+            if (row.getProperty("CSF") == 1){
                 if(bigSqlRedo == null){
                     bigSqlRedo = new StringBuilder()
                 }
